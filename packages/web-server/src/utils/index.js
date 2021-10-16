@@ -1,0 +1,1 @@
+//Viết các hàm hỗ trợ
