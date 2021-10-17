@@ -23,7 +23,7 @@ exports.initPhieuThuTien = function(mongoose) {
             },
         })
     
-        const PhieuThuTien = mongoose.model('PhieuThuTien', PhieuThuTienSchema);
+        const PhieuThuTien = mongoose.model('phieuthutiens', PhieuThuTienSchema);
     
         return PhieuThuTien;
     }

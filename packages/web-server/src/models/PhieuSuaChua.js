@@ -23,7 +23,7 @@ exports.initPhieuSuaChua = function(mongoose) {
             },
         })
     
-        const PhieuSuaChua = mongoose.model('PhieuSuaChua', PhieuSuaChuaSchema);
+        const PhieuSuaChua = mongoose.model('phieusuachuas', PhieuSuaChuaSchema);
     
         return PhieuSuaChua;
     }

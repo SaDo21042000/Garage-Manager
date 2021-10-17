@@ -19,7 +19,7 @@ exports.initDoanhSo = function(mongoose) {
             },
         })
     
-        const DoanhSo = mongoose.model('DoanhSo', DoanhSoSchema);
+        const DoanhSo = mongoose.model('doanhsos', DoanhSoSchema);
     
         return DoanhSo;
     }
