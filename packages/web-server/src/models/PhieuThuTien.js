@@ -21,6 +21,14 @@ exports.initPhieuThuTien = function(mongoose) {
                 type: Number,
                 require: true
             },
+            soTienThua:{
+                type: Number,
+                require: true
+            },
+            soTienNhan:{
+                type: Number,
+                require: true
+            }
         })
     
         const PhieuThuTien = mongoose.model('phieuthutiens', PhieuThuTienSchema);
