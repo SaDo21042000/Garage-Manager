@@ -1,16 +1,8 @@
-import React from 'react'
-import TestPage from './Containers/TestPage'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React from 'react';
+import Routes from './Routes';
 
-
-const App=() =>{
-  return (
-    <Router>
-        <Switch>
-            <Route path='/' component={()=><TestPage title="TestPage"/>} />
-        </Switch>
-    </Router>
-  );
-}
+const App = () => {
+  return <Routes />;
+};
 
 export default App;
