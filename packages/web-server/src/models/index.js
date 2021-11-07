@@ -12,6 +12,7 @@ const { initVatTu } = require('./VatTu');
 const { initPhieuNhapVatTu } = require('./PhieuNhapVatTu');
 const { initChiTietBaoCaoTon } = require('./ChiTietBaoCaoTon');
 const { initBaoCaoTon } = require('./BaoCaoTon');
+const { initLoaiVatTu } = require('./LoaiVatTu');
 
 const db = {};
 
@@ -30,6 +31,7 @@ db.VatTu = initVatTu(mongoose)
 db.PhieuNhapVatTu = initPhieuNhapVatTu(mongoose)
 db.ChiTietBaoCaoTon = initChiTietBaoCaoTon(mongoose)
 db.BaoCaoTon = initBaoCaoTon(mongoose)
+db.LoaiVatTu = initLoaiVatTu(mongoose)
 
 
 module.exports = db;

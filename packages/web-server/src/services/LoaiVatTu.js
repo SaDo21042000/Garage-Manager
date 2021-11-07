@@ -1,33 +1,33 @@
-const { HieuXe } = require('../models');
+const { LoaiVatTu } = require('../models');
 
 /* `````````````````````````````````` */
 // Put your custom services code below this line
 exports.create = async input => {
     
-    // Create HieuXe base on input
-    let newHieuXe = await new HieuXe({
+    // Create LoaiVatTu base on input
+    let newLoaiVatTu = await new LoaiVatTu({
         ...input
     });
-    await newHieuXe.save();
+    await newLoaiVatTu.save();
 
-    return newHieuXe;
+    return newLoaiVatTu;
 }
 
 exports.find = () =>{
-    return HieuXe.find();
+    return LoaiVatTu.find();
 }
 
 exports.findAll = () =>{
-    return HieuXe.find();
+    return LoaiVatTu.find();
 }
 
 
 exports.findOne = (id) =>{
-    return HieuXe.findOne(id);
+    return LoaiVatTu.findOne(id);
 }
 
 exports.deleteOne = (obj) =>{
-    return HieuXe.deleteOne(obj);
+    return LoaiVatTu.deleteOne(obj);
 }
 
 /* `````````````````````````````````` */
