@@ -4,6 +4,7 @@ const {successResponse,errorResponse}= require('../utils/objResponse');
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "QuocDepTrai";
 
+//login để truy cập các tài nguyên yêu cầu quyền cao nhất
 let isAdminAuth = async (req, res, next) => {
 
   const authorizationHeader = req.headers['authorization'];
@@ -36,6 +37,7 @@ let isAdminAuth = async (req, res, next) => {
   }
 }
 
+//login để truy cập các thông tin trường
 let isAuth = async (req, res, next) => {
   // Lấy token được gửi lên từ phía client, thông thường tốt nhất là các bạn nên truyền token vào header
   const authorizationHeader = req.headers['authorization'];
