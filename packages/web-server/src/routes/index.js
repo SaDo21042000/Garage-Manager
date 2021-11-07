@@ -7,6 +7,11 @@ const TaiKhoanRouter = require('./TaiKhoan');
 const QuyDinhRouter = require('./QuyDinh');
 const LoaiVatTuRouter = require('./LoaiVatTu');
 const {isAdminAuth}=require('../middlewares/AuthMiddleware')
+const AccessoryRouter = require('./Accessory');
+const WageRouter = require('./Wage');
+const ParameterRouter = require('./Parameter');
+const AccessoryImportFormRouter = require('./AccessoryImportForm');
+const InventoryReportRouter = require('./InventoryReport');
 
 const route = (app) => {
     app.use('/api/bills', BillRouter);
@@ -17,6 +22,11 @@ const route = (app) => {
     app.use('/api/taikhoans', TaiKhoanRouter);
     app.use('/api/quydinhs',isAdminAuth, QuyDinhRouter);
     app.use('/api/loaivattus',isAdminAuth , LoaiVatTuRouter);
+    app.use('/api/wages', WageRouter);
+    app.use('/api/parameters', ParameterRouter);
+    app.use('/api/accessories', AccessoryRouter);
+    app.use('/api/accessory-import-forms', AccessoryImportFormRouter);
+    app.use('/api/inventory-reports', InventoryReportRouter);
 }
 
 
