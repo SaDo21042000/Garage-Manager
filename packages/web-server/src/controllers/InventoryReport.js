@@ -1,7 +1,7 @@
 const { InventoryReport, InventoryReportDetail, Accessory, AccessoryImportForm } = require('../models');
 const InventoryReportService = require('../services/InventoryReport');
 const InventoryReportDetailService = require('../configs/service.template.config')(InventoryReportDetail);
-const RepairVoteService = require('../services/RepairVote');
+// const RepairVoteService = require('../services/RepairVote');
 const AccessoryService = require('../configs/service.template.config')(Accessory);
 const AccessoryImportFormService = require('../configs/service.template.config')(AccessoryImportForm);
 
@@ -20,25 +20,25 @@ const create = async (req, res) => {
     input.reportDetails = [];
 
     // Find repair vote in this month/year
-    let repairVoteList = await RepairVoteService.find().lean();
-    let repairVoteListInThisMonth = repairVoteList.filter(repairVote => {
-        return (repairVote.repairDate.getMonth() == input.month)
-            && (repairVote.repairDate.getFullYear() == input.year);
-    })
+    // let repairVoteList = await RepairVoteService.find().lean();
+    // let repairVoteListInThisMonth = repairVoteList.filter(repairVote => {
+    //     return (repairVote.repairDate.getMonth() == input.month)
+    //         && (repairVote.repairDate.getFullYear() == input.year);
+    // })
 
     // check if no repair happened this month / year
-    if (repairVoteListInThisMonth.length == 0)
-        return res.status(400).json({
-            statusCode: 400,
-            message: 'Không có dữ liệu vì không đủ dữ liệu trong thời gian này!!!'
-        });
+    // if (repairVoteListInThisMonth.length == 0)
+    //     return res.status(400).json({
+    //         statusCode: 400,
+    //         message: 'Không có dữ liệu vì không đủ dữ liệu trong thời gian này!!!'
+    //     });
 
-    let repairVoteDetailList = [];
-    repairVoteListInThisMonth.forEach( repairVote => {
-        repairVote.details.forEach( repairVoteDetail => {
-            repairVoteDetailList.push(repairVoteDetail);
-        })
-    })
+    // let repairVoteDetailList = [];
+    // repairVoteListInThisMonth.forEach( repairVote => {
+    //     repairVote.details.forEach( repairVoteDetail => {
+    //         repairVoteDetailList.push(repairVoteDetail);
+    //     })
+    // })
 
     // Find all accessory import form in this month / year
     let accessoryImportList = await AccessoryImportFormService.find().lean();
