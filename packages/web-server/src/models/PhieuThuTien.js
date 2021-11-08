@@ -20,14 +20,6 @@ exports.initPhieuThuTien = function(mongoose) {
             soTienThu:{
                 type: Number,
                 require: true
-            },
-            soTienThua:{
-                type: Number,
-                require: true
-            },
-            soTienNhan:{
-                type: Number,
-                require: true
             }
         })
     
