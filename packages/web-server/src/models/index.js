@@ -14,6 +14,7 @@ const { initWage } = require('./Wage');
 const { initInventoryReport } = require('./InventoryReport');
 const { initInventoryReportDetail } = require('./InventoryReportDetail');
 const { initParameter } = require('./Parameter');
+const { initLoaiVatTu } = require('./LoaiVatTu');
 
 const db = {};
 
@@ -28,6 +29,7 @@ db.ChiTietDoanhSo = initChiTietDoanhSo(mongoose);
 db.TaiKhoan = initTaiKhoan(mongoose);
 db.QuyDinh = initQuyDinh(mongoose)
 db.ChiTietSuaChua = initChiTietSuaChua(mongoose)
+db.LoaiVatTu= initLoaiVatTu(mongoose);
 db.Accessory = initAccessory(mongoose);
 db.AccessoryImportForm = initAccessoryImportForm(mongoose);
 db.Wage = initWage(mongoose);

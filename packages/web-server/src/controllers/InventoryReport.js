@@ -76,11 +76,11 @@ const create = async (req, res) => {
             endingStock: accessory.remaining,
             arising: 0,
         };
-        repairVoteDetailList.forEach(repairVoteDetail => {
-            if (JSON.stringify(repairVoteDetail.accessory) === JSON.stringify(accessory._id)) {
-                numberOfProductSold += repairVoteDetail.quantity;
-            }
-        });
+        // repairVoteDetailList.forEach(repairVoteDetail => {
+        //     if (JSON.stringify(repairVoteDetail.accessory) === JSON.stringify(accessory._id)) {
+        //         numberOfProductSold += repairVoteDetail.quantity;
+        //     }
+        // });
         accessoryImportListInThisMonth.forEach(accessoryImport => {
             if (JSON.stringify(accessoryImport.accessoryId) === JSON.stringify(accessory._id)) {
                 newInventoryReportDetailObj.arising += accessoryImport.amount;
