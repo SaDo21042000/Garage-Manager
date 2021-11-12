@@ -14,11 +14,11 @@ const {  create,  deleteOne, getAll } = require('../controllers/LoaiVatTu');
 // router.put('/:id', update);
 
 /* DELETE */
-router.post('/delete', deleteOne);
+router.delete('/delete', deleteOne);
 
 router.post('/create', create);
 
-router.post('/get-all', getAll);
+router.get('/get-all', getAll);
 
 
 module.exports = router;
