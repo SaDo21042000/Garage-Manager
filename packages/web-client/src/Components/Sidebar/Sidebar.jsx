@@ -36,21 +36,13 @@ const Sidebar = () => {
           <Link to="/customer"></Link>
         </Menu.Item>
         <SubMenu key="/sales-report" icon={<FormOutlined />} title="Báo cáo doanh số">
-          <Menu.Item key="r1"><Link to="sales-report-page">Báo cáo doanh số</Link></Menu.Item>
-          <Menu.Item key="r2"><Link to="sales-report-form">Form doanh số</Link></Menu.Item>
+          <Menu.Item key="sales-report-page"><Link to="sales-report-page">Báo cáo doanh số</Link></Menu.Item>
+          <Menu.Item key="sales-report-form"><Link to="sales-report-form">Form doanh số</Link></Menu.Item>
         </SubMenu>
-        <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-          <Menu.Item key="3">Tom</Menu.Item>
-          <Menu.Item key="4">Bill</Menu.Item>
-          <Menu.Item key="5">Alex</Menu.Item>
+        <SubMenu key="/inventory-report" icon={<FormOutlined />} title="Báo cáo tồn">
+          <Menu.Item key="inventory-report-page"><Link to="inventory-report-page">Báo cáo tồn</Link></Menu.Item>
+          <Menu.Item key="inventory-report-form"><Link to="inventory-report-form">Form báo cáo tồn</Link></Menu.Item>
         </SubMenu>
-        <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-          <Menu.Item key="6">Team 1</Menu.Item>
-          <Menu.Item key="8">Team 2</Menu.Item>
-        </SubMenu>
-        <Menu.Item key="9" icon={<FileOutlined />}>
-          Files
-        </Menu.Item>
       </Menu>
     </StyledSider>
   );

@@ -1,22 +1,21 @@
-import { Button, DatePicker, Form, Input, Layout } from 'antd';
+import { Button, DatePicker, Form, Input, Layout, Breadcrumb } from 'antd';
 import React from 'react';
 import { ButtonWrapper, Title } from './styles';
 
-const FormText = [
-  'Mã vật tư',
-  'Tên vật tư',
-  'Tồn đầu',
-  'Phát sinh',
-  'Tồn cuối',
-  'Mã nhân viên',
-];
+const { Header } = Layout;
+const FormText = ['Mã vật tư', 'Tên vật tư', 'Tồn đầu', 'Phát sinh', 'Tồn cuối', 'Mã nhân viên'];
 
 const FormBaoCaoTon = () => {
   const { Item } = Form;
 
   return (
     <Layout>
+      <Header className="site-layout-background" style={{ padding: 0 }} />
       <Layout.Content style={{ width: '100%', clear: 'both' }}>
+        <Breadcrumb style={{ margin: '16px 16px' }}>
+          <Breadcrumb.Item>Báo cáo tồn</Breadcrumb.Item>
+          <Breadcrumb.Item>Form lập báo cáo tồn</Breadcrumb.Item>
+        </Breadcrumb>
         <Title>Lập báo cáo</Title>
 
         <Form
