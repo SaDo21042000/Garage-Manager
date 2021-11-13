@@ -1,12 +1,7 @@
-import { Layout, Table } from 'antd';
+import { Layout, Table, Breadcrumb } from 'antd';
 import React from 'react';
 import { MONTHS, YEARS } from '../../Constants';
-import {
-  CreateReportButton,
-  PrintReportButton,
-  TimePicker,
-  Wrapper,
-} from './styles';
+import { CreateReportButton, PrintReportButton, TimePicker, Wrapper } from './styles';
 
 const dataSource = [
   {
@@ -99,11 +94,16 @@ const BaoCaoTon = () => {
   const title = 'Danh sách báo cáo tồn kho tháng 6/2021';
   const tableTitle = 'Báo cáo tồn kho tháng  6/2021';
   const { Column } = Table;
-  const { Content } = Layout;
+  const { Content, Header } = Layout;
 
   return (
     <Layout>
+      <Header className="site-layout-background" style={{ padding: 0 }} />
       <Content>
+        <Breadcrumb style={{ margin: '16px 16px' }}>
+          <Breadcrumb.Item>Báo cáo tồn</Breadcrumb.Item>
+          <Breadcrumb.Item>Báo cáo tồn</Breadcrumb.Item>
+        </Breadcrumb>
         <Wrapper>
           <div style={{ height: '4rem' }} />
           <h1>{title}</h1>
