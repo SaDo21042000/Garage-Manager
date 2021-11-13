@@ -22,12 +22,7 @@ const Layout = ({ menuSelectedKey, children }) => {
   return (
     <StyledLayout style={{ minHeight: '100vh' }}>
       <Sidebar selectedKey={menuSelectedKey} />
-      {/* <Layout menuSelectedKey={'Home'}> */}
-        {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
-        {/* <Content style={{ margin: '0 16px' }}></Content> */}
-        {children}
-        {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-      </Layout> */}
+      {children}
     </StyledLayout>
   );
 };
