@@ -3,8 +3,7 @@ import Layout from './Components/Layout';
 import HomePage from './Containers/HomePage';
 import CustomerPage from './Containers/CustomerPage';
 import { SaleReportPage, SaleReportForm } from './Containers/SaleReportPage';
-import BaoCaoTon from './Containers/BaoCaoTon';
-import FormBaoCaoTon from './Containers/FormBaoCaoTon';
+import { InventoryReport, InventoryReportForm } from './Containers/InventoryPage';
 
 function Routes() {
   return (
@@ -15,8 +14,8 @@ function Routes() {
           <Route path="/customer" component={CustomerPage} />
           <Route path="/sales-report-page" component={SaleReportPage} />
           <Route path="/sales-report-form" component={SaleReportForm} />
-          <Route path="/inventory-report-page" component={BaoCaoTon} />
-          <Route path="/inventory-report-form" component={FormBaoCaoTon} />
+          <Route path="/inventory-report-page" component={InventoryReport} />
+          <Route path="/inventory-report-form" component={InventoryReportForm} />
         </Switch>
       </Layout>
     </BrowserRouter>
