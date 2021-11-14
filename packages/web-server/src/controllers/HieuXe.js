@@ -1,6 +1,5 @@
 const { HieuXe } = require('../models');
 const HieuXeService = require('../services/HieuXe');
-const {find, findOne, update } = require('../configs/controller.template.config')(HieuXe);
 const {generateID}= require('../helpers/generateID');
 const {successResponse,errorResponse}= require('../utils/objResponse');
 
@@ -74,10 +73,8 @@ const getAll = async (req, res) => {
 }
 
 module.exports = {
-    find,
-    findOne,
+
     create,
-    update,
     deleteOne,
     getAll
 }

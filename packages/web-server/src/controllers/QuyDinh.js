@@ -14,7 +14,6 @@ const get = async (req, res) => {
                 return {
                     maQuyDinh:item.maQuyDinh,
                     soXeMax:item.soXeMax,
-                    soLoaiTienCong:item.soLoaiTienCong,
                 }
             })
             let objQuyDinh=lstQuyDinh[0];
@@ -37,17 +36,13 @@ const update = async (req, res) => {
         let oldListQuyDinh = await QuyDinhService.find();
         if(oldListQuyDinh&& oldListQuyDinh.length>0){
             let oldQuyDinh =await QuyDinhService.findOne({maQuyDinh:data.maQuyDinh});
-            if(data.soLoaiTienCong.hasOwnProperty("gioHanhChinh")&&data.soLoaiTienCong.hasOwnProperty("ngoaiGio")){
-                if(oldQuyDinh){
-                    await QuyDinhService.update({maQuyDinh:data.maQuyDinh},data)
-                    return res.status(200).json(successResponse("Cập nhật quy định thành công"));
-               }else{
-                res.status(403).json(errorResponse( 'Không tìm thấy quy định này.'));
-               } 
+            if(oldQuyDinh){
+                await QuyDinhService.update({maQuyDinh:data.maQuyDinh},data)
+                return res.status(200).json(successResponse("Cập nhật quy định thành công"));
             }else{
-                res.status(403).json(errorResponse( 'Dữ liệu không đúng.'));
-            }
-                  
+            res.status(403).json(errorResponse( 'Không tìm thấy quy định này.'));
+            } 
+     
         }else{
             let id=generateID("QD");
             data={
