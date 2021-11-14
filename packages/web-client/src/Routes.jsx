@@ -6,8 +6,7 @@ import { CarList, CarReception, Bill } from './Containers/CarManagement';
 import { RepairForm, RepairPage } from './Containers/RepairManagement';
 import CustomerPage from './Containers/CustomerPage';
 import { SaleReportPage, SaleReportForm } from './Containers/SaleReportPage';
-import BaoCaoTon from './Containers/BaoCaoTon';
-import FormBaoCaoTon from './Containers/FormBaoCaoTon';
+import { InventoryReport, InventoryReportForm } from './Containers/InventoryPage';
 
 function Routes() {
   return (
@@ -25,8 +24,8 @@ function Routes() {
           <Route path="/bill" component={Bill} />
           <Route path="/log-in" component={LogIn} />
           <Route path="/sign-up" component={SignUp} />
-          <Route path="/inventory-report-page" component={BaoCaoTon} />
-          <Route path="/inventory-report-form" component={FormBaoCaoTon} />
+          <Route path="/inventory-report-page" component={InventoryReport} />
+          <Route path="/inventory-report-form" component={InventoryReportForm} />
         </Switch>
       </Layout>
     </BrowserRouter>

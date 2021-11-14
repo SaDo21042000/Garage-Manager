@@ -100,7 +100,7 @@ const SaleReportPage = () => {
     {
       title: 'Mã Hiệu Xe',
       dataIndex: 'carName',
-      key: 'carNname',
+      key: 'carName',
     },
     {
       title: 'Số Lượng Sửa',
