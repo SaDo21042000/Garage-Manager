@@ -12,6 +12,10 @@ const { initVatTu } = require('./VatTu');
 const { initPhieuNhapVatTu } = require('./PhieuNhapVatTu');
 const { initChiTietBaoCaoTon } = require('./ChiTietBaoCaoTon');
 const { initBaoCaoTon } = require('./BaoCaoTon');
+const { initPhieuTiepNhan } = require('./PhieuTiepNhan');
+const { initPhieuSuaChua } = require('./PhieuSuaChua');
+const { initPhieuThuTien } = require('./PhieuThuTien');
+const { initDoanhSo } = require('./DoanhSo');
 
 const db = {};
 
@@ -30,6 +34,10 @@ db.VatTu = initVatTu(mongoose)
 db.PhieuNhapVatTu = initPhieuNhapVatTu(mongoose)
 db.ChiTietBaoCaoTon = initChiTietBaoCaoTon(mongoose)
 db.BaoCaoTon = initBaoCaoTon(mongoose)
+db.PhieuTiepNhan = initPhieuTiepNhan(mongoose)
+db.PhieuSuaChua = initPhieuSuaChua(mongoose)
+db.PhieuThuTien = initPhieuThuTien(mongoose)
+db.DoanhSo = initDoanhSo(mongoose)
 
 
 module.exports = db;
