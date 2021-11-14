@@ -1,0 +1,41 @@
+const { response } = require("express");
+const jwtHelper = require("../helpers/jwt.helper");
+const TaiKhoanService = require('../services/TaiKhoan');
+const bcrypt = require('bcrypt');
+const {successResponse,errorResponse}= require('../utils/objResponse');
+
+// Thời gian sống của token
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1d";
+
+// Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "quocdeptrai-access";
+
+
+let login = async (req, res) => {
+  try {
+    var dataLogin=req.body;
+    var taikhoan= await TaiKhoanService.findOne({tenTaiKhoan:dataLogin.tenTaiKhoan});
+    if(taikhoan&&taikhoan!==null){
+      //tham số dầu tiên là mật khẩu chưa băm, cái thứ 2 là đã băm
+      const checkPw = await bcrypt.compare(dataLogin.matKhau,taikhoan.matKhau);
+
+        if(checkPw){
+            const accessToken = await jwtHelper.generateToken(taikhoan, accessTokenSecret, accessTokenLife);
+            return res.status(200).json(successResponse("Bạn đã đăng nhập thành công",{accessToken,
+            tenTaiKhoan:taikhoan.tenTaiKhoan,
+            email:taikhoan.email}));
+        }else{
+            return res.status(401).json(errorResponse("Mật khẩu của bạn không đúng. Vui lòng kiểm tra lại"))
+        }
+    }else{
+        return res.status(401).json(errorResponse("Tên tài khoản không đúng. Vui lòng kiểm tra lại"))
+    }
+
+  } catch (error) {
+    return res.status(500).json(errorResponse("Đã có lỗi xảy ra. Vui lòng thực hiện lại"));
+  }
+}
+
+module.exports = {
+  login: login,
+}

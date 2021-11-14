@@ -3,20 +3,16 @@ exports.initQuyDinh = function(mongoose) {
 
   // Create QuyDinh Schema
   const QuyDinhSchema = new Schema({
-     soLuongHX: {
-       type:Number,
-       require: true
-     },
+    maQuyDinh: {
+      type:String,
+      require: true
+    },
      soXeMax: {
        type:Number,
        require: true
      },
-     soLoaiVatTu: {
-       type:Number,
-       require: true
-     },
      soLoaiTienCong: {
-       type:Number,
+      type:Object,
        require: true
      }
   })

@@ -14,11 +14,20 @@ exports.create = async input => {
 }
 
 exports.find = () =>{
-    return HieuXe.find({ name: 'hóa đơn điện'});
+    return HieuXe.find();
 }
 
+exports.findAll = () =>{
+    return HieuXe.find();
+}
+
+
 exports.findOne = (id) =>{
-    return HieuXe.findById(id);
+    return HieuXe.findOne(id);
+}
+
+exports.deleteOne = (obj) =>{
+    return HieuXe.deleteOne(obj);
 }
 
 /* `````````````````````````````````` */

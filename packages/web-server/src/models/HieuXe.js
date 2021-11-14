@@ -9,6 +9,7 @@ exports.initHieuXe = function(mongoose) {
         },
        tenHieuXe: {
             type:String,
+            unique: true
         }
     })
 

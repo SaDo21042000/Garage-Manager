@@ -16,10 +16,12 @@ exports.initTaiKhoan = function(mongoose) {
         type:String,
         require: true
       },
+      email:{
+        type:String,
+        require: true
+      },
       quyenHan: {
-        type: String,
-        enum: ["thêm", "sửa", "xóa", "cập nhật", "null"],
-        default: "null"
+        type: Number,
       }
   })
 
