@@ -54,7 +54,7 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try { 
-        var listHieuXe=await HieuXeService.findAll(123);
+        var listHieuXe=await HieuXeService.findAll();
         listHieuXe=listHieuXe.map((item)=>{
             return {maHieuXe:item.maHieuXe,
                     tenHieuXe:item.tenHieuXe}

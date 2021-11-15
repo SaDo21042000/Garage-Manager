@@ -1,5 +1,7 @@
 const {generateID}=require('../helpers/generateID')
 const QuyDinhService = require('../services/QuyDinh');
+const HieuXeService = require('../services/HieuXe');
+const LoaiVatTuService = require('../services/LoaiVatTu');
 const {mutipleMongooseToObject,mongooseToObject} =require('../utils/mongoose')
 const {successResponse,errorResponse}= require('../utils/objResponse');
 
@@ -10,16 +12,18 @@ const get = async (req, res) => {
         let oldListQuyDinh = await QuyDinhService.find();
         if(oldListQuyDinh&& oldListQuyDinh.length>0){
             lstQuyDinh=mutipleMongooseToObject(oldListQuyDinh);
+            let listHieuXe=await HieuXeService.findAll();
+            let listLoaiVatTu=await LoaiVatTuService.findAll();
             lstQuyDinh=lstQuyDinh.map(item=>{
                 return {
                     maQuyDinh:item.maQuyDinh,
                     soXeMax:item.soXeMax,
+                    soHieuXe:listHieuXe.length,
+                    soLoaiVatTu:listLoaiVatTu.length
                 }
             })
             let objQuyDinh=lstQuyDinh[0];
             res.status(200).json(successResponse("Lấy danh sách thành công",{quyDinh:objQuyDinh}));
-            // await QuyDinhService.update({maQuyDinh:data.maQuyDinh},newQuyDinh);
-            // return res.status(200).json({message:"Cập nhật quy định thành công"});
             
         }else{
            await QuyDinhService.create(req.body);
