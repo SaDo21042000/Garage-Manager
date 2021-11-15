@@ -15,7 +15,7 @@ const create = async (req, res) => {
     if (formInput.amount <= 0){
         return res.status(400).json({
             statusCode: 400,
-            message: 'Number of accessories must be greater than zero'
+            message: 'Number of money must be greater than zero'
         });
     }
 

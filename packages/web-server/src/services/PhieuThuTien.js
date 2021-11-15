@@ -9,7 +9,7 @@ exports.create = async formInput => {
     await Accessory.updateOne({ _id: formInput.accessoryId} , { remaining: newRemaining });
 
     // Create new accessory import form
-    let newPTT = await new AccessoryImportForm({
+    let newPTT = await new PhieuThuTien({
         ...formInput
     });
 
