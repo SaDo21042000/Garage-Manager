@@ -6,20 +6,31 @@ exports.initPhieuThuTien = function(mongoose) {
         const PhieuThuTienSchema = new Schema({
             maPTT: {
                 type:String,
-                require: true,
-                unique: true
             },
             maXe: {
                 type:String,
                 require: true
             },
-            ngayTT:{
+            bienSo: {
                 type:String,
+                require: true
+            },
+            ngayTT:{
+                type: Date,
                 require: true
             },
             soTienThu:{
                 type: Number,
                 require: true
+            },
+            hoTen:{
+                type: String,
+            },
+            dienThoai:{
+                type: String,
+            },
+            email:{
+                type: String,
             }
         })
     

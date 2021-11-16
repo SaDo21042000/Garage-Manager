@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { find, create, findOne } = require('../controllers/AccessoryImportForm');
+const { find, create, findOne } = require('../controllers/PhieuThuTien');
 
 /* GET find accessaries list */
 router.get('/:id', findOne);
