@@ -12,6 +12,7 @@ const WageRouter = require('./Wage');
 const ParameterRouter = require('./Parameter');
 const AccessoryImportFormRouter = require('./AccessoryImportForm');
 const InventoryReportRouter = require('./InventoryReport');
+const PhieuTiepNhan = require('./PhieuTIepNhan');
 
 const route = (app) => {
     app.use('/api/bills', BillRouter);
@@ -27,6 +28,7 @@ const route = (app) => {
     app.use('/api/accessories', AccessoryRouter);
     app.use('/api/accessory-import-forms', AccessoryImportFormRouter);
     app.use('/api/inventory-reports', InventoryReportRouter);
+    app.use('/api/phieutiepnhan', PhieuTiepNhan);
 }
 
 

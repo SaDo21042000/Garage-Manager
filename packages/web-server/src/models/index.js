@@ -15,6 +15,7 @@ const { initInventoryReport } = require('./InventoryReport');
 const { initInventoryReportDetail } = require('./InventoryReportDetail');
 const { initParameter } = require('./Parameter');
 const { initLoaiVatTu } = require('./LoaiVatTu');
+const { initPhieuTiepNhan } = require('./PhieuTiepNhan');
 
 const db = {};
 
@@ -36,6 +37,7 @@ db.Wage = initWage(mongoose);
 db.InventoryReport = initInventoryReport(mongoose);
 db.InventoryReportDetail = initInventoryReportDetail(mongoose);
 db.Parameter = initParameter(mongoose);
+db.PhieuTiepNhan = initPhieuTiepNhan(mongoose);
 
 
 module.exports = db;
