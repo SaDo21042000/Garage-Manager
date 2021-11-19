@@ -7,6 +7,7 @@ import { RepairForm, RepairPage } from './Containers/RepairManagement';
 import CustomerPage from './Containers/CustomerPage';
 import { SaleReportPage, SaleReportForm } from './Containers/SaleReportPage';
 import { InventoryReport, InventoryReportForm } from './Containers/InventoryPage';
+import Receipt from './Containers/Receipt';
 
 function Routes() {
   return (
@@ -26,6 +27,7 @@ function Routes() {
           <Route path="/sign-up" component={SignUp} />
           <Route path="/inventory-report-page" component={InventoryReport} />
           <Route path="/inventory-report-form" component={InventoryReportForm} />
+          <Route path="/receipt" component={Receipt} />
         </Switch>
       </Layout>
     </BrowserRouter>

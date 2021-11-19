@@ -92,27 +92,27 @@ const dataSource = [
 
 const columns = [
   {
-    title: '#',
+    title: 'STT',
     dataIndex: 'index',
     key: 'index',
   },
   {
-    title: 'Tên vật phẩm',
+    title: 'Vật tư phụ tùng',
     dataIndex: 'itemName',
     key: 'itemName',
   },
   {
-    title: 'Số lượng',
+    title: 'Tồn đầu',
     dataIndex: 'amount',
     key: 'amount',
   },
   {
-    title: 'Tiêu hao',
+    title: 'Phát sinh',
     dataIndex: 'used',
     key: 'used',
   },
   {
-    title: 'Còn lại',
+    title: 'Tồn cuối',
     dataIndex: 'rest',
     key: 'rest',
   },

@@ -1,19 +1,19 @@
+import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
+  Breadcrumb,
   Button,
-  Table,
+  Divider,
   Form,
+  Input,
   InputNumber,
   Layout,
-  Breadcrumb,
-  Typography,
-  Divider,
-  Popconfirm,
   message,
-  Input,
+  Popconfirm,
+  Table,
+  Typography,
 } from 'antd';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { InventoryReportStyles as InventoryReportFormStyles } from './styles';
-import { CheckCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Header, Content } = Layout;
 const { Item } = Form;
@@ -34,6 +34,7 @@ const InventoryReportForm = () => {
     {
       index: 1,
       itemName: 'Toyota',
+      itemAmount: 122,
       itemUsed: 8,
       itemRest: 2,
     },
@@ -106,19 +107,29 @@ const InventoryReportForm = () => {
   ]);
   const columns = [
     {
-      title: '#',
+      title: 'STT',
       dataIndex: 'index',
       key: 'index',
     },
     {
-      title: 'Tên vật phẩm',
+      title: 'Vật tư phụ tùng',
       dataIndex: 'itemName',
       key: 'itemName',
     },
     {
-      title: 'Đã dùng',
+      title: 'Tồn đầu',
+      dataIndex: 'itemAmount',
+      key: 'itemAmount',
+    },
+    {
+      title: 'Phát sinh',
       dataIndex: 'itemUsed',
       key: 'itemUsed',
+    },
+    {
+      title: 'Tồn cuối',
+      dataIndex: 'itemRest',
+      key: 'itemRest',
     },
     {
       title: 'Hành động',
@@ -147,8 +158,8 @@ const InventoryReportForm = () => {
       email: '${label} không phải là email hợp lệ!',
     },
     number: {
-      min: "'${label}' không thể nhỏ hơn ${min}",
-      max: "'${label}' không thể lớn hơn ${max}",
+      min: '${label} không thể nhỏ hơn ${min}',
+      max: '${label} không thể lớn hơn ${max}',
       range: '${label} phải ở giữa ${min} và ${max}',
     },
   };
