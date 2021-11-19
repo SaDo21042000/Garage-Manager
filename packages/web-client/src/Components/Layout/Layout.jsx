@@ -4,8 +4,6 @@ import { Layout as AntLayout } from 'antd';
 import styled from 'styled-components';
 import Sidebar from '../Sidebar';
 
-// const { Header, Footer } = AntLayout;
-
 const StyledLayout = styled(AntLayout)`
   .logo {
     height: 32px;
