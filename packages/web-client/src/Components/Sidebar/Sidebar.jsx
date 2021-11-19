@@ -3,13 +3,7 @@ import 'antd/dist/antd.css';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  HomeOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-  FormOutlined,
-} from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, FormOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 const StyledSider = styled(Sider)`
@@ -60,6 +54,9 @@ const Sidebar = () => {
             <Link to="bill">Lập Phiếu Thu Tiền</Link>
           </Menu.Item>
         </SubMenu>
+        <Menu.Item key="/receipt" icon={<UserOutlined />}>
+          <Link to="/receipt">Receipt Page</Link>
+        </Menu.Item>
         <SubMenu key="/sales-report" icon={<FormOutlined />} title="Báo cáo doanh số">
           <Menu.Item key="r8">
             <Link to="sales-report-page">Báo cáo doanh số</Link>

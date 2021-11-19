@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import { PrinterFilled, ReloadOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, DatePicker, Form, Input, InputNumber, Layout, Typography } from 'antd';
 import React from 'react';
