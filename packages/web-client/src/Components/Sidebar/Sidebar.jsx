@@ -3,7 +3,13 @@ import 'antd/dist/antd.css';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { HomeOutlined, FileOutlined, TeamOutlined, UserOutlined, FormOutlined } from '@ant-design/icons';
+import {
+  HomeOutlined,
+  FileOutlined,
+  TeamOutlined,
+  UserOutlined,
+  FormOutlined,
+} from '@ant-design/icons';
 
 const { Sider } = Layout;
 const StyledSider = styled(Sider)`
@@ -35,14 +41,40 @@ const Sidebar = () => {
           <span>Customer Page</span>
           <Link to="/customer"></Link>
         </Menu.Item>
-        <SubMenu key="/sales-report" icon={<FormOutlined />} title="Báo cáo doanh số">
-          <Menu.Item key="r1"><Link to="sales-report-page">Báo cáo doanh số</Link></Menu.Item>
-          <Menu.Item key="r2"><Link to="sales-report-form">Form doanh số</Link></Menu.Item>
+        <SubMenu key="car-managemant" icon={<FormOutlined />} title="Quản Lý Xe">
+          <Menu.Item key="r1">
+            <Link to="/car-list">Danh sách xe</Link>
+          </Menu.Item>
+          <Menu.Item key="r2">
+            <Link to="/car-reception">Tiếp Nhận Xe Sửa</Link>
+          </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-          <Menu.Item key="3">Tom</Menu.Item>
-          <Menu.Item key="4">Bill</Menu.Item>
-          <Menu.Item key="5">Alex</Menu.Item>
+        <SubMenu key="" icon={<FormOutlined />} title="Phiếu Sửa Chữa">
+          <Menu.Item key="/repair-page">
+            <Link to="repair-page">Quản Lý Phiếu Sửa Chữa</Link>
+          </Menu.Item>
+          <Menu.Item key="/repair-form">
+            <Link to="repair-form">Lập Phiếu Sửa Chữa</Link>
+          </Menu.Item>
+          <Menu.Item key="/bill">
+            <Link to="bill">Lập Phiếu Thu Tiền</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="/sales-report" icon={<FormOutlined />} title="Báo cáo doanh số">
+          <Menu.Item key="r8">
+            <Link to="sales-report-page">Báo cáo doanh số</Link>
+          </Menu.Item>
+          <Menu.Item key="r9">
+            <Link to="sales-report-form">Form doanh số</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub1" icon={<UserOutlined />} title="Đăng Nhập">
+          <Menu.Item key="/log-in">
+            <Link to="log-in">Đăng Nhập</Link>
+          </Menu.Item>
+          <Menu.Item key="/sign-up">
+            <Link to="sign-up">Đăng Ký</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
           <Menu.Item key="6">Team 1</Menu.Item>
