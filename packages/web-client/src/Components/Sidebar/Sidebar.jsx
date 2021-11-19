@@ -3,13 +3,7 @@ import 'antd/dist/antd.css';
 import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  HomeOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-  FormOutlined,
-} from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, FormOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 const StyledSider = styled(Sider)`
@@ -60,6 +54,9 @@ const Sidebar = () => {
             <Link to="bill">Lập Phiếu Thu Tiền</Link>
           </Menu.Item>
         </SubMenu>
+        <Menu.Item key="/receipt" icon={<UserOutlined />}>
+          <Link to="/receipt">Receipt Page</Link>
+        </Menu.Item>
         <SubMenu key="/sales-report" icon={<FormOutlined />} title="Báo cáo doanh số">
           <Menu.Item key="r8">
             <Link to="sales-report-page">Báo cáo doanh số</Link>
@@ -76,13 +73,10 @@ const Sidebar = () => {
             <Link to="sign-up">Đăng Ký</Link>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-          <Menu.Item key="6">Team 1</Menu.Item>
-          <Menu.Item key="8">Team 2</Menu.Item>
+        <SubMenu key="/inventory-report" icon={<FormOutlined />} title="Báo cáo tồn">
+          <Menu.Item key="inventory-report-page"><Link to="inventory-report-page">Báo cáo tồn</Link></Menu.Item>
+          <Menu.Item key="inventory-report-form"><Link to="inventory-report-form">Form báo cáo tồn</Link></Menu.Item>
         </SubMenu>
-        <Menu.Item key="9" icon={<FileOutlined />}>
-          Files
-        </Menu.Item>
       </Menu>
     </StyledSider>
   );
