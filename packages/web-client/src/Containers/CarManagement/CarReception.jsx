@@ -1,13 +1,24 @@
+/* eslint-disable no-template-curly-in-string */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Layout as AntLayout, Breadcrumb, Typography, Form, Input, Button, Table,
-  Popconfirm, message, InputNumber, DatePicker } from 'antd';
+import {
+  Layout as AntLayout,
+  Breadcrumb,
+  Typography,
+  Form,
+  Input,
+  Button,
+  Table,
+  Popconfirm,
+  message,
+  DatePicker,
+} from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Header, Footer, Content } = AntLayout;
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-const StyledTiepNhanXe = styled(AntLayout)`
+const StyledCarReception = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
   }
@@ -21,14 +32,12 @@ const StyledTiepNhanXe = styled(AntLayout)`
     }
   }
 
-
   .result-table {
     margin-bottom: 30px;
   }
-
 `;
 
-const TiepNhanXe = () => {
+const CarReception = () => {
   const [dataSource, setDataSource] = useState([
     {
       key: '1',
@@ -53,7 +62,6 @@ const TiepNhanXe = () => {
       carName: 'Toyota',
       name: 'Nguyen Van C',
       phone: '0123456789',
-
     },
   ]);
 
@@ -80,8 +88,6 @@ const TiepNhanXe = () => {
       range: '${label} phải ở giữa ${min} và ${max}',
     },
   };
-
-  
 
   const columns = [
     {
@@ -128,15 +134,12 @@ const TiepNhanXe = () => {
       ),
     },
   ];
-  
-
 
   const handleDelete = (number) => {
     console.log(number);
     setDataSource(dataSource.filter((item) => item.number !== number));
     message.info('Clicked on Yes.');
   };
-
 
   const onFinishAddItem = (values) => {
     values.number = dataSource.length + 1;
@@ -152,9 +155,8 @@ const TiepNhanXe = () => {
     setDataSource([...dataSource, newData]);
   };
 
-
   return (
-    <StyledTiepNhanXe menuSelectedKey={'sales-report-form'}>
+    <StyledCarReception menuSelectedKey={'sales-report-form'}>
       <Header className="site-layout-background" style={{ padding: 0 }} />
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
@@ -201,7 +203,6 @@ const TiepNhanXe = () => {
               rules={[
                 {
                   required: true,
-
                 },
               ]}
             >
@@ -240,15 +241,17 @@ const TiepNhanXe = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item name="date"
+            <Form.Item
+              name="date"
               label="Ngày Tiếp Nhận"
               rules={[
                 {
                   required: true,
                 },
-              ]}>
-            <DatePicker  style={{ width: '100%' }} />
-           </Form.Item>
+              ]}
+            >
+              <DatePicker style={{ width: '100%' }} />
+            </Form.Item>
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
               <Button type="primary" htmlType="submit">
                 Xác nhận
@@ -256,21 +259,20 @@ const TiepNhanXe = () => {
             </Form.Item>
           </Form>
 
-          
           <Title className="main-title" level={2}>
             Danh sách xe tiếp nhận trong ngày
           </Title>
+          <Table
+            className="result-table"
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+          />
         </div>
       </Content>
-      <Table
-              className="result-table"
-              columns={columns}
-              dataSource={dataSource}
-              pagination={false}
-            />
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-    </StyledTiepNhanXe>
+    </StyledCarReception>
   );
 };
 
-export default TiepNhanXe;
+export default CarReception;

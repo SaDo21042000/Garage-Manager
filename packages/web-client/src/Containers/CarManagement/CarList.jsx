@@ -1,12 +1,22 @@
+/* eslint-disable no-template-curly-in-string */
 import React from 'react';
-import { Layout as AntLayout, Breadcrumb,Typography, Table, Input,
-Button, Popconfirm, message, Form, Select, DatePicker } from 'antd';
+import {
+  Layout as AntLayout,
+  Breadcrumb,
+  Typography,
+  Table,
+  Button,
+  Popconfirm,
+  message,
+  Form,
+  Input,
+} from 'antd';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const { Header, Footer, Content } = AntLayout;
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const StyledHomePage = styled(AntLayout)`
   .site-layout-background {n
     background: #fff;
@@ -27,11 +37,7 @@ const StyledHomePage = styled(AntLayout)`
   }
 `;
 
-
-const RepairManagement = () => {
-
-  const { Option } = Select;
-
+const CarList = () => {
   const validateMessages = {
     required: 'Nhập ${label}!',
     types: {
@@ -57,19 +63,24 @@ const RepairManagement = () => {
       key: 'plate',
     },
     {
+      title: 'Hiệu Xe',
+      dataIndex: 'carName',
+      key: 'carName',
+    },
+    {
       title: 'Chủ Xe',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Tổng Tiền Sửa Chữa',
-      dataIndex: 'money',
-      key: 'money',
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
-      title: 'Tình trạng sửa',
-      dataIndex: 'done',
-      key: 'done',
+      title: 'Tiền Nợ',
+      dataIndex: 'debt',
+      key: 'debt',
     },
     {
       title: 'Action',
@@ -96,25 +107,28 @@ const RepairManagement = () => {
       key: '1',
       number: '1',
       plate: '81A-12345',
+      carName: 'Audi',
       name: 'Nguyen Van A',
-      money: '500000',
-      done: 'Đã sửa chữa'
+      phone: '0123456789',
+      debt: '0',
     },
     {
       key: '2',
       number: '2',
       plate: '81A-12345',
+      carName: 'Mercedes',
       name: 'Nguyen Van B',
-      money: '1500000',
-      done: 'Chưa sửa chữa'
+      phone: '0123456789',
+      debt: '0',
     },
     {
       key: '3',
       number: '3',
       plate: '81A-12345',
+      carName: 'Toyota',
       name: 'Nguyen Van C',
-      money: '5000000',
-      done: 'Chưa sửa chữa'
+      phone: '0123456789',
+      debt: '0',
     },
   ];
 
@@ -122,17 +136,21 @@ const RepairManagement = () => {
     message.info('Clicked on Yes.');
   }
 
+  const onFinish = (values) => {
+    console.log(values);
+  };
+
   return (
     <StyledHomePage>
       <Header className="site-layout-background" style={{ padding: 0 }} />
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Quản Lý Xe</Breadcrumb.Item>
-          <Breadcrumb.Item>Quản Lý Phiếu Sửa Chữa</Breadcrumb.Item>
+          <Breadcrumb.Item>Danh sách Xe</Breadcrumb.Item>
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <Title className="main-title" level={2}>
-            Quản lý phiếu sửa chữa
+            Danh sách xe
           </Title>
           <Form
             name="basic"
@@ -143,23 +161,30 @@ const RepairManagement = () => {
             autoComplete="off"
             layout="inline"
             validateMessages={validateMessages}
+            onFinish={onFinish}
           >
-            <Form.Item name="date"
-              label="Ngày">
-            <DatePicker  style={{ width: '100%' }} />
-           </Form.Item>
+            <Form.Item label="Biển Số" name="plate">
+              <Input style={{ width: '100%' }} />
+            </Form.Item>
+
+            <Form.Item label="Chủ Xe" name="owner">
+              <Input style={{ width: '100%' }} />
+            </Form.Item>
+            <Form.Item label="Phone" name="phone">
+              <Input style={{ width: '100%' }} />
+            </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Tìm kiếm
               </Button>
             </Form.Item>
           </Form>
-          </div>
-        <Table columns={columns} dataSource={data} />
+          <Table columns={columns} dataSource={data} />
+        </div>
         <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
       </Content>
     </StyledHomePage>
   );
 };
 
-export default RepairManagement;
+export default CarList;

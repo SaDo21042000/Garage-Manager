@@ -1,14 +1,26 @@
+/* eslint-disable no-template-curly-in-string */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Layout as AntLayout, Breadcrumb, Typography, Form, Input, Button, Table,
-Popconfirm, message, InputNumber, Select, DatePicker } from 'antd';
+import {
+  Layout as AntLayout,
+  Breadcrumb,
+  Typography,
+  Form,
+  Input,
+  Button,
+  Table,
+  Popconfirm,
+  message,
+  InputNumber,
+  Select,
+} from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Header, Footer, Content } = AntLayout;
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-const StyledRepairPage = styled(AntLayout)`
+const StyledRepairForm = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
   }
@@ -36,7 +48,7 @@ const StyledRepairPage = styled(AntLayout)`
   }
 `;
 
-const RepairPage = () => {
+const RepairForm = () => {
   const [dataSource, setDataSource] = useState([
     {
       key: '1',
@@ -78,12 +90,6 @@ const RepairPage = () => {
     },
     wrapperCol: {
       span: 8,
-    },
-  };
-  const tailLayout = {
-    wrapperCol: {
-      offset: 8,
-      span: 16,
     },
   };
 
@@ -158,17 +164,15 @@ const RepairPage = () => {
 
   const { Option } = Select;
 
-  const [form] = Form.useForm();
-  
+  // const [form] = Form.useForm();
 
-  dataSource.map((item, index) => (item.number = index + 1))
+  dataSource.map((item, index) => (item.number = index + 1));
 
   const handleDelete = (number) => {
     console.log(number);
     setDataSource(dataSource.filter((item) => item.number !== number));
     message.info('Clicked on Yes.');
   };
-
 
   const onFinishAddItem = (values) => {
     values.number = dataSource.length + 1;
@@ -179,25 +183,23 @@ const RepairPage = () => {
       price: values.price,
       wage: values.wage,
       numberSpare: values.numberSpare,
-      money: values.money
+      money: values.money,
     };
     setDataSource([...dataSource, newData]);
-
   };
 
-
   return (
-    <StyledRepairPage menuSelectedKey={'sales-report-form'}>
+    <StyledRepairForm menuSelectedKey={'sales-report-form'}>
       <Header className="site-layout-background" style={{ padding: 0 }} />
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Quản lý xe</Breadcrumb.Item>
+          <Breadcrumb.Item>Phiếu sửa chữa</Breadcrumb.Item>
           <Breadcrumb.Item>Lập phiếu sửa chữa</Breadcrumb.Item>
         </Breadcrumb>
 
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <Title className="main-title" level={2}>
-          Form lập phiếu sửa chữa
+            Lập phiếu sửa chữa
           </Title>
 
           <Form
@@ -216,19 +218,19 @@ const RepairPage = () => {
               ]}
             >
               <Select
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            filterSort={(optionA, optionB) =>
-            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-            }
-            >
-            <Option value="81A-12345">81A-12345</Option>
-            <Option value="81B-12345">81B-12345</Option>
-            <Option value="81C-12345">81C-12345</Option>
-            </Select>
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                }
+              >
+                <Option value="81A-12345">81A-12345</Option>
+                <Option value="81B-12345">81B-12345</Option>
+                <Option value="81C-12345">81C-12345</Option>
+              </Select>
             </Form.Item>
             <Form.Item
               name="content"
@@ -246,26 +248,26 @@ const RepairPage = () => {
               name="sparePart"
               label="Vật Tư Phụ Tùng"
               rules={[
-              {
-              required: true,
-              },
-            ]}
+                {
+                  required: true,
+                },
+              ]}
             >
-            <Select
-            showSearch
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-            filterSort={(optionA, optionB) =>
-            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-            }
-            >
-            <Option value="Bánh Xe">Bánh Xe</Option>
-            <Option value="Bóng Đèn">Bóng Đèn</Option>
-            <Option value="Gương">Gương</Option>
-            </Select>
-          </Form.Item>
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                }
+              >
+                <Option value="Bánh Xe">Bánh Xe</Option>
+                <Option value="Bóng Đèn">Bóng Đèn</Option>
+                <Option value="Gương">Gương</Option>
+              </Select>
+            </Form.Item>
             <Form.Item
               name="numberSpare"
               label="Số Lượng"
@@ -291,7 +293,7 @@ const RepairPage = () => {
                 },
               ]}
             >
-            <InputNumber style={{ width: '100%' }} />
+              <InputNumber style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
               <Button type="primary" htmlType="submit">
@@ -299,28 +301,26 @@ const RepairPage = () => {
               </Button>
             </Form.Item>
           </Form>
-          
+
+          <Table
+            className="result-table"
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+          />
+          <Button
+            className="button-finish"
+            icon={<DownloadOutlined />}
+            type="primary"
+            size="middle"
+          >
+            In phiếu sửa chữa
+          </Button>
         </div>
       </Content>
-      
-
-      <Table
-              className="result-table"
-              columns={columns}
-              dataSource={dataSource}
-              pagination={false}
-            />
-      <Button
-              className="button-finish"
-              icon={<DownloadOutlined />}
-              type="primary"
-              size="middle"
-            >
-              In phiếu sửa chữa
-            </Button>
       <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-    </StyledRepairPage>
+    </StyledRepairForm>
   );
 };
 
-export default RepairPage;
+export default RepairForm;
