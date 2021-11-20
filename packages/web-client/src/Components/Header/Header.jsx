@@ -22,7 +22,7 @@ const Header = () => {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Link to="sign-up">
+        <Link to="log-in">
           Đăng xuất
         </Link>
       </Menu.Item>
