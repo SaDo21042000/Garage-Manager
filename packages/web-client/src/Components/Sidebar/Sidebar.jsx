@@ -50,9 +50,6 @@ const Sidebar = () => {
             <Link to="bill">Lập Phiếu Thu Tiền</Link>
           </Menu.Item>
         </SubMenu>
-        <Menu.Item key="/receipt" icon={<UserOutlined />}>
-          <Link to="/receipt">Receipt Page</Link>
-        </Menu.Item>
         <SubMenu key="/sales-report" icon={<FormOutlined />} title="Báo cáo doanh số">
           <Menu.Item key="/sales-report-page">
             <Link to="sales-report-page">Báo cáo doanh số</Link>
