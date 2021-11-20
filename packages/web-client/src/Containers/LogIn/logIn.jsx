@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Layout as AntLayout, Typography, Form, Input, Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -37,44 +38,42 @@ const LogIn = () => {
   return (
     <StyledLogIn menuSelectedKey={'sales-report-form'}>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 20 }}>
-        <Title className="main-title" level={2}>
+        <Title className="main-title" level={2} style={{ marginTop: '5em' }}>
           Đăng Nhập
         </Title>
 
-        <div className="site-layout-background">
-          <Form {...layout} name="nest-messages" validateMessages={validateMessages}>
-            <Form.Item
-              name="account"
-              label="Tên Tài Khoản"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              label="Mật Khẩu"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-            <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-              <Button type="primary" htmlType="submit">
-                Đăng Nhập
-              </Button>
-            </Form.Item>
-            <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
-              Nếu chưa có tài khoản <a href="/sign-up">Đăng ký ngay!</a>
-            </Form.Item>
-          </Form>
-        </div>
+        <Form {...layout} name="nest-messages" validateMessages={validateMessages}>
+          <Form.Item
+            name="account"
+            label="Tên Tài Khoản"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Mật Khẩu"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
+            <Button type="primary" htmlType="submit">
+              Đăng Nhập
+            </Button>
+          </Form.Item>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
+            Nếu chưa có tài khoản <Link to="/sign-up">Đăng ký ngay!</Link>
+          </Form.Item>
+        </Form>
       </div>
     </StyledLogIn>
   );

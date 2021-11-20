@@ -11,6 +11,7 @@ import {
   InputNumber,
   DatePicker,
 } from 'antd';
+import { PrinterFilled } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -150,9 +151,14 @@ const Bill = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-            <Button type="primary" htmlType="submit">
-              Lưu
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
+            <Button
+              type="success"
+              icon={<PrinterFilled style={{ fontSize: '20px' }} />}
+              htmlType="submit"
+              style={{ backgroundColor: '#237804', color: '#fff' }}
+            >
+              In báo cáo và lưu
             </Button>
           </Form.Item>
         </Form>

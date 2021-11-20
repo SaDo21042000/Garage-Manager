@@ -31,10 +31,6 @@ const Sidebar = () => {
           <span>Home Page</span>
           <Link to="/"></Link>
         </Menu.Item>
-        <Menu.Item key="/customer" icon={<UserOutlined />}>
-          <span>Customer Page</span>
-          <Link to="/customer"></Link>
-        </Menu.Item>
         <SubMenu key="car-managemant" icon={<FormOutlined />} title="Quản Lý Xe">
           <Menu.Item key="r1">
             <Link to="/car-list">Danh sách xe</Link>
