@@ -22,7 +22,7 @@ const route = (app) => {
     app.use('/api/hieuxes', HieuXeRouter);
     app.use('/api/chitietdoanhsos', ChiTietDoanhSoRouter);
     app.use('/api/taikhoans', TaiKhoanRouter);
-    app.use('/api/quydinhs',isAdminAuth, QuyDinhRouter);
+    app.use('/api/quydinhs', QuyDinhRouter);
     app.use('/api/loaivattus', LoaiVatTuRouter);
     app.use('/api/wages', WageRouter);
     app.use('/api/parameters', ParameterRouter);
