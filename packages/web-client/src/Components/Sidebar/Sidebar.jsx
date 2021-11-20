@@ -40,7 +40,7 @@ const Sidebar = () => {
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub2" icon={<FormOutlined />} title="Quản lý phụ tùng">
-        <Menu.Item key="/listAccessary">
+          <Menu.Item key="/listAccessary">
             <span>Nhập vật tư phụ tùng</span>
             <Link to="/import-accessary"></Link>
           </Menu.Item>
@@ -72,20 +72,20 @@ const Sidebar = () => {
             <Link to="sales-report-form">Form doanh số</Link>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub1" icon={<UserOutlined />} title="Đăng Nhập">
-          <Menu.Item key="/log-in">
-            <Link to="log-in">Đăng Nhập</Link>
-          </Menu.Item>
-          <Menu.Item key="/sign-up">
-            <Link to="sign-up">Đăng Ký</Link>
-          </Menu.Item>
-        </SubMenu>
         <SubMenu key="/inventory-report" icon={<FormOutlined />} title="Báo cáo tồn">
           <Menu.Item key="inventory-report-page">
             <Link to="inventory-report-page">Báo cáo tồn</Link>
           </Menu.Item>
           <Menu.Item key="inventory-report-form">
             <Link to="inventory-report-form">Form báo cáo tồn</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="sub1" icon={<UserOutlined />} title="Đăng Nhập">
+          <Menu.Item key="/log-in">
+            <Link to="log-in">Đăng Nhập</Link>
+          </Menu.Item>
+          <Menu.Item key="/sign-up">
+            <Link to="sign-up">Đăng Ký</Link>
           </Menu.Item>
         </SubMenu>
         <Menu.Item key="/setting" icon={<SettingOutlined />}>
