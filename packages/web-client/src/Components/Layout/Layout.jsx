@@ -4,6 +4,10 @@ import { Layout as AntLayout } from 'antd';
 import styled from 'styled-components';
 import Sidebar from '../Sidebar';
 
+import Header from '../../Components/Header';
+import Footer from '../../Components/Footer';
+const { Content } = AntLayout;
+
 const StyledLayout = styled(AntLayout)`
   .logo {
     height: 32px;
@@ -20,7 +24,13 @@ const Layout = ({ menuSelectedKey, children }) => {
   return (
     <StyledLayout style={{ minHeight: '100vh' }}>
       <Sidebar selectedKey={menuSelectedKey} />
-      {children}
+      <AntLayout>
+        <Header />
+        <Content style={{ margin: '0 16px' }}>
+          {children}
+          <Footer />
+        </Content>
+      </AntLayout>
     </StyledLayout>
   );
 };

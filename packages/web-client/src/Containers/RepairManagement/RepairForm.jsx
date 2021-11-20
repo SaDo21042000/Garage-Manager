@@ -17,7 +17,6 @@ import {
 import { DownloadOutlined } from '@ant-design/icons';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-const { Header, Footer, Content } = AntLayout;
 const { Title } = Typography;
 
 const StyledRepairForm = styled(AntLayout)`
@@ -190,135 +189,126 @@ const RepairForm = () => {
 
   return (
     <StyledRepairForm menuSelectedKey={'sales-report-form'}>
-      <Header className="site-layout-background" style={{ padding: 0 }} />
-      <Content style={{ margin: '0 16px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Phiếu sửa chữa</Breadcrumb.Item>
-          <Breadcrumb.Item>Lập phiếu sửa chữa</Breadcrumb.Item>
-        </Breadcrumb>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Phiếu sửa chữa</Breadcrumb.Item>
+        <Breadcrumb.Item>Lập phiếu sửa chữa</Breadcrumb.Item>
+      </Breadcrumb>
 
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
-          <Title className="main-title" level={2}>
-            Lập phiếu sửa chữa
-          </Title>
+      <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
+        <Title className="main-title" level={2}>
+          Lập phiếu sửa chữa
+        </Title>
 
-          <Form
-            {...layout}
-            name="nest-messages"
-            onFinish={onFinishAddItem}
-            validateMessages={validateMessages}
+        <Form
+          {...layout}
+          name="nest-messages"
+          onFinish={onFinishAddItem}
+          validateMessages={validateMessages}
+        >
+          <Form.Item
+            label="Biển Số"
+            name="plate"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
           >
-            <Form.Item
-              label="Biển Số"
-              name="plate"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              filterSort={(optionA, optionB) =>
+                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+              }
             >
-              <Select
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                filterSort={(optionA, optionB) =>
-                  optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                }
-              >
-                <Option value="81A-12345">81A-12345</Option>
-                <Option value="81B-12345">81B-12345</Option>
-                <Option value="81C-12345">81C-12345</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name="content"
-              label="Nội Dung"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              name="sparePart"
-              label="Vật Tư Phụ Tùng"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                filterSort={(optionA, optionB) =>
-                  optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                }
-              >
-                <Option value="Bánh Xe">Bánh Xe</Option>
-                <Option value="Bóng Đèn">Bóng Đèn</Option>
-                <Option value="Gương">Gương</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name="numberSpare"
-              label="Số Lượng"
-              rules={[
-                {
-                  required: true,
-                  type: 'number',
-                  min: 0,
-                  max: 100,
-                },
-              ]}
-            >
-              <InputNumber style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item
-              name="wage"
-              label="Tiền Công"
-              rules={[
-                {
-                  required: true,
-                  type: 'number',
-                  min: 0,
-                },
-              ]}
-            >
-              <InputNumber style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-              <Button type="primary" htmlType="submit">
-                Thêm
-              </Button>
-            </Form.Item>
-          </Form>
-
-          <Table
-            className="result-table"
-            columns={columns}
-            dataSource={dataSource}
-            pagination={false}
-          />
-          <Button
-            className="button-finish"
-            icon={<DownloadOutlined />}
-            type="primary"
-            size="middle"
+              <Option value="81A-12345">81A-12345</Option>
+              <Option value="81B-12345">81B-12345</Option>
+              <Option value="81C-12345">81C-12345</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="content"
+            label="Nội Dung"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
           >
-            In phiếu sửa chữa
-          </Button>
-        </div>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="sparePart"
+            label="Vật Tư Phụ Tùng"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              filterSort={(optionA, optionB) =>
+                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+              }
+            >
+              <Option value="Bánh Xe">Bánh Xe</Option>
+              <Option value="Bóng Đèn">Bóng Đèn</Option>
+              <Option value="Gương">Gương</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="numberSpare"
+            label="Số Lượng"
+            rules={[
+              {
+                required: true,
+                type: 'number',
+                min: 0,
+                max: 100,
+              },
+            ]}
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            name="wage"
+            label="Tiền Công"
+            rules={[
+              {
+                required: true,
+                type: 'number',
+                min: 0,
+              },
+            ]}
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
+            <Button type="primary" htmlType="submit">
+              Thêm
+            </Button>
+          </Form.Item>
+        </Form>
+
+        <Table
+          className="result-table"
+          columns={columns}
+          dataSource={dataSource}
+          pagination={false}
+        />
+        <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">
+          In phiếu sửa chữa
+        </Button>
+      </div>
     </StyledRepairForm>
   );
 };

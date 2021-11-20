@@ -11,12 +11,11 @@ import {
   Form,
   Input,
 } from 'antd';
-
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
-const { Header, Footer, Content } = AntLayout;
 const { Title } = Typography;
+
 const StyledHomePage = styled(AntLayout)`
   .site-layout-background {n
     background: #fff;
@@ -142,47 +141,43 @@ const CarList = () => {
 
   return (
     <StyledHomePage>
-      <Header className="site-layout-background" style={{ padding: 0 }} />
-      <Content style={{ margin: '0 16px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Quản Lý Xe</Breadcrumb.Item>
-          <Breadcrumb.Item>Danh sách Xe</Breadcrumb.Item>
-        </Breadcrumb>
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
-          <Title className="main-title" level={2}>
-            Danh sách xe
-          </Title>
-          <Form
-            name="basic"
-            className="filter-form"
-            initialValues={{
-              remember: true,
-            }}
-            autoComplete="off"
-            layout="inline"
-            validateMessages={validateMessages}
-            onFinish={onFinish}
-          >
-            <Form.Item label="Biển Số" name="plate">
-              <Input style={{ width: '100%' }} />
-            </Form.Item>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Quản Lý Xe</Breadcrumb.Item>
+        <Breadcrumb.Item>Danh sách Xe</Breadcrumb.Item>
+      </Breadcrumb>
+      <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
+        <Title className="main-title" level={2}>
+          Danh sách xe
+        </Title>
+        <Form
+          name="basic"
+          className="filter-form"
+          initialValues={{
+            remember: true,
+          }}
+          autoComplete="off"
+          layout="inline"
+          validateMessages={validateMessages}
+          onFinish={onFinish}
+        >
+          <Form.Item label="Biển Số" name="plate">
+            <Input style={{ width: '100%' }} />
+          </Form.Item>
 
-            <Form.Item label="Chủ Xe" name="owner">
-              <Input style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item label="Phone" name="phone">
-              <Input style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Tìm kiếm
-              </Button>
-            </Form.Item>
-          </Form>
-          <Table columns={columns} dataSource={data} />
-        </div>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-      </Content>
+          <Form.Item label="Chủ Xe" name="owner">
+            <Input style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item label="Phone" name="phone">
+            <Input style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Tìm kiếm
+            </Button>
+          </Form.Item>
+        </Form>
+        <Table columns={columns} dataSource={data} />
+      </div>
     </StyledHomePage>
   );
 };

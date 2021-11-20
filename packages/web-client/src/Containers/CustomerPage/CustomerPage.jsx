@@ -1,10 +1,8 @@
 import React from 'react';
-// import { Table } from 'antd';
 import { Layout as AntLayout, Breadcrumb, Table, Button, Popconfirm, message } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
-const { Header, Footer, Content } = AntLayout;
 const StyledHomePage = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
@@ -91,15 +89,11 @@ const CustomerPage = () => {
 
   return (
     <StyledHomePage>
-      <Header className="site-layout-background" style={{ padding: 0 }} />
-      <Content style={{ margin: '0 16px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Customer List</Breadcrumb.Item>
-          <Breadcrumb.Item>Bill</Breadcrumb.Item>
-        </Breadcrumb>
-        <Table columns={columns} dataSource={data} />
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-      </Content>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Customer List</Breadcrumb.Item>
+        <Breadcrumb.Item>Bill</Breadcrumb.Item>
+      </Breadcrumb>
+      <Table columns={columns} dataSource={data} />
     </StyledHomePage>
   );
 };
