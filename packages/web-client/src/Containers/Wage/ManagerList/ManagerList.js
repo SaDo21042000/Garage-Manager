@@ -143,14 +143,12 @@ const ManagerList = () => {
 
   return (
     <StyledHomePage>
-      <Header className="site-layout-background" style={{ padding: 0 }} />
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Quản lý phụ tùng</Breadcrumb.Item>
           <Breadcrumb.Item>Danh sách tiền công</Breadcrumb.Item>
         </Breadcrumb>
         <ManagerListView />
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UEDD</Footer>
       </Content>
     </StyledHomePage>
   );
