@@ -15,9 +15,9 @@ const {isAdminAuth}=require('../middlewares/AuthMiddleware')
 // router.put('/:id', update);
 
 /* DELETE */
-router.post('/delete',isAdminAuth, deleteOne);
+router.post('/delete', deleteOne);
 
-router.post('/create',isAdminAuth, create);
+router.post('/create', create);
 
 router.post('/get', getAll);
 
