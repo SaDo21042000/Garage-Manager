@@ -3,13 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux'
-import store from './Store'
+import { Provider } from 'react-redux';
+import store from './Store';
+import 'antd/dist/antd.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Router>
+    <Provider store={store}>
+      <Switch>
+        <Route path="*" component={App} />
+      </Switch>
+    </Provider>
+  </Router>,
   document.getElementById('root')
 );
 
