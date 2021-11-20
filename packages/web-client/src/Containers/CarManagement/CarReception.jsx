@@ -15,7 +15,6 @@ import {
 } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-const { Header, Footer, Content } = AntLayout;
 const { Title } = Typography;
 
 const StyledCarReception = styled(AntLayout)`
@@ -157,120 +156,115 @@ const CarReception = () => {
 
   return (
     <StyledCarReception menuSelectedKey={'sales-report-form'}>
-      <Header className="site-layout-background" style={{ padding: 0 }} />
-      <Content style={{ margin: '0 16px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Quản lý xe</Breadcrumb.Item>
-          <Breadcrumb.Item>Tiếp nhận xe sửa</Breadcrumb.Item>
-        </Breadcrumb>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Quản lý xe</Breadcrumb.Item>
+        <Breadcrumb.Item>Tiếp nhận xe sửa</Breadcrumb.Item>
+      </Breadcrumb>
+      <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+        <Title className="main-title" level={2}>
+          Form tiếp nhận xe sửa
+        </Title>
 
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-          <Title className="main-title" level={2}>
-            Form tiếp nhận xe sửa
-          </Title>
-
-          <Form
-            {...layout}
-            name="nest-messages"
-            onFinish={onFinishAddItem}
-            validateMessages={validateMessages}
+        <Form
+          {...layout}
+          name="nest-messages"
+          onFinish={onFinishAddItem}
+          validateMessages={validateMessages}
+        >
+          <Form.Item
+            name="plate"
+            label="Biển Số"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
           >
-            <Form.Item
-              name="plate"
-              label="Biển Số"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="carName"
-              label="Hiệu Xe"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="name"
-              label="Chủ Xe"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="phone"
-              label="Phone"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="address"
-              label="Địa chỉ"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="date"
-              label="Ngày Tiếp Nhận"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <DatePicker style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-              <Button type="primary" htmlType="submit">
-                Xác nhận
-              </Button>
-            </Form.Item>
-          </Form>
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="carName"
+            label="Hiệu Xe"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="Chủ Xe"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            label="Phone"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="address"
+            label="Địa chỉ"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="date"
+            label="Ngày Tiếp Nhận"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <DatePicker style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
+            <Button type="primary" htmlType="submit">
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
 
-          <Title className="main-title" level={2}>
-            Danh sách xe tiếp nhận trong ngày
-          </Title>
-          <Table
-            className="result-table"
-            columns={columns}
-            dataSource={dataSource}
-            pagination={false}
-          />
-        </div>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        <Title className="main-title" level={2}>
+          Danh sách xe tiếp nhận trong ngày
+        </Title>
+        <Table
+          className="result-table"
+          columns={columns}
+          dataSource={dataSource}
+          pagination={false}
+        />
+      </div>
     </StyledCarReception>
   );
 };

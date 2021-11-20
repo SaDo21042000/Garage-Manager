@@ -18,7 +18,6 @@ import {
 
 import { DeleteOutlined } from '@ant-design/icons';
 
-const { Header, Footer, Content } = AntLayout;
 const { Title } = Typography;
 
 const StyledSaleReportPage = styled(AntLayout)`
@@ -154,87 +153,154 @@ const SettingPage = () => {
 
   return (
     <StyledSaleReportPage menuSelectedKey={'sales-report-page'}>
-      <Header className="site-layout-background" style={{ padding: 0 }} />
-      <Content style={{ margin: '0 16px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Cài đặt và thay đổi quy định</Breadcrumb.Item>
-        </Breadcrumb>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Cài đặt và thay đổi quy định</Breadcrumb.Item>
+      </Breadcrumb>
 
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-          <Title className="main-title" level={2}>
-            Cài đặt và thay đổi quy định
-          </Title>
+      <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+        <Title className="main-title" level={2}>
+          Cài đặt và thay đổi quy định
+        </Title>
 
-          <div>
-            <Divider />
-            <Form
-              name="basic"
-              layout="inline"
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-              className="max-car-number"
+        <div>
+          <Divider />
+          <Form
+            name="basic"
+            layout="inline"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+            className="max-car-number"
+          >
+            <Form.Item
+              label="Số xe tiếp nhận tối đa trong ngày"
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
+              ]}
             >
-              <Form.Item
-                label="Số xe tiếp nhận tối đa trong ngày"
-                name="username"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your username!',
-                  },
-                ]}
-              >
-                <InputNumber />
-              </Form.Item>
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-              >
-                <Button type="primary" htmlType="submit">
-                  Cập nhật
-                </Button>
-              </Form.Item>
-            </Form>
-
-            <Divider />
-
-            <Form
-              name="basic"
-              layout="inline"
-              initialValues={{
-                remember: true,
+              <InputNumber />
+            </Form.Item>
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
               }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-              className="max-car-number"
             >
-              <Form.Item label="Số hiệu xe" name="username">
-                <InputNumber disabled={true} defaultValue={3} />
-              </Form.Item>
+              <Button type="primary" htmlType="submit">
+                Cập nhật
+              </Button>
+            </Form.Item>
+          </Form>
 
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
+          <Divider />
+
+          <Form
+            name="basic"
+            layout="inline"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+            className="max-car-number"
+          >
+            <Form.Item label="Số hiệu xe" name="username">
+              <InputNumber disabled={true} defaultValue={3} />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
+            >
+              <Button type="primary" htmlType="submit" onClick={() => setVisibleCarNumber(true)}>
+                Chỉnh sửa danh sách
+              </Button>
+            </Form.Item>
+            <Modal
+              title="Số hiệu xe"
+              centered
+              visible={visibleCarNumber}
+              onOk={() => setVisibleCarNumber(false)}
+              onCancel={() => setVisibleCarNumber(false)}
+              width={1000}
+            >
+              <Form
+                name="basic"
+                layout="inline"
+                initialValues={{
+                  remember: true,
                 }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                className="max-car-number"
+                style={{ marginBottom: '10px' }}
               >
-                <Button type="primary" htmlType="submit" onClick={() => setVisibleCarNumber(true)}>
-                  Chỉnh sửa danh sách
-                </Button>
-              </Form.Item>
+                <Form.Item label="Thêm số hiệu xe mới" name="username">
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit">
+                    Thêm mới
+                  </Button>
+                </Form.Item>
+              </Form>
+              <Table
+                className="result-table"
+                columns={columnsCarNumber}
+                dataSource={dataSourceCarNumber}
+                pagination={false}
+              />
+            </Modal>
+          </Form>
+
+          <Divider />
+
+          <Form
+            name="basic"
+            layout="inline"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+            className="max-car-number"
+          >
+            <Form.Item label="Số loại vật tư" name="username">
+              <InputNumber disabled={true} defaultValue={3} />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
+            >
+              <Button type="primary" htmlType="submit" onClick={() => setVisibleSupply(true)}>
+                Chỉnh sửa danh sách
+              </Button>
               <Modal
-                title="Số hiệu xe"
+                title="Số loại vật tư"
                 centered
-                visible={visibleCarNumber}
-                onOk={() => setVisibleCarNumber(false)}
-                onCancel={() => setVisibleCarNumber(false)}
+                visible={visibleSupply}
+                onOk={() => setVisibleSupply(false)}
+                onCancel={() => setVisibleSupply(false)}
                 width={1000}
               >
                 <Form
@@ -249,7 +315,7 @@ const SettingPage = () => {
                   className="max-car-number"
                   style={{ marginBottom: '10px' }}
                 >
-                  <Form.Item label="Thêm số hiệu xe mới" name="username">
+                  <Form.Item label="Thêm loại vật tư mới" name="username">
                     <Input />
                   </Form.Item>
                   <Form.Item
@@ -265,89 +331,15 @@ const SettingPage = () => {
                 </Form>
                 <Table
                   className="result-table"
-                  columns={columnsCarNumber}
-                  dataSource={dataSourceCarNumber}
+                  columns={columnsSupply}
+                  dataSource={dataSourceSupply}
                   pagination={false}
                 />
               </Modal>
-            </Form>
-
-            <Divider />
-
-            <Form
-              name="basic"
-              layout="inline"
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              autoComplete="off"
-              className="max-car-number"
-            >
-              <Form.Item
-                label="Số loại vật tư"
-                name="username"
-              >
-                <InputNumber disabled={true} defaultValue={3} />
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-              >
-                <Button type="primary" htmlType="submit"  onClick={() => setVisibleSupply(true)}>
-                  Chỉnh sửa danh sách
-                </Button>
-                <Modal
-                  title="Số loại vật tư"
-                  centered
-                  visible={visibleSupply}
-                  onOk={() => setVisibleSupply(false)}
-                  onCancel={() => setVisibleSupply(false)}
-                  width={1000}
-                >
-                  <Form
-                    name="basic"
-                    layout="inline"
-                    initialValues={{
-                      remember: true,
-                    }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
-                    className="max-car-number"
-                    style={{ marginBottom: '10px' }}
-                  >
-                    <Form.Item label="Thêm loại vật tư mới" name="username">
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                      }}
-                    >
-                      <Button type="primary" htmlType="submit">
-                        Thêm mới
-                      </Button>
-                    </Form.Item>
-                  </Form>
-                  <Table
-                    className="result-table"
-                    columns={columnsSupply}
-                    dataSource={dataSourceSupply}
-                    pagination={false}
-                  />
-                </Modal>
-              </Form.Item>
-            </Form>
-          </div>
+            </Form.Item>
+          </Form>
         </div>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+      </div>
     </StyledSaleReportPage>
   );
 };
