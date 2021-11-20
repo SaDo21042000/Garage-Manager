@@ -14,10 +14,25 @@ function onChange(value) {
   console.log('changed', value);
 }
 
-const { Header, Footer, Content } = AntLayout;
+const {Content } = AntLayout;
+
 const StyledHomePage = styled(AntLayout)`
-  .site-layout-background {
+  .site-layout-background {n
     background: #fff;
+  }
+
+  .main-title {
+    margin-bottom: 30px;
+    text-align: center;
+
+    &-result {
+      text-align: center;
+    }
+  }
+
+  .filter-form {
+    justify-content: center;
+    margin-bottom: 30px;
   }
 `;
 
@@ -91,7 +106,9 @@ const ImportAccessary = () => {
           <Breadcrumb.Item>Quản lý phụ tùng</Breadcrumb.Item>
           <Breadcrumb.Item>Nhập phụ tùng</Breadcrumb.Item>
         </Breadcrumb>
+        <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
         <ImportAccessaryView />
+        </div>
       </Content>
     </StyledHomePage>
   );

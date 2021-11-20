@@ -6,11 +6,24 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 const { Header, Footer, Content } = AntLayout;
 const StyledHomePage = styled(AntLayout)`
-  .site-layout-background {
+  .site-layout-background {n
     background: #fff;
   }
-`;
 
+  .main-title {
+    margin-bottom: 30px;
+    text-align: center;
+
+    &-result {
+      text-align: center;
+    }
+  }
+
+  .filter-form {
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+`;
 function onChange(value) {
   console.log('changed', value);
 }
@@ -132,7 +145,7 @@ const ManagerList = () => {
                 dataSource={data}
                 pagination={{ pageSize: 50 }}
                 scroll={{ y: 240 }}
-                style={{fontSize: 16}}
+                style={{ fontSize: 16 }}
               />
             </div>
           </div>
@@ -148,7 +161,9 @@ const ManagerList = () => {
           <Breadcrumb.Item>Quản lý phụ tùng</Breadcrumb.Item>
           <Breadcrumb.Item>Danh sách tiền công</Breadcrumb.Item>
         </Breadcrumb>
-        <ManagerListView />
+        <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
+          <ManagerListView />
+        </div>
       </Content>
     </StyledHomePage>
   );

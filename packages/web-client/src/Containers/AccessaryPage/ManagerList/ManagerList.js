@@ -73,8 +73,22 @@ function handleChange(value) {
 }
 
 const StyledHomePage = styled(AntLayout)`
-  .site-layout-background {
+  .site-layout-background {n
     background: #fff;
+  }
+
+  .main-title {
+    margin-bottom: 30px;
+    text-align: center;
+
+    &-result {
+      text-align: center;
+    }
+  }
+
+  .filter-form {
+    justify-content: center;
+    margin-bottom: 30px;
   }
 `;
 
@@ -86,13 +100,17 @@ const ManagerList = () => {
           <div className="row">
             <div className="col">
               <div className="form-group">
-                <label htmlFor="" className="larger-size">Mã loại phụ tùng</label>
+                <label htmlFor="" className="larger-size">
+                  Mã loại phụ tùng
+                </label>
                 <Input size="large" placeholder="Nhập mã loại phụ tùng" />
               </div>
             </div>
             <div className="col">
               <div className="form-group">
-                <label htmlFor="" className="larger-size">Tên loại phụ tùng</label>
+                <label htmlFor="" className="larger-size">
+                  Tên loại phụ tùng
+                </label>
                 <Input size="large" placeholder="Nhập tên loại phụ tùng" />
               </div>
             </div>
@@ -115,9 +133,9 @@ const ManagerList = () => {
                   size="large"
                   onChange={handleChange}
                 >
-                   <Option value="jack">Kính chiếu hậu xe Mercedes</Option>
-                    <Option value="lucy">Lốp xe Mercedes</Option>
-                    <Option value="Yiminghe">Vô lăng xe Mercedes</Option>
+                  <Option value="jack">Kính chiếu hậu xe Mercedes</Option>
+                  <Option value="lucy">Lốp xe Mercedes</Option>
+                  <Option value="Yiminghe">Vô lăng xe Mercedes</Option>
                 </Select>
               </div>
             </div>
@@ -182,7 +200,7 @@ const ManagerList = () => {
                 dataSource={data}
                 pagination={{ pageSize: 50 }}
                 scroll={{ y: 240 }}
-                style={{fontSize: 16}}
+                style={{ fontSize: 16 }}
               />
             </div>
           </div>
@@ -198,7 +216,9 @@ const ManagerList = () => {
           <Breadcrumb.Item>Quản lý phụ tùng</Breadcrumb.Item>
           <Breadcrumb.Item>Danh sách phụ tùng</Breadcrumb.Item>
         </Breadcrumb>
-        <ManagerListView />
+        <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
+          <ManagerListView />
+        </div>
       </Content>
     </StyledHomePage>
   );

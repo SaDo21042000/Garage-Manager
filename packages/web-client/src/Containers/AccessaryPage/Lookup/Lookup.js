@@ -73,8 +73,22 @@ function handleChange(value) {
 }
 
 const StyledHomePage = styled(AntLayout)`
-  .site-layout-background {
+  .site-layout-background {n
     background: #fff;
+  }
+
+  .main-title {
+    margin-bottom: 30px;
+    text-align: center;
+
+    &-result {
+      text-align: center;
+    }
+  }
+
+  .filter-form {
+    justify-content: center;
+    margin-bottom: 30px;
   }
 `;
 
@@ -199,7 +213,9 @@ const ManagerList = () => {
           <Breadcrumb.Item>Quản lý phụ tùng</Breadcrumb.Item>
           <Breadcrumb.Item>Danh sách phụ tùng</Breadcrumb.Item>
         </Breadcrumb>
+        <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
         <ManagerListView />
+        </div>
       </Content>
     </StyledHomePage>
   );
