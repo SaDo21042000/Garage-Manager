@@ -68,19 +68,19 @@ const Sidebar = () => {
           <Menu.Item key="/sales-report-page">
             <Link to="sales-report-page">Báo cáo doanh số</Link>
           </Menu.Item>
-          <Menu.Item key="/sales-report-form">
+          {/* <Menu.Item key="/sales-report-form">
             <Link to="sales-report-form">Form doanh số</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </SubMenu>
         <SubMenu key="/inventory-report" icon={<FormOutlined />} title="Báo cáo tồn">
           <Menu.Item key="inventory-report-page">
             <Link to="inventory-report-page">Báo cáo tồn</Link>
           </Menu.Item>
-          <Menu.Item key="inventory-report-form">
+          {/* <Menu.Item key="inventory-report-form">
             <Link to="inventory-report-form">Form báo cáo tồn</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </SubMenu>
-        <SubMenu key="sub1" icon={<UserOutlined />} title="Đăng Nhập">
+        <SubMenu key="sub1" icon={<UserOutlined />} title="Quản lý user">
           <Menu.Item key="/log-in">
             <Link to="log-in">Đăng Nhập</Link>
           </Menu.Item>

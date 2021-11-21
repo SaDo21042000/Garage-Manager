@@ -24,7 +24,7 @@ const StyledLayout = styled(AntLayout)`
 
 const Layout = ({ menuSelectedKey, children }) => {
   const { pathname } = useLocation();
-  const isPubicRoutes = pathname === '/log-in' || pathname === '/sign-up' ? true : false;
+  const isPubicRoutes = pathname === '/log-in'  ? true : false;
 
   return isPubicRoutes ? (
     <>{children}</>

@@ -1,13 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Layout as AntLayout, Typography, Form, Input, Button } from 'antd';
+import { Breadcrumb, Layout as AntLayout, Typography, Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 const { Title } = Typography;
 
 const StyledSignUp = styled(AntLayout)`
-  .site-layout-background {
-    background: #fff;
-  }
 
   .main-title {
     margin-bottom: 30px;
@@ -36,7 +33,11 @@ const SignUp = () => {
 
   return (
     <StyledSignUp menuSelectedKey={'sales-report-form'}>
-      <div className="site-layout-background" style={{ padding: 20, minHeight: 20 }}>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Quản lý</Breadcrumb.Item>
+        <Breadcrumb.Item>Đăng kí tài khoản mới</Breadcrumb.Item>
+      </Breadcrumb>
+      <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
         <Title className="main-title" level={2} style={{ marginTop: '5em' }}>
           Đăng Ký
         </Title>

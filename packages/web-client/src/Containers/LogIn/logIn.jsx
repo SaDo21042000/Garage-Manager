@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Layout as AntLayout, Typography, Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import axios from '../../Configs/Axios'
 
 const { Title } = Typography;
 
@@ -34,7 +35,19 @@ const LogIn = () => {
     // eslint-disable-next-line no-template-curly-in-string
     required: 'Nhập ${label}!',
   };
+  const onFinish=(values)=>{
+    console.log(values);
+    getUser();
+  }
+  const getUser= async()=>{
+    let data= await axios.post("/api/taikhoans/login",{
+        "tenTaiKhoan":"QuocDT",
+        "matKhau":"quocdeptrai"
 
+    })
+    console.log(data);
+
+  }
   return (
     <StyledLogIn menuSelectedKey={'sales-report-form'}>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 20 }}>
@@ -42,7 +55,7 @@ const LogIn = () => {
           Đăng Nhập
         </Title>
 
-        <Form {...layout} name="nest-messages" validateMessages={validateMessages}>
+        <Form {...layout} name="nest-messages" validateMessages={validateMessages} onFinish={onFinish}>
           <Form.Item
             name="account"
             label="Tên Tài Khoản"
