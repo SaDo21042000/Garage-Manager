@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout as AntLayout, Breadcrumb, Button, Form, Input, Typography, Select } from 'antd';
+import { Layout as AntLayout, Breadcrumb, Button, Form, Input, Typography, Select, notification } from 'antd';
 import styled from 'styled-components';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
@@ -70,6 +70,9 @@ const ImportAccessary = () => {
     }
     postData();
     form.resetFields()
+    notification.success({
+      message: 'Import Accessory Successfully',
+    })
   };
 
   const ImportAccessaryView = () => {
@@ -83,6 +86,12 @@ const ImportAccessary = () => {
           className="filter-form"
           initialValues={{
             remember: true,
+          }}
+          labelCol={{
+            span: 4,
+          }}
+          wrapperCol={{
+            span: 14,
           }}
           autoComplete="off"
           layout="horizontal"
@@ -110,7 +119,12 @@ const ImportAccessary = () => {
           <Form.Item label="Số lượng" name="amount">
             <Input style={{ width: '100%' }} />
           </Form.Item>
-          <Form.Item>
+          <Form.Item
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
             <Button type="primary" htmlType="submit">
               Thêm Ngay
             </Button>
