@@ -1,9 +1,11 @@
 /* eslint-disable no-template-curly-in-string */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout as AntLayout, Breadcrumb, Button, Form, Input, Typography } from 'antd';
+import { Layout as AntLayout, Breadcrumb, Button, Form, Input, Typography, Select } from 'antd';
 import styled from 'styled-components';
 import { InfoCircleOutlined } from '@ant-design/icons';
+
+import axiosClient from '../../Configs/Axios';
 
 const { Content } = AntLayout;
 const { Title, Text } = Typography;
@@ -29,6 +31,10 @@ const StyledImportAccessary = styled(AntLayout)`
 `;
 
 const ImportAccessary = () => {
+  const [data, setData] = useState([]);
+
+  const [form] = Form.useForm();
+
   const validateMessages = {
     required: 'Nhập ${label}!',
     types: {
@@ -42,8 +48,28 @@ const ImportAccessary = () => {
     },
   };
 
+  useEffect(()=>{
+    const getAPI = async () => {
+      try {
+        const response = await axiosClient.get('/accessories')
+        setData(response)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getAPI();
+  },[])
+
   const onFinish = (values) => {
-    console.log(values);
+    const postData = async () => {
+      try {
+        await axiosClient.post('/accessory-import-forms',values)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    postData();
+    form.resetFields()
   };
 
   const ImportAccessaryView = () => {
@@ -59,19 +85,34 @@ const ImportAccessary = () => {
             remember: true,
           }}
           autoComplete="off"
-          layout="inline"
+          layout="horizontal"
           validateMessages={validateMessages}
           onFinish={onFinish}
+          form={form}
         >
-          <Form.Item label="Tên phụ tùng" name="accessaryName">
-            <Input style={{ width: '100%' }} />
+          <Form.Item label="Tên phụ tùng" name="accessoryId">
+            <Select 
+              placeholder="Select a option"
+              showSearch="true"
+              showArrow
+              allowClear
+              style={{ width: '100%' }}
+            >
+              {data.map((item) => {
+              return (
+                <Select.Option key={item._id} value={item._id}>
+                  {item.name}
+                </Select.Option>
+              );
+            })}
+            </Select>
           </Form.Item>
-          <Form.Item label="Số lượng" name="quantity">
+          <Form.Item label="Số lượng" name="amount">
             <Input style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Nhập
+              Thêm Ngay
             </Button>
           </Form.Item>
         </Form>
