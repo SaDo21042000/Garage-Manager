@@ -5,7 +5,7 @@ require('dotenv').config()
 const route = require('./routes')
 const database = require('./configs/database')
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5001
 
 // Middle ware
 app.use(express.urlencoded({
