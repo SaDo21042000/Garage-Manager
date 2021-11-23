@@ -64,15 +64,15 @@ const ImportAccessary = () => {
     const postData = async () => {
       try {
         await axiosClient.post('/accessory-import-forms',values)
+        notification.success({
+          message: 'Import Accessory Successfully',
+        })
       } catch (error) {
         console.log(error);
       }
     }
     postData();
     form.resetFields()
-    notification.success({
-      message: 'Import Accessory Successfully',
-    })
   };
 
   const ImportAccessaryView = () => {

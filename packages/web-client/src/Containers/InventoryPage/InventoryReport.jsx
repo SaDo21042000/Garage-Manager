@@ -1,123 +1,32 @@
 /* eslint-disable no-template-curly-in-string */
 import { DownloadOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Divider, Form, InputNumber, Table, Typography } from 'antd';
+import { Breadcrumb, Button, Divider, Form, InputNumber, Table, Typography, notification } from 'antd';
 import React, { useState } from 'react';
+
 import { InventoryReportStyles } from './styles';
+import axiosClient from '../../Configs/Axios';
 
 const { Title } = Typography;
 
-const dataSource = [
-  {
-    index: 1,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 2,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 3,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 4,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 5,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 6,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 7,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 8,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 9,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 10,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 11,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-  {
-    index: 12,
-    itemName: 'Toyota',
-    amount: 10,
-    used: 8,
-    rest: 2,
-  },
-];
-
 const columns = [
   {
-    title: 'STT',
-    dataIndex: 'index',
-    key: 'index',
-  },
-  {
-    title: 'Vật tư phụ tùng',
-    dataIndex: 'itemName',
-    key: 'itemName',
+    title: 'Tên Vật tư',
+    render: (value) => (value.accessory.name)
   },
   {
     title: 'Tồn đầu',
-    dataIndex: 'amount',
-    key: 'amount',
+    dataIndex: 'openingStock',
+    key: 'openingStock',
   },
   {
     title: 'Phát sinh',
-    dataIndex: 'used',
-    key: 'used',
+    dataIndex: 'arising',
+    key: 'arising',
   },
   {
     title: 'Tồn cuối',
-    dataIndex: 'rest',
-    key: 'rest',
+    dataIndex: 'endingStock',
+    key: 'endingStock',
   },
 ];
 
@@ -136,12 +45,28 @@ const validateMessages = {
 const InventoryReport = () => {
   const [showReportResult, setShowReportResult] = useState(false);
   const [time, setTime] = useState({ month: '', year: '' });
+  const [dataTable, setDataTable] = useState([]);
+  const [form] = Form.useForm();
 
   const onFinishCreateTable = (values) => {
     const { month, year } = values;
+    const postData = async () => {
+      try {
+        const response = await axiosClient.post('/inventory-reports',values)
+        notification.success({
+          message: 'Import Accessory Successfully',
+        })
+        setDataTable(response.reportDetails);
+        form.resetFields()
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    postData();
     setTime({ ...time, month: month, year: year });
     setShowReportResult(true);
   };
+
 
   const onFinishFailedCreateTable = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -175,6 +100,7 @@ const InventoryReport = () => {
           autoComplete="off"
           layout="inline"
           validateMessages={validateMessages}
+          form={form}
         >
           <Form.Item
             label="Tháng"
@@ -215,7 +141,7 @@ const InventoryReport = () => {
           <Table
             className="result-table"
             columns={columns}
-            dataSource={dataSource}
+            dataSource={dataTable}
             pagination={{ defaultPageSize: 5 }}
           />
           <Button
