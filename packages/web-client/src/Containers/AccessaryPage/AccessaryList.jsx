@@ -1,8 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { Input } from 'antd';
 import React, { useState, useEffect } from 'react';
-
-//import React from 'react';
 import {
   Layout as AntLayout,
   Breadcrumb,
@@ -15,9 +13,8 @@ import {
   Typography,
   notification,
 } from 'antd';
-import { EditOutlined, DeleteOutlined, ConsoleSqlOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-
 import axiosClient from '../../Configs/Axios';
 
 const { Content } = AntLayout;
@@ -53,24 +50,45 @@ const StyledAccessaryList = styled(AntLayout)`
   .input-search {
     margin-right: 28px;
   }
-  
 `;
 
-const AccessaryList = () => {
+export const TableActions = ({ onDelete, onEdit }) => {
+  return (
+    <>
+      <Button icon={<EditOutlined />} onClick={onEdit}></Button>
+      <Popconfirm
+        placement="topRight"
+        title={'Are you sure to delete?'}
+        onConfirm={onDelete}
+        okText={'Yes'}
+        cancelText={'No'}
+      >
+        <Button icon={<DeleteOutlined />}></Button>
+      </Popconfirm>
+    </>
+  );
+};
 
+const AccessaryList = () => {
+  //useState
   const [dataTypeAccessary, setDataTypeAccessay] = useState([]);
   const [dataListAccessary, setDataListAccessary] = useState([]);
+  const [checkEdit, setCheckEdit] = useState(false);
+  const [dataEditAccessary, setDataEditAccessay] = useState({
+    typeAccessory: '',
+    idAccessary: '',
+    nameAccessary: '',
+    unitPrice: '',
+  });
+  const [inputSearch, setInputSearch] = useState('');
+  const [resultSearch, setResultSearch] = useState([]);
 
-  const [dataEditAccessary, setDataEditAccessay] = useState({typeAccessary: "", nameAccessary: "", unitPrice: ""});
-  //const [buttonEditAdd, setButtonEditAdd] = useState("Thêm mới")
-  const [checkEdit, setCheckEdit] = useState(false)
-
- 
-
-
-
+  //Form
   const [formTypeAcccessary] = Form.useForm();
   const [formAcccessary] = Form.useForm();
+  const [formSearch] = Form.useForm();
+
+  //Validate
   const validateMessages = {
     required: 'Nhập ${label}!',
     types: {
@@ -84,26 +102,43 @@ const AccessaryList = () => {
     },
   };
 
-  useEffect(() => {
-    const getAPI = async () => {
-      try {
-        const typeAccessary = await axiosClient.get('/loaivattus/get');
-        const listAccessay = await axiosClient.get('/accessories');
-        console.log(listAccessay);
+  //Get data
+  const getAPI = async () => {
+    try {
+      const typeAccessary = await axiosClient.get('/loaivattus/get');
+      const listAccessay = await axiosClient.get('/accessories');
 
-        setDataTypeAccessay(typeAccessary.object.listLoaiVatTu);
-        setDataListAccessary(listAccessay);
+      setDataTypeAccessay(typeAccessary.object.listLoaiVatTu);
+      setDataListAccessary(listAccessay);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAPI();
+  }, []);
+
+  console.log(inputSearch);
+  useEffect(() => {
+    const getApiSearch = async () => {
+      try {
+        console.log(inputSearch);
+        const dataResultSearch = await axiosClient.get(`/accessories/search?name=${inputSearch}`);
+        console.log(dataResultSearch);
+        setDataListAccessary(dataResultSearch);
       } catch (error) {
         console.log(error);
       }
     };
-    getAPI();
-    console.log(dataListAccessary);
-  }, []);
+    getApiSearch();
+  }, [inputSearch]);
 
-  const onFinish = (values) => {
-    console.log(values);
-  };
+  //FUNCTION
+  function reLoad() {
+    setTimeout(function () {
+      window.location.reload(true);
+    }, 500);
+  }
 
   //Them loai vat tu
   const onFinishTypeAccessary = (values) => {
@@ -123,80 +158,80 @@ const AccessaryList = () => {
 
   //Them vat tu or edit vat tu
   const onFinishAccessary = (values) => {
-    if(!checkEdit) {
+    if (!checkEdit) {
       const postData = async () => {
         try {
           await axiosClient.post('/accessories', values);
-          window.location.reload(true);
           notification.success({
             message: 'Import Accessory Successfully',
           });
+          //reLoad();
         } catch (error) {
           console.log(error);
         }
       };
       postData();
       formAcccessary.resetFields();
-    }else {
+      getAPI();
+    } else {
       const postData = async () => {
         try {
-          await axiosClient.PUT('/accessories', values);
+          await axiosClient.put(`/accessories/${dataEditAccessary.idAccessary}`, values);
           notification.success({
             message: 'Edit Accessory Successfully',
           });
+          //reLoad();
         } catch (error) {
           console.log(error);
         }
       };
       postData();
-      setDataEditAccessay({typeAccessary: "", nameAccessary: "", unitPrice: ""})
+      setDataEditAccessay({ typeAccessory: '', idAccessary: '', nameAccessary: '', unitPrice: '' });
       formAcccessary.resetFields();
-      setCheckEdit(false)
-      //formAcccessary.resetFields();
+      setCheckEdit(false);
+      getAPI();
     }
-   
   };
 
-  const MethodTable = (props) => {
+  //Tìm kiếm vật tư
+  const onFinishSearch = (values) => {
+    setInputSearch(values.nameAccessary);
+    console.log(resultSearch);
+  };
+  console.log(dataListAccessary);
 
-    //Delete accessary
-    const onFinishDeleteAccessary = (event, idAccessary) => {
-      event.preventDefault();
-      const postData = async () => {
-        try {
-          await axiosClient.delete(`/accessories/${idAccessary}`);
-          window.location.reload(true);
-          notification.success({
-            message: 'Delete Accessory Successfully',
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      postData();
-      //formAcccessary.resetFields();
+  const onFinishDeleteAccessary = (idAccessary) => {
+    //event.preventDefault();
+    const postData = async () => {
+      try {
+        await axiosClient.delete(`/accessories/${idAccessary}`);
+        //dataListAccessary.filter((item) => item._id !== idAccessary )
+        notification.success({
+          message: 'Delete Accessory Successfully',
+        });
+        //reLoad();
+      } catch (error) {
+        console.log(error);
+      }
     };
+    postData();
+    getAPI();
+  };
 
-    //Edit accessary
-    const onFinishEditAccessary = (event, accessary) => {
-      event.preventDefault();
-      const dataEdit = {typeAccessary: "619126ce0ca950f28f11ff61", nameAccessary: accessary.name, unitPrice: accessary.unitPrice}
-      setDataEditAccessay(dataEdit)
-      setCheckEdit(true)
+  //Edit accessary
+  const onFinishEditAccessary = (accessary) => {
+    console.log(accessary);
+    const dataEdit = {
+      typeAccessory: accessary.typeAccessory,
+      idAccessary: accessary._id,
+      nameAccessary: accessary.name,
+      unitPrice: accessary.unitPrice,
     };
-
-    return (
-      <>
-        <td className="text-center">
-          <button className="btn" onClick={(event) => onFinishDeleteAccessary(event, props.accessary._id)}>
-            <DeleteOutlined />
-          </button>
-          <button className="btn" onClick={(event) => onFinishEditAccessary(event, props.accessary)}>
-            <EditOutlined />
-          </button>
-        </td>
-      </>
-    );
+    setDataEditAccessay(dataEdit);
+    setCheckEdit(true);
+    formAcccessary.setFieldsValue(dataEdit);
+    console.log(formAcccessary);
+    console.log(formAcccessary.getFieldValue());
   };
 
   const columns = [
@@ -207,38 +242,37 @@ const AccessaryList = () => {
     },
     {
       title: 'Tên phụ tùng',
-      dataIndex: 'nameAccessary',
+      dataIndex: 'name',
+      key: 'name',
       width: 400,
     },
     {
       title: 'Đơn giá',
-      dataIndex: 'price',
+      dataIndex: 'unitPrice',
+      key: 'unitPrice',
       width: 150,
     },
     {
       title: 'Số lượng còn',
-      dataIndex: 'quantityRemaining',
+      dataIndex: 'remaining',
+      key: 'remaining',
       width: 150,
     },
     {
       title: 'Thao tác',
       dataIndex: 'handle',
       width: 150,
+      render: (v, i) => {
+        console.log(i);
+        return (
+          <TableActions
+            onDelete={() => onFinishDeleteAccessary(i._id)}
+            onEdit={() => onFinishEditAccessary(i)}
+          />
+        );
+      },
     },
   ];
-
-  const dataListAccessaryTable = [];
-  for (let i = 0; i < dataListAccessary.length; i++) {
-    dataListAccessaryTable.push({
-      key: i,
-      stt: i + 1,
-      nameAccessary: dataListAccessary[i].name,
-      price: dataListAccessary[i].unitPrice,
-      quantityRemaining: dataListAccessary[i].remaining,
-      handle: <MethodTable accessary={dataListAccessary[i]} />,
-    });
-  }
-
 
   const AccessaryListView = () => {
     const displayAddOnlyAdmin = () => {
@@ -288,7 +322,11 @@ const AccessaryList = () => {
               >
                 {dataTypeAccessary.map((item) => {
                   return (
-                    <Select.Option key={item._id} value={item.idVatTu} defaultValue={{ value: 'lucy' }} >
+                    <Select.Option
+                      key={item._id}
+                      value={item.idVatTu}
+                      defaultValue={{ value: 'lucy' }}
+                    >
                       {item.tenLoaiVatTu}
                     </Select.Option>
                   );
@@ -298,12 +336,12 @@ const AccessaryList = () => {
             <Form.Item label="Tên phụ tùng" name="name">
               <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.nameAccessary} />
             </Form.Item>
-            <Form.Item label="Đơn giá" name="unitPrice" >
-              <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.unitPrice}/>
+            <Form.Item label="Đơn giá" name="unitPrice">
+              <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.unitPrice} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                {(checkEdit==true) ? "Chỉnh sửa" : "thêm mới"}
+                {checkEdit == true ? 'Chỉnh sửa' : 'Thêm mới'}
               </Button>
             </Form.Item>
           </Form>
@@ -329,9 +367,10 @@ const AccessaryList = () => {
               autoComplete="off"
               layout="inline"
               validateMessages={validateMessages}
-              onFinish={onFinish}
+              onFinish={onFinishSearch}
+              form={formSearch}
             >
-              <Form.Item label="Tên loại phụ tùng" name="partTypeCode">
+              <Form.Item label="Tên phụ tùng" name="nameAccessary">
                 <Input style={{ width: '100%' }} />
               </Form.Item>
               <Form.Item>
@@ -344,7 +383,7 @@ const AccessaryList = () => {
             <div className="list mt-4">
               <Table
                 columns={columns}
-                dataSource={dataListAccessaryTable}
+                dataSource={dataListAccessary}
                 pagination={{ pageSize: 50 }}
                 scroll={{ y: 240 }}
                 style={{ fontSize: 16 }}
