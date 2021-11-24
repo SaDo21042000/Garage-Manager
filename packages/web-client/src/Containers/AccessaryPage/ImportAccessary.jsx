@@ -1,7 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout as AntLayout, Breadcrumb, Button, Form, Input, Typography, Select, notification } from 'antd';
+import { Layout as AntLayout, Breadcrumb, Button, Form, InputNumber, Typography, Select, notification } from 'antd';
 import styled from 'styled-components';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
@@ -100,7 +100,7 @@ const ImportAccessary = () => {
           form={form}
         >
           <Form.Item label="Tên phụ tùng" name="accessoryId">
-            <Select 
+            <Select
               placeholder="Select a option"
               showSearch="true"
               showArrow
@@ -108,16 +108,27 @@ const ImportAccessary = () => {
               style={{ width: '100%' }}
             >
               {data.map((item) => {
-              return (
-                <Select.Option key={item._id} value={item._id}>
-                  {item.name}
-                </Select.Option>
-              );
-            })}
+                return (
+                  <Select.Option key={item._id} value={item._id}>
+                    {item.name}
+                  </Select.Option>
+                );
+              })}
             </Select>
           </Form.Item>
-          <Form.Item label="Số lượng" name="amount">
-            <Input style={{ width: '100%' }} />
+          <Form.Item
+            label="Số lượng"
+            name="amount"
+            rules={[
+              {
+                required: true,
+                type: 'number',
+                min: 1,
+                max: 100,
+              },
+            ]}
+          >
+            <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
             wrapperCol={{

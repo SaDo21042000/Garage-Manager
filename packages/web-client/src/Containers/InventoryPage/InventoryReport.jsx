@@ -53,11 +53,15 @@ const InventoryReport = () => {
     const postData = async () => {
       try {
         const response = await axiosClient.post('/inventory-reports',values)
-        notification.success({
-          message: 'Import Accessory Successfully',
-        })
+        response.reportDetails.length === 0
+          ? notification.error({
+              message:
+                'Thông tin không hợp lệ. Không có vật tư được nhập hay sử dung trong thời gian bạn nhập',
+            })
+          : notification.success({
+              message: 'Lập báo cáo thành công',
+            });
         setDataTable(response.reportDetails);
-        form.resetFields()
       } catch (error) {
         console.log(error);
       }
@@ -136,22 +140,24 @@ const InventoryReport = () => {
           </Form.Item>
         </Form>
         <div className={showReportResult ? 'show' : 'hide'}>
-          <Divider plain>Kết quả</Divider>
-          <ResultTitle />
-          <Table
+          {dataTable.length !== 0 && <Divider plain>Kết quả</Divider>}
+          {dataTable.length !== 0 && <ResultTitle />}
+          {dataTable.length !== 0 && <Table
             className="result-table"
             columns={columns}
             dataSource={dataTable}
             pagination={{ defaultPageSize: 5 }}
-          />
-          <Button
-            className="button-finish"
-            icon={<DownloadOutlined />}
-            type="primary"
-            size="middle"
-          >
-            In báo cáo
-          </Button>
+          />}
+          {
+            dataTable.length !== 0 && <Button
+              className="button-finish"
+              icon={<DownloadOutlined />}
+              type="primary"
+              size="middle"
+            >
+              In báo cáo
+            </Button>
+          }
         </div>
       </div>
     </InventoryReportStyles>
