@@ -74,14 +74,13 @@ const AccessaryList = () => {
   const [dataTypeAccessary, setDataTypeAccessay] = useState([]);
   const [dataListAccessary, setDataListAccessary] = useState([]);
   const [checkEdit, setCheckEdit] = useState(false);
+  const [inputSearch, setInputSearch] = useState('');
   const [dataEditAccessary, setDataEditAccessay] = useState({
     typeAccessory: '',
     idAccessary: '',
     nameAccessary: '',
     unitPrice: '',
   });
-  const [inputSearch, setInputSearch] = useState('');
-  const [resultSearch, setResultSearch] = useState([]);
 
   //Form
   const [formTypeAcccessary] = Form.useForm();
@@ -114,17 +113,16 @@ const AccessaryList = () => {
       console.log(error);
     }
   };
+  console.log(dataListAccessary);
   useEffect(() => {
     getAPI();
   }, []);
 
-  console.log(inputSearch);
   useEffect(() => {
     const getApiSearch = async () => {
       try {
         console.log(inputSearch);
         const dataResultSearch = await axiosClient.get(`/accessories/search?name=${inputSearch}`);
-        console.log(dataResultSearch);
         setDataListAccessary(dataResultSearch);
       } catch (error) {
         console.log(error);
@@ -133,14 +131,8 @@ const AccessaryList = () => {
     getApiSearch();
   }, [inputSearch]);
 
-  //FUNCTION
-  function reLoad() {
-    setTimeout(function () {
-      window.location.reload(true);
-    }, 500);
-  }
-
-  //Them loai vat tu
+  //FUNCTION HANDLE
+  //Thêm loại vật tư
   const onFinishTypeAccessary = (values) => {
     const postData = async () => {
       try {
@@ -156,7 +148,7 @@ const AccessaryList = () => {
     formTypeAcccessary.resetFields();
   };
 
-  //Them vat tu or edit vat tu
+  //Thêm loại vật tư và sửa chữa
   const onFinishAccessary = (values) => {
     if (!checkEdit) {
       const postData = async () => {
@@ -165,7 +157,6 @@ const AccessaryList = () => {
           notification.success({
             message: 'Import Accessory Successfully',
           });
-          //reLoad();
         } catch (error) {
           console.log(error);
         }
@@ -180,7 +171,6 @@ const AccessaryList = () => {
           notification.success({
             message: 'Edit Accessory Successfully',
           });
-          //reLoad();
         } catch (error) {
           console.log(error);
         }
@@ -196,20 +186,16 @@ const AccessaryList = () => {
   //Tìm kiếm vật tư
   const onFinishSearch = (values) => {
     setInputSearch(values.nameAccessary);
-    console.log(resultSearch);
   };
-  console.log(dataListAccessary);
 
+  //Xóa một vật tư
   const onFinishDeleteAccessary = (idAccessary) => {
-    //event.preventDefault();
     const postData = async () => {
       try {
         await axiosClient.delete(`/accessories/${idAccessary}`);
-        //dataListAccessary.filter((item) => item._id !== idAccessary )
         notification.success({
           message: 'Delete Accessory Successfully',
         });
-        //reLoad();
       } catch (error) {
         console.log(error);
       }
@@ -218,7 +204,7 @@ const AccessaryList = () => {
     getAPI();
   };
 
-  //Edit accessary
+  //Chỉnh sửa vật tư
   const onFinishEditAccessary = (accessary) => {
     console.log(accessary);
     const dataEdit = {
@@ -234,11 +220,15 @@ const AccessaryList = () => {
     console.log(formAcccessary.getFieldValue());
   };
 
+  //Header table
   const columns = [
     {
       title: 'STT',
       dataIndex: 'stt',
       width: 60,
+      render: (v, i) => {
+        return <span>{dataListAccessary.indexOf(i) + 1}</span>;
+      },
     },
     {
       title: 'Tên phụ tùng',
@@ -263,7 +253,7 @@ const AccessaryList = () => {
       dataIndex: 'handle',
       width: 150,
       render: (v, i) => {
-        console.log(i);
+        //console.log(i);
         return (
           <TableActions
             onDelete={() => onFinishDeleteAccessary(i._id)}
@@ -337,7 +327,7 @@ const AccessaryList = () => {
               <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.nameAccessary} />
             </Form.Item>
             <Form.Item label="Đơn giá" name="unitPrice">
-              <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.unitPrice} />
+              <Input type="number" style={{ width: '100%' }} defaultValue={dataEditAccessary.unitPrice} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
