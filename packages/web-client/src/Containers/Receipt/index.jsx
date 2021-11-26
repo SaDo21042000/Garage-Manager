@@ -1,6 +1,9 @@
+/* eslint-disable no-template-curly-in-string */
 import { PrinterFilled, ReloadOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, DatePicker, Form, Input, InputNumber, Layout, Typography } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
+
+import axiosClient from '../../Configs/Axios';
 
 import { ButtonWrapper, ReceiptStyles } from './receipt.styles';
 
@@ -9,34 +12,43 @@ const { Title } = Typography;
 const { Item } = Form;
 
 const dateFormat = 'YYYY-MM-DD';
+const validateMessages = {
+  required: 'Nhập ${label}!',
+  types: {
+    number: '${label} không hợp lệ!',
+  },
+  number: {
+    min: '${label} không thể nhỏ hơn ${min}',
+  },
+};
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 8,
+  },
+};
 
-const Receipt = () => {
-  const onFinishCreateTable = (values) => {
-    console.info(values);
+const Receipt = (form) => {
+  console.log(form);
+  const handleFinish = (values) => {
+    const { BienSo, NgayThuTien, SoTien, CustomerEmail, CustomerName, PhoneNumber } = values;
+    const _NgayThuTien = NgayThuTien.format(dateFormat).toString();
+    const data = {
+      maXe: BienSo,
+      ngayTT: _NgayThuTien,
+      soTienThu: SoTien,
+      CustomerName: CustomerName,
+      PhoneNumber: PhoneNumber,
+      CustomerEmail: CustomerEmail,
+    };
+    axiosClient.post('http://localhost:5000/api/bills', JSON.stringify(data));
   };
 
-  const onFinishFailedCreateTable = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
-
-  const validateMessages = {
-    required: 'Nhập ${label}!',
-    types: {
-      number: '${label} không hợp lệ!',
-    },
-    number: {
-      min: '${label} không thể nhỏ hơn ${min}',
-    },
-  };
-
-  const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 8,
-    },
-  };
+  function handleFinishFailed(errorInfo) {
+    console.error('Error:', errorInfo);
+  }
 
   return (
     <ReceiptStyles>
@@ -54,12 +66,12 @@ const Receipt = () => {
             {...layout}
             name="basic"
             initialValues={{
-              remember: true,
+              remember: false,
             }}
-            onFinish={onFinishCreateTable}
-            onFinishFailed={onFinishFailedCreateTable}
             autoComplete="off"
             validateMessages={validateMessages}
+            onFinish={handleFinish}
+            onFinishFailed={handleFinishFailed}
           >
             <Item
               name="BienSo"
@@ -121,6 +133,7 @@ const Receipt = () => {
                   marginRight: 'auto',
                   borderRadius: '10px',
                 }}
+                htmlType="submit"
               >
                 In báo cáo và lưu
               </Button>

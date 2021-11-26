@@ -18,14 +18,6 @@ import { InventoryReportStyles as InventoryReportFormStyles } from './styles';
 const { Header, Content } = Layout;
 const { Item } = Form;
 const { Title } = Typography;
-const formLayout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 8,
-  },
-};
 
 const InventoryReportForm = () => {
   const [showReportResult, setShowReportResult] = useState(false);
@@ -161,6 +153,15 @@ const InventoryReportForm = () => {
       min: '${label} không thể nhỏ hơn ${min}',
       max: '${label} không thể lớn hơn ${max}',
       range: '${label} phải ở giữa ${min} và ${max}',
+    },
+  };
+
+  const formLayout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 8,
     },
   };
 
