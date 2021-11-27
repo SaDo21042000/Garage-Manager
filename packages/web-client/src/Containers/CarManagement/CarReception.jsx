@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
   Layout as AntLayout,
@@ -13,7 +13,8 @@ import {
   message,
   DatePicker,
 } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, FieldNumberOutlined } from '@ant-design/icons';
+import axiosClient from '../../Configs/Axios'
 
 const { Title } = Typography;
 
@@ -37,34 +38,48 @@ const StyledCarReception = styled(AntLayout)`
 `;
 
 const CarReception = () => {
-  const [dataSource, setDataSource] = useState([
-    {
-      key: '1',
-      number: '1',
-      plate: '81A-12345',
-      carName: 'Audi',
-      name: 'Nguyen Van A',
-      phone: '0123456789',
-    },
-    {
-      key: '2',
-      number: '2',
-      plate: '81A-12345',
-      carName: 'Mercedes',
-      name: 'Nguyen Van B',
-      phone: '0123456789',
-    },
-    {
-      key: '3',
-      number: '3',
-      plate: '81A-12345',
-      carName: 'Toyota',
-      name: 'Nguyen Van C',
-      phone: '0123456789',
-    },
-  ]);
 
-  dataSource.map((item, index) => (item.number = index + 1));
+  const [dataSource, setDataSource] = useState();
+
+  useEffect(() => {
+    const getAPI = async () => {
+      let data = [];
+      let finalData = [];
+
+      await axiosClient.get('/phieutiepnhan/getPhieuTiepNhan')
+        .then(res => {
+          // Tien xu ly nhung du lieu ao
+          for(var i in res['khachang']) {
+            if(res['khachang'][i][0]){
+              for(var j in res['xe']) {
+                if(res['khachang'][i][0].maKhachHang == res['xe'][j].maKhachHang)
+                  data.push({
+                    khachang: res['khachang'][i][0],
+                    xe: res['xe'][j]
+                  })
+              }
+            }   
+          }
+        })
+
+      for(var i in data) {
+        var child = {
+          plate: data[i].xe.bienSo,
+          carName: data[i].xe.maHieuXe,
+          name: data[i].khachang.tenKhachHang,
+          phone: data[i].khachang.soDT,
+          number: data.length - i,
+          key: i
+        }
+        finalData.push(child);
+      }
+      setDataSource(finalData.reverse());
+      console.log(finalData)
+    }
+    getAPI();
+
+  }, []);
+
 
   const layout = {
     labelCol: {
@@ -134,24 +149,44 @@ const CarReception = () => {
     },
   ];
 
-  const handleDelete = (number) => {
-    console.log(number);
+  const handleDelete = async (number) => {
+   
     setDataSource(dataSource.filter((item) => item.number !== number));
     message.info('Clicked on Yes.');
+
+    await axiosClient.post("/phieutiepnhan/xoaXeSua", dataSource[number-1]);
+
+    console.log(number);
+  
+
   };
 
-  const onFinishAddItem = (values) => {
-    values.number = dataSource.length + 1;
+  const onFinishAddItem = async (values) => {
+
     const newData = {
-      number: values.number,
-      carName: values.carName,
-      plate: values.plate,
-      name: values.name,
-      phone: values.phone,
+      maHieuXe: values.carName,
+      bienSo: values.plate,
+      tenChuXe: values.name,
+      dienThoai: values.phone,
       email: values.email,
-      address: values.address,
+      diaChi: values.address,
     };
-    setDataSource([...dataSource, newData]);
+
+    await axiosClient.post('/phieutiepnhan/createOne', newData);
+    // CCap nhat lai index trong dataSourcce
+
+    for(var i in dataSource) {
+      dataSource[i].number+=1;
+    }
+    
+    setDataSource( [{
+      plate: values.plate,
+      carName: values.carName,
+      name: values.name,
+      phone:  values.phone,
+      number: 1,
+      key: dataSource.length
+    } ,...dataSource]);
   };
 
   return (

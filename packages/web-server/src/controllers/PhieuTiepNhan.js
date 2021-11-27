@@ -69,6 +69,54 @@ const createOne = async (req, res) => {
 })
 }
 
+const xoaXeSua = async (req, res) => {
+  console.log("req.body", req.body.plate);
+  try {
+    await Xe.deleteMany({ bienSo: req.body.plate })
+    res.status(201).json({
+      statusCode: 201,
+      message: 'Xoa thanh cong' })  
+  } catch (err){
+    console.log("Error xoa xe: ", err);
+  }
+
+}
+
+const getPhieuTiepNhan = async (req, res) => {
+
+  let data = {
+    xe: [],
+    khachang: []
+  };
+
+  let query = req.query;
+  try {
+      let xe = await Xe.find({});
+      data.xe = xe;
+      for(var i of xe){
+        const response = await KhachHang.find({maKhachHang: i.maKhachHang});
+        if(response) {
+          data.khachang.push(response);
+        }
+      }
+      if (query.name)
+          xe = xe.filter(accessory => {
+              return nonAccentVietnamese(accessory.name.toLowerCase()).indexOf(nonAccentVietnamese(query.name.toLowerCase())) !== -1;
+          })
+        // phieutiepnhan.filter()
+
+
+      return res.status(200).json(data);
+  } catch (err) {
+      return res.status(500).json({
+          statusCode: 500,
+          message: err.message || `Some errors happened when finding accessory`
+      });
+  }
+}
+
 module.exports = {
-  createOne
+  createOne,
+  getPhieuTiepNhan,
+  xoaXeSua
 }
