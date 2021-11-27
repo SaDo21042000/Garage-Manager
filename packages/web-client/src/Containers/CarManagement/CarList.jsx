@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Layout as AntLayout,
   Breadcrumb,
@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const { Title } = Typography;
 
@@ -135,8 +136,16 @@ const CarList = () => {
     message.info('Clicked on Yes.');
   }
 
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = async (values) => {
+    const { plate, owner, phone } = values;
+
+    try {
+      const getBienSo = await axios.get(`/api/car-list/search?number?plate=${plate}`);
+      const getSoDT = await axios.get(`/api/car-list/search?phone=${phone}`);
+      const getKhachHang = await axios.get(`/api/car-list/search?name=${owner}`);
+    } catch (error) {
+      console.error('Error: ', error);
+    }
   };
 
   return (
