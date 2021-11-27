@@ -13,8 +13,8 @@ exports.create = async input => {
     return newChiTietDoanhSo;
 }
 
-exports.find = () =>{
-    return ChiTietDoanhSo.find({ name: 'hóa đơn điện'});
+exports.find = (query) =>{
+    return ChiTietDoanhSo.find({ maDoanhSo: query.maDoanhSo });
 }
 
 exports.findOne = (id) =>{

@@ -6,7 +6,6 @@ exports.initChiTietDoanhSo = function(mongoose) {
     const ChiTietDoanhSoSchema = new Schema({
         maCTDS: {
             type:String,
-            unique: true
         },
         maHieuXe:{
             type:String

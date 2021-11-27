@@ -3,19 +3,27 @@ const pttService = require('../services/PhieuThuTien');
 /* ````````````Declare your custom controller here `````````````````````*/
 const create = async (req, res) => {
   let formInput = req.body;
+  console.log(formInput);
 
   // If input is null, return 400 Error
-  if (!formInput) {
+  if (!formInput.bienSo) {
     return res.status(400).json({
       statusCode: 400,
-      message: 'Your input is null/empty',
+      message: 'Your bienSo is null/empty',
     });
   }
 
-  if (formInput.amount <= 0) {
+  if (!formInput.ngayTT) {
     return res.status(400).json({
       statusCode: 400,
-      message: 'Number of accessories must be greater than zero',
+      message: 'Your ngayTT is null/empty',
+    });
+  }
+
+  if (!formInput.soTienThu || formInput.soTienThu <= 0) {
+    return res.status(400).json({
+      statusCode: 400,
+      message: 'Number of money must be greater than zero',
     });
   }
 

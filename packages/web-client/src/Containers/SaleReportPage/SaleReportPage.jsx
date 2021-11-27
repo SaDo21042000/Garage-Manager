@@ -13,6 +13,7 @@ import {
   Table,
 } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Header, Footer, Content } = AntLayout;
 const { Title, Text } = Typography;
@@ -137,6 +138,11 @@ const SaleReportPage = () => {
   const onFinishCreateTable = (values) => {
     const { month, year } = values;
     setDateData({ ...dateData, month: month, year: year });
+    // axios.get(`http://localhost:5000/api/doanhsos?month=${month}&year=${year}`);
+    axios
+      .get(`http://localhost:5000/api/chitietdoanhsos?maDoanhSo=61951d84609a0e7842149340`)
+      .then((data) => console.log(data))
+      .catch((err) => console.error('Error: ', err));
     setShowReportResult(true);
   };
 

@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { PrinterFilled, ReloadOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, DatePicker, Form, Input, InputNumber, Layout, Typography } from 'antd';
+import axios from 'axios';
 import React, { useState } from 'react';
 
 import axiosClient from '../../Configs/Axios';
@@ -18,7 +19,9 @@ const validateMessages = {
     number: '${label} không hợp lệ!',
   },
   number: {
+    len: '${label} không vượt quá ${len} kí tự',
     min: '${label} không thể nhỏ hơn ${min}',
+    max: "'${label}' không thể lớn hơn ${max}",
   },
 };
 const layout = {
@@ -30,20 +33,19 @@ const layout = {
   },
 };
 
-const Receipt = (form) => {
-  console.log(form);
+const Receipt = (props) => {
   const handleFinish = (values) => {
     const { BienSo, NgayThuTien, SoTien, CustomerEmail, CustomerName, PhoneNumber } = values;
     const _NgayThuTien = NgayThuTien.format(dateFormat).toString();
     const data = {
-      maXe: BienSo,
+      bienSo: BienSo,
       ngayTT: _NgayThuTien,
       soTienThu: SoTien,
-      CustomerName: CustomerName,
-      PhoneNumber: PhoneNumber,
-      CustomerEmail: CustomerEmail,
+      hoTen: CustomerName,
+      dienThoai: PhoneNumber,
+      email: CustomerEmail,
     };
-    axiosClient.post('http://localhost:5000/api/bills', JSON.stringify(data));
+    axios.post('http://localhost:5000/api/phieuthutiens', { ...data });
   };
 
   function handleFinishFailed(errorInfo) {
@@ -102,13 +104,21 @@ const Receipt = (form) => {
               <InputNumber style={{ width: '100%' }} />
             </Item>
 
-            <Form.Item name="CustomerName" label="Họ tên chủ xe" rules={[{ required: true }]}>
+            <Form.Item name="CustomerName" label="Họ tên chủ xe">
               <Input />
             </Form.Item>
-            <Form.Item name="PhoneNumber" label="Số điện thoại" rules={[{ required: true }]}>
-              <Input />
+            <Form.Item
+              name="PhoneNumber"
+              label="Số điện thoại"
+              rules={[
+                {
+                  type: 'number',
+                },
+              ]}
+            >
+              <InputNumber style={{ width: '100%' }} />
             </Form.Item>
-            <Form.Item name="CustomerEmail" label="Email" rules={[{ required: true }]}>
+            <Form.Item name="CustomerEmail" label="Email">
               <Input />
             </Form.Item>
 
