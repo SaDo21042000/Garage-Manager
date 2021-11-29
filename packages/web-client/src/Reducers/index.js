@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux';
-import status from '../Containers/TestPage/reducers/status';
-import lstProduct from '../Containers/TestPage/reducers/lstProduct';
+import user from '../Containers/LogIn/reducers/user';
 
 const AppReducer = combineReducers({
-  status,
-  lstProduct,
+  user,
 });
 
 export default AppReducer;

@@ -26,20 +26,20 @@ const Sidebar = () => {
   return (
     <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo" />
-      <Menu theme="dark" defaultSelectedKeys={[location.pathname]} mode="inline">
+      <Menu theme="dark" defaultSelectedKeys={[location.pathname]} selectedKeys={[location.pathname]} mode="inline">
         <Menu.Item key="/" icon={<HomeOutlined />}>
           <span>Home Page</span>
           <Link to="/"></Link>
         </Menu.Item>
-        <SubMenu key="car-managemant" icon={<FormOutlined />} title="Quản Lý Xe">
-          <Menu.Item key="r1">
+        <SubMenu key="car-management" icon={<FormOutlined />} title="Quản Lý Xe">
+          <Menu.Item key="/cart-list">
             <Link to="/car-list">Danh sách xe</Link>
           </Menu.Item>
-          <Menu.Item key="r2">
+          <Menu.Item key="/car-reception">
             <Link to="/car-reception">Tiếp Nhận Xe Sửa</Link>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="sub2" icon={<FormOutlined />} title="Quản lý phụ tùng">
+        <SubMenu key="AccessaryManagement" icon={<FormOutlined />} title="Quản lý phụ tùng">
           <Menu.Item key="/listAccessary">
             <span>Nhập vật tư phụ tùng</span>
             <Link to="/import-accessary"></Link>
@@ -53,7 +53,7 @@ const Sidebar = () => {
             <Link to="/wage-list"></Link>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="" icon={<FormOutlined />} title="Phiếu Sửa Chữa">
+        <SubMenu key="repair" icon={<FormOutlined />} title="Phiếu Sửa Chữa">
           <Menu.Item key="/repair-page">
             <Link to="repair-page">Quản Lý Phiếu Sửa Chữa</Link>
           </Menu.Item>
@@ -73,19 +73,19 @@ const Sidebar = () => {
           </Menu.Item> */}
         </SubMenu>
         <SubMenu key="/inventory-report" icon={<FormOutlined />} title="Báo cáo tồn">
-          <Menu.Item key="inventory-report-page">
+          <Menu.Item key="/inventory-report-page">
             <Link to="inventory-report-page">Báo cáo tồn</Link>
           </Menu.Item>
           {/* <Menu.Item key="inventory-report-form">
             <Link to="inventory-report-form">Form báo cáo tồn</Link>
           </Menu.Item> */}
         </SubMenu>
-        <SubMenu key="sub1" icon={<UserOutlined />} title="Quản lý user">
-          <Menu.Item key="/log-in">
-            <Link to="log-in">Đăng Nhập</Link>
-          </Menu.Item>
+        <SubMenu key="admin" icon={<UserOutlined />} title="Quản lý user">
           <Menu.Item key="/sign-up">
-            <Link to="sign-up">Đăng Ký</Link>
+            <Link to="sign-up">Đăng Ký thành viên</Link>
+          </Menu.Item>
+          <Menu.Item key="/change-password">
+            <Link to="change-password">Thay đổi mật khẩu</Link>
           </Menu.Item>
         </SubMenu>
         <Menu.Item key="/setting" icon={<SettingOutlined />}>

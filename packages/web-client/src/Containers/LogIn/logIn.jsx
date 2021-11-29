@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Layout as AntLayout, Typography, Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import axios from '../../Configs/Axios'
-
-const { Title } = Typography;
+import { useDispatch } from 'react-redux';
+import * as actions from './actions';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
+const { Text } = Typography;
 
 const StyledLogIn = styled(AntLayout)`
   .site-layout-background {
@@ -30,34 +31,61 @@ const LogIn = () => {
       span: 8,
     },
   };
+  const dispatch = useDispatch();
+  const params = useParams();
+  let history = useHistory();
+  let location = useLocation();
 
+  useEffect(() => {
+    const isNumeric = /^\/validate-account\/*/;
+    if (isNumeric.test(location.pathname)) {
+      console.log('params', params.id);
+      vaildateAccount(params.id);
+    }
+  });
+  const vaildateAccount = async (params) => {
+    try {
+      await actions.onValidateAccountRequest(params);
+      history.push('/');
+    } catch (e) {
+      alert(e.message);
+      history.push('/');
+    }
+  };
   const validateMessages = {
     // eslint-disable-next-line no-template-curly-in-string
     required: 'Nhập ${label}!',
   };
-  const onFinish=(values)=>{
-    console.log(values);
-    getUser();
-  }
-  const getUser= async()=>{
-    let data= await axios.post("/api/taikhoans/login",{
-        "tenTaiKhoan":"QuocDT",
-        "matKhau":"quocdeptrai"
-
-    })
-    console.log(data);
-
-  }
+  const onFinish = async (values) => {
+    try {
+      const data = {
+        tenTaiKhoan: values.tenTaiKhoan,
+        matKhau: values.matKhau,
+      };
+      await dispatch(actions.onGetUserRequest(data));
+      history.push('/');
+    } catch (e) {
+      alert(e.message);
+    }
+  };
   return (
-    <StyledLogIn menuSelectedKey={'sales-report-form'}>
+    <StyledLogIn>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 20 }}>
-        <Title className="main-title" level={2} style={{ marginTop: '5em' }}>
-          Đăng Nhập
-        </Title>
+        <div className="main-title">
+          <h3 style={{ marginTop: '5em', marginBottom: '0px' }}>Đăng nhập</h3>
+          <Text >
+            Bạn quên mật khẩu? <Link to={'forgot-password'}>Quên mật khẩu</Link>
+          </Text>
+        </div>
 
-        <Form {...layout} name="nest-messages" validateMessages={validateMessages} onFinish={onFinish}>
+        <Form
+          {...layout}
+          name="nest-messages"
+          validateMessages={validateMessages}
+          onFinish={onFinish}
+        >
           <Form.Item
-            name="account"
+            name="tenTaiKhoan"
             label="Tên Tài Khoản"
             rules={[
               {
@@ -68,12 +96,20 @@ const LogIn = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="password"
+            name="matKhau"
             label="Mật Khẩu"
             rules={[
               {
                 required: true,
               },
+              () => ({
+                validator(_, value) {
+                  if (!value || value.length >= 8) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('Mật khẩu có ít nhất 8 kí tự'));
+                },
+              }),
             ]}
           >
             <Input.Password />

@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Layout from './Components/Layout';
 import HomePage from './Containers/HomePage';
 import { ImportAccessary, WageList, AccessaryList } from './Containers/AccessaryPage';
-import { LogIn, SignUp } from './Containers/LogIn';
+import { LogIn, SignUp, ForgotPassword, ChangePassword } from './Containers/LogIn';
 import { CarList, CarReception, Bill } from './Containers/CarManagement';
 import { RepairForm, RepairPage } from './Containers/RepairManagement';
 import { SaleReportPage, SaleReportForm } from './Containers/SaleReportPage';
@@ -24,12 +24,15 @@ function Routes() {
           <Route path="/bill" component={Bill} />
           <Route path="/log-in" component={LogIn} />
           <Route path="/sign-up" component={SignUp} />
+          <Route path="/forgot-password" component={ForgotPassword} />
+          <Route path="/change-password" component={ChangePassword} />
           <Route path="/inventory-report-page" component={InventoryReport} />
           <Route path="/inventory-report-form" component={InventoryReportForm} />
           <Route path="/setting" component={SettingPage} />
           <Route path="/import-accessary" component={ImportAccessary} />
           <Route path="/list-accessary" component={AccessaryList} />
           <Route path="/wage-list" component={WageList} />
+          <Route path="/validate-account/:id" component={LogIn} />
         </Switch>
       </Layout>
     </BrowserRouter>

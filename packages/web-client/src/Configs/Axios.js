@@ -6,7 +6,7 @@ var axiosClient = axios.create({
     // `withCredentials` chỉ định có thực hiện các request cross-site Access-Control sử dụng credential hay không
     withCredentials: false, // mặc định là false,
     headers: {'content-type': 'application/json',
-            'Authorization':`Bearer ${localStorage.getItem('token')}`
+           // 'Authorization':"bearer " + JSON.parse(localStorage.getItem('token'))
     },
 
     // `responseType` chỉ định kiểu dữ liệu mà server sẽ trả về
@@ -14,9 +14,13 @@ var axiosClient = axios.create({
     //responseType: 'json', // default
     });
     axiosClient.interceptors.request.use(async (config)=>{
-        //handle token here 
-        return config;
-    })
+              // Do something before request is sent
+              config.headers["Authorization"] = "bearer " + JSON.parse(localStorage.getItem('token'));
+              return config;
+            },
+            error => {
+                throw error;
+            })
     axiosClient.interceptors.response.use((response)=>{
         if(response && response.data){
             return response.data;
