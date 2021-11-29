@@ -7,7 +7,7 @@ const createOne = async (req, res) => {
   console.log("BODY: ", req.body);
   const { tenChuXe, diaChi, email, dienThoai } = req.body;
   const { bienSo, maHieuXe } = req.body;
-  var maKhachHang = generateID('KH'), maXe = generateID('MX');
+  let maKH, maXe; 
 
   var today = new Date();
   var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
@@ -18,7 +18,6 @@ const createOne = async (req, res) => {
   console.log("USER: ", user);
   if(!user) {
     let newUser =  new KhachHang({
-      maKhachHang,
       tenKhachHang: tenChuXe,
       diaChi,
       email,
@@ -27,16 +26,19 @@ const createOne = async (req, res) => {
     await newUser.save()
     .then(res => {
       console.log("Tạo khách hàng mới (nếu như chưa tồn tại) từ PTN: ", res)
+      maKH = res;
     });
   }
   else {
-    maKhachHang = user.maKhachHang;
+    await KhachHang.findOne({ email }).then(res => {
+      maKH = res;
+      console.log("RES: ", res);
+    })
   }
 
   // Tao mot Xe moi
   let newXe = new Xe({
-    maXe,
-    maKhachHang,
+    maKhachHang: maKH._id,
     bienSo,
     tienNo: 0,
     trangThai: 0,
@@ -44,13 +46,13 @@ const createOne = async (req, res) => {
   })
   await newXe.save()
     .then(res => {
-      console.log("Lưu vào bảng Xe từ PhieuTiepNhan: ", res)
+      console.log("Lưu vào bảng Xe từ PhieuTiepNhan: ", res);
+      maXe = res;
     })
 
   // Cuoi cung la tao PhieuTiepNhan
   let newPhieuTiepNhan = new PhieuTiepNhan({
-    maPTN: generateID('PTN'),
-    maXe,
+    maXe: maXe._id,
     ngayTN: date
   })
   try {
@@ -69,6 +71,55 @@ const createOne = async (req, res) => {
 })
 }
 
+const xoaXeSua = async (req, res) => {
+  console.log("req.body", req.body.plate);
+  try {
+    await Xe.deleteMany({ bienSo: req.body.plate })
+    res.status(201).json({
+      statusCode: 201,
+      message: 'Xoa thanh cong' })  
+  } catch (err){
+    console.log("Error xoa xe: ", err);
+  }
+
+}
+
+const getPhieuTiepNhan = async (req, res) => {
+
+  let data = {
+    xe: [],
+    khachang: []
+  };
+
+  let query = req.query;
+  try {
+      let xe = await Xe.find({});
+      data.xe = xe;
+      for(var i of xe){
+        const response = await KhachHang.find({_id: i.maKhachHang});
+        
+        if(response) {
+          data.khachang.push(response);
+        }
+      }
+      if (query.name)
+          xe = xe.filter(accessory => {
+              return nonAccentVietnamese(accessory.name.toLowerCase()).indexOf(nonAccentVietnamese(query.name.toLowerCase())) !== -1;
+          })
+        // phieutiepnhan.filter()
+      // console.log(data);
+
+      return res.status(200).json(data);
+  } catch (err) {
+      return res.status(500).json({
+          statusCode: 500,
+          message: err.message || `Some errors happened when finding accessory`
+      });
+  }
+}
+
 module.exports = {
-  createOne
+  createOne,
+  getPhieuTiepNhan,
+  xoaXeSua
 }

@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   Layout as AntLayout,
@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import axiosClient from '../../Configs/Axios';
 
 const { Title } = Typography;
 
@@ -48,40 +49,78 @@ const StyledRepairForm = styled(AntLayout)`
 `;
 
 const RepairForm = () => {
-  const [dataSource, setDataSource] = useState([
-    {
-      key: '1',
-      number: '1',
-      content: 'Thay lốp xe',
-      sparePart: 'Lốp xe',
-      price: '500000',
-      numberSpare: '1',
-      wage: '200000',
-      money: '700000',
-    },
-    {
-      key: '2',
-      number: '2',
-      content: 'Thay bóng đèn',
-      sparePart: 'Bóng đèn',
-      price: '200000',
-      numberSpare: '1',
-      wage: '100000',
-      money: '300000',
-    },
-    {
-      key: '3',
-      number: '3',
-      content: 'Thay kính chiếu hậu',
-      sparePart: 'Kính chiếu hậu',
-      price: '300000',
-      numberSpare: '1',
-      wage: '200000',
-      money: '500000',
-    },
-  ]);
 
-  dataSource.map((item, index) => (item.number = index + 1));
+  const [dataSource, setDataSource] = useState([]);
+  const [dataBienSo, setDataBienSo] = useState([]);
+  const [dataLVT, setDataLVT] = useState([]);
+  const [dataTenTienCong, setDataTenTienCong] = useState([]);
+  const [dataCTSC, setDataCTSC] = useState([]);
+
+
+  useEffect(() => {
+    // Lay tat ca cac xe hien tai co trong database.
+    axiosClient.get('/xes/').then((res) => {
+      setDataBienSo(res);
+    }).catch((err) => {console.log("ERROR GET XE: ", err)});
+
+    // Lat tat ca cac loai vat tu co trong database
+    axiosClient.get('/accessories/').then(res => {
+      setDataLVT(res);
+    }).catch((err) => {console.log("ERROR GET LVT: ", err)});
+
+    // Lat tat ca cac ten tien cong co trong database
+    axiosClient.get('/wages/').then(res => {
+      setDataTenTienCong(res);
+    }).catch(err => {console.log("ERROR GET TIENCONG: ", err)})
+
+    // Lay danh sach CTSC hien tai dang co trong database
+    let CTSC = [];
+   
+    axiosClient.get('/phieusuachua/getAllCTSC').then( async (res) => {
+      console.log("DATA: ", res);
+      
+      for(var i in res) {
+        let ctsc = {
+          numner: 0,
+          content: '',
+          sparePart: '',
+          price: '',
+          numberSpare: '',
+          wage: '',
+          money: '',
+        }
+        await callAPI(res[i].maVaTu, res[i].maTienCong, ctsc, () => {
+          // console.log(ctsc);
+        });
+
+        console.log(i);
+        ctsc.content = res[i].noiDung;
+        ctsc.numberSpare = res[i].soLuong;
+        ctsc.money = res[i].thanhTien;
+        ctsc.number = parseInt(i)+1;
+
+        CTSC.push(ctsc);
+        if(CTSC.length === res.length) {
+          setDataCTSC(CTSC);
+          
+        }
+      }
+    }).catch(err => {console.log("ERROR GET CTSC: ", err)});
+
+   const callAPI = async (maVatTu, maTienCong, ctsc,callback) => {
+    await axiosClient.get(`/phieusuachua/getVatTu/?maVatTu=${maVatTu}`).then(res1 => {
+      ctsc.sparePart = res1.name;
+      ctsc.price = res1.unitPrice;
+    })
+    await axiosClient.get(`/phieusuachua/getTienCong/?maTienCong=${maTienCong}`).then(res2 => {
+      ctsc.wage = res2.name;
+    })
+    callback();
+   }
+
+
+ 
+  }, [])
 
   const layout = {
     labelCol: {
@@ -173,18 +212,20 @@ const RepairForm = () => {
     message.info('Clicked on Yes.');
   };
 
-  const onFinishAddItem = (values) => {
-    values.number = dataSource.length + 1;
+  const onFinishAddItem = async (values) => {
+    console.log("DATA: ", values);
+  
     const newData = {
-      number: values.number,
-      content: values.content,
-      sparePart: values.sparePart,
-      price: values.price,
-      wage: values.wage,
-      numberSpare: values.numberSpare,
-      money: values.money,
+      bienSo: values.plate,
+      noiDung: values.content,
+      nameLoaiVatTu: values.sparePart,
+      nameTienCong: values.wage,
+      soLuong: values.numberSpare,
     };
-    setDataSource([...dataSource, newData]);
+
+    await axiosClient.post('/phieusuachua/createOne', newData);
+
+    
   };
 
   return (
@@ -224,9 +265,12 @@ const RepairForm = () => {
                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
               }
             >
-              <Option value="81A-12345">81A-12345</Option>
-              <Option value="81B-12345">81B-12345</Option>
-              <Option value="81C-12345">81C-12345</Option>
+              {dataBienSo.map((item, id) => {
+                return(
+                  <Option key={id} value={item.bienSo}>{item.bienSo}</Option>
+                )
+              })}
+              
             </Select>
           </Form.Item>
           <Form.Item
@@ -260,9 +304,12 @@ const RepairForm = () => {
                 optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
               }
             >
-              <Option value="Bánh Xe">Bánh Xe</Option>
-              <Option value="Bóng Đèn">Bóng Đèn</Option>
-              <Option value="Gương">Gương</Option>
+              {dataLVT.map((item, id) => {
+                return(
+                  <Option key={id} value={item.name}>{item.name}</Option>
+                )
+              })}
+              
             </Select>
           </Form.Item>
           <Form.Item
@@ -280,17 +327,31 @@ const RepairForm = () => {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
+            label="Tên tiền công"
             name="wage"
-            label="Tiền Công"
             rules={[
               {
                 required: true,
-                type: 'number',
-                min: 0,
               },
             ]}
           >
-            <InputNumber style={{ width: '100%' }} />
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              filterSort={(optionA, optionB) =>
+                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+              }
+            >
+              {dataTenTienCong.map((item, id) => {
+                return(
+                  <Option key={id} value={item.name}>{item.name}</Option>
+                )
+              })}
+              
+            </Select>
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
             <Button type="primary" htmlType="submit">
@@ -302,7 +363,7 @@ const RepairForm = () => {
         <Table
           className="result-table"
           columns={columns}
-          dataSource={dataSource}
+          dataSource={dataCTSC}
           pagination={false}
         />
         <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">
