@@ -6,11 +6,9 @@ exports.initDoanhSo = function(mongoose) {
         const DoanhSoSchema = new Schema({
             maDS: {
                 type:String,
-                require: true,
-                unique: true
             },
             ThoiDiemDS: {
-                type:String,
+                type:Date,
                 require: true
             },
             tongDS:{
