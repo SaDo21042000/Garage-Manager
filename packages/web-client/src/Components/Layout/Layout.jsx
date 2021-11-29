@@ -32,18 +32,18 @@ const Layout = ({ menuSelectedKey, children }) => {
   const [isLoading, setIsLoading] =useState(false);
   const isPubicRoutes = pathname === '/log-in'|| pathname ==='/forgot-password' ? true : false;
 
-  // useEffect(()=>{
-  //   console.log(123);
-  //   if(!isCheckToken()){
-  //     console.log(123);
-  //     localStorage.removeItem('token');
-  //   }
-  // })
+  useEffect(()=>{ 
+    isCheckToken()
+    .then((res)=>{
+      if(!res){
+        localStorage.removeItem('token')
+      }
+    })
+  })
    
   const isCheckToken=async()=>{
     try{
       await actions.onCheckTokenRequest();
-      console.log('21321');
       return true;
     }
     catch(e){

@@ -14,6 +14,7 @@ const AccessoryImportFormRouter = require('./AccessoryImportForm');
 const InventoryReportRouter = require('./InventoryReport');
 const PhieuTiepNhan = require('./PhieuTIepNhan');
 const PhieuSuaChua = require('./PhieuSuaChua');
+const CheckToken = require('./CheckToken');
 
 const route = (app) => {
     app.use('/api/bills', BillRouter);
@@ -31,6 +32,7 @@ const route = (app) => {
     app.use('/api/inventory-reports', InventoryReportRouter);
     app.use('/api/phieutiepnhan', PhieuTiepNhan);
     app.use('/api/phieusuachua', PhieuSuaChua);
+    app.use('/api/check-token', CheckToken);
 }
 
 
