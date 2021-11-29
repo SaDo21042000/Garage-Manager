@@ -48,17 +48,23 @@ const CarReception = () => {
 
       await axiosClient.get('/phieutiepnhan/getPhieuTiepNhan')
         .then(res => {
-          // Tien xu ly nhung du lieu ao
+          // Tien xu ly nhung du lieu au
+          // for(var i in res['khachang']) {
+          //   if(res['khachang'][i][0]){
+          //     for(var j in res['xe']) {
+          //       if(res['khachang'][i][0]._id == res['xe'][j]._id)
+          //         data.push({
+          //           khachang: res['khachang'][i][0],
+          //           xe: res['xe'][j]
+          //         })
+          //     }
+          //   }   
+          // }
           for(var i in res['khachang']) {
-            if(res['khachang'][i][0]){
-              for(var j in res['xe']) {
-                if(res['khachang'][i][0].maKhachHang == res['xe'][j].maKhachHang)
-                  data.push({
-                    khachang: res['khachang'][i][0],
-                    xe: res['xe'][j]
-                  })
-              }
-            }   
+            data.push({
+              khachang: res['khachang'][i][0],
+              xe: res['xe'][i]
+            })
           }
         })
 

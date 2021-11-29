@@ -7,7 +7,7 @@ const createOne = async (req, res) => {
   console.log("BODY: ", req.body);
   const { tenChuXe, diaChi, email, dienThoai } = req.body;
   const { bienSo, maHieuXe } = req.body;
-  var maKhachHang = generateID('KH'), maXe = generateID('MX');
+  let maKH, maXe; 
 
   var today = new Date();
   var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
@@ -18,7 +18,6 @@ const createOne = async (req, res) => {
   console.log("USER: ", user);
   if(!user) {
     let newUser =  new KhachHang({
-      maKhachHang,
       tenKhachHang: tenChuXe,
       diaChi,
       email,
@@ -27,16 +26,19 @@ const createOne = async (req, res) => {
     await newUser.save()
     .then(res => {
       console.log("Tạo khách hàng mới (nếu như chưa tồn tại) từ PTN: ", res)
+      maKH = res;
     });
   }
   else {
-    maKhachHang = user.maKhachHang;
+    await KhachHang.findOne({ email }).then(res => {
+      maKH = res;
+      console.log("RES: ", res);
+    })
   }
 
   // Tao mot Xe moi
   let newXe = new Xe({
-    maXe,
-    maKhachHang,
+    maKhachHang: maKH._id,
     bienSo,
     tienNo: 0,
     trangThai: 0,
@@ -44,13 +46,13 @@ const createOne = async (req, res) => {
   })
   await newXe.save()
     .then(res => {
-      console.log("Lưu vào bảng Xe từ PhieuTiepNhan: ", res)
+      console.log("Lưu vào bảng Xe từ PhieuTiepNhan: ", res);
+      maXe = res;
     })
 
   // Cuoi cung la tao PhieuTiepNhan
   let newPhieuTiepNhan = new PhieuTiepNhan({
-    maPTN: generateID('PTN'),
-    maXe,
+    maXe: maXe._id,
     ngayTN: date
   })
   try {
@@ -94,7 +96,8 @@ const getPhieuTiepNhan = async (req, res) => {
       let xe = await Xe.find({});
       data.xe = xe;
       for(var i of xe){
-        const response = await KhachHang.find({maKhachHang: i.maKhachHang});
+        const response = await KhachHang.find({_id: i.maKhachHang});
+        
         if(response) {
           data.khachang.push(response);
         }
@@ -104,7 +107,7 @@ const getPhieuTiepNhan = async (req, res) => {
               return nonAccentVietnamese(accessory.name.toLowerCase()).indexOf(nonAccentVietnamese(query.name.toLowerCase())) !== -1;
           })
         // phieutiepnhan.filter()
-
+      // console.log(data);
 
       return res.status(200).json(data);
   } catch (err) {
