@@ -56,6 +56,7 @@ const RepairForm = () => {
   const [dataTenTienCong, setDataTenTienCong] = useState([]);
   const [dataCTSC, setDataCTSC] = useState([]);
 
+
   useEffect(() => {
     // Lay tat ca cac xe hien tai co trong database.
     axiosClient.get('/xes/').then((res) => {
@@ -73,32 +74,40 @@ const RepairForm = () => {
     }).catch(err => {console.log("ERROR GET TIENCONG: ", err)})
 
     // Lay danh sach CTSC hien tai dang co trong database
-    var CTSC = [];
-    var ctsc = {
-      numner: 0,
-      content: '',
-      sparePart: '',
-      price: '',
-      numberSpare: '',
-      wage: '',
-      money: '',
-    }
-    axiosClient.get('/phieusuachua/getAllCTSC').then(res => {
-      CTSC = res;
-      for(var i in CTSC) {
-        ctsc.content = CTSC[i].noiDung;
-        ctsc.numberSpare = CTSC[i].soLuong;
-        ctsc.money = CTSC[i].thanhTien;
-        ctsc.number = parseInt(i+1);
-       
-        callAPI(CTSC[i].maVaTu, CTSC[i].maTienCong, () => {
-          setDataCTSC([ctsc, ...dataCTSC]);
+    let CTSC = [];
+   
+    axiosClient.get('/phieusuachua/getAllCTSC').then( async (res) => {
+      console.log("DATA: ", res);
+      
+      for(var i in res) {
+        let ctsc = {
+          numner: 0,
+          content: '',
+          sparePart: '',
+          price: '',
+          numberSpare: '',
+          wage: '',
+          money: '',
+        }
+        await callAPI(res[i].maVaTu, res[i].maTienCong, ctsc, () => {
+          // console.log(ctsc);
         });
-        
+
+        console.log(i);
+        ctsc.content = res[i].noiDung;
+        ctsc.numberSpare = res[i].soLuong;
+        ctsc.money = res[i].thanhTien;
+        ctsc.number = parseInt(i)+1;
+
+        CTSC.push(ctsc);
+        if(CTSC.length === res.length) {
+          setDataCTSC(CTSC);
+          
+        }
       }
     }).catch(err => {console.log("ERROR GET CTSC: ", err)});
 
-   const callAPI = async (maVatTu, maTienCong, callback) => {
+   const callAPI = async (maVatTu, maTienCong, ctsc,callback) => {
     await axiosClient.get(`/phieusuachua/getVatTu/?maVatTu=${maVatTu}`).then(res1 => {
       ctsc.sparePart = res1.name;
       ctsc.price = res1.unitPrice;
@@ -110,6 +119,7 @@ const RepairForm = () => {
    }
 
 
+ 
   }, [])
 
   const layout = {
@@ -353,7 +363,7 @@ const RepairForm = () => {
         <Table
           className="result-table"
           columns={columns}
-          dataSource={dataCTSC  }
+          dataSource={dataCTSC}
           pagination={false}
         />
         <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">

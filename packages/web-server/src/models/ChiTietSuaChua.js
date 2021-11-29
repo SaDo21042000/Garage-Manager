@@ -2,9 +2,6 @@ exports.initChiTietSuaChua = function(mongoose) {
   const Schema = mongoose.Schema;
 
   const ChiTietSuaChuaSchema = new Schema({
-    maCTSC: {
-      type: String
-    },
     noiDung: {
        type: String,
        require: true

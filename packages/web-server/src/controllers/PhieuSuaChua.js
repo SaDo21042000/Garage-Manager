@@ -42,7 +42,6 @@ const createOne = async (req, res) => {
   })
 
   let newCTSC = new ChiTietSuaChua({
-    maCTSC: "nul",
     noiDung,
     maVaTu: maVT._id,
     soLuong,
