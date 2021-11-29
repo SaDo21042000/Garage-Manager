@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { Layout as AntLayout, Form, Input, Button } from 'antd';
 import {useSelector } from 'react-redux';
 import * as actions from './actions';
 import { useHistory } from 'react-router-dom';
-
+import {LoadingScreenCustom } from './../../Components' 
 const ChangePasswordStyled = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
+    position: relative;
   }
 
   .main-title {
@@ -30,26 +31,33 @@ const ChangePassword = () => {
     },
   };
   const history = useHistory();
+  const [isLoading, setIsLoading] =useState(false);
   const user=useSelector(state=>state.user);
+
   const validateMessages = {
     // eslint-disable-next-line no-template-curly-in-string
     required: 'Nhập ${label}!',
   };
+
   const onFinish = async (values) => {
-    console.log('user',values);
+
     try {
+      setIsLoading(true);
       const data = {
         tenTaiKhoan: values.tenTaiKhoan,
         matKhau: values.matKhau,
         matKhauMoi:values.matKhauMoi
       };
       await actions.onChangePasswordRequest(data);
+      setIsLoading(false);
       alert('Đổi mật khẩu thành công');
       history.push('/');
     } catch (e) {
+      setIsLoading(false);
       alert(e.message);
     }
   };
+
   return (
     <ChangePasswordStyled>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 20 }}>
@@ -144,6 +152,7 @@ const ChangePassword = () => {
             </Button>
           </Form.Item>
         </Form>
+        <LoadingScreenCustom isLoading ={isLoading} />
       </div>
     </ChangePasswordStyled>
   );

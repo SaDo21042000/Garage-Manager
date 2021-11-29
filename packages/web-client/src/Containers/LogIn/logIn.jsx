@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Layout as AntLayout, Typography, Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as actions from './actions';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
+import {LoadingScreen } from './../../Components'
 const { Text } = Typography;
 
 const StyledLogIn = styled(AntLayout)`
@@ -35,19 +36,22 @@ const LogIn = () => {
   const params = useParams();
   let history = useHistory();
   let location = useLocation();
+  const [isLoading, setIsLoading] =useState(false);
 
   useEffect(() => {
     const isNumeric = /^\/validate-account\/*/;
     if (isNumeric.test(location.pathname)) {
-      console.log('params', params.id);
       vaildateAccount(params.id);
     }
   });
   const vaildateAccount = async (params) => {
     try {
+      setIsLoading(true);
       await actions.onValidateAccountRequest(params);
+      setIsLoading(false);
       history.push('/');
     } catch (e) {
+      setIsLoading(false);
       alert(e.message);
       history.push('/');
     }
@@ -58,13 +62,16 @@ const LogIn = () => {
   };
   const onFinish = async (values) => {
     try {
+      setIsLoading(true);
       const data = {
         tenTaiKhoan: values.tenTaiKhoan,
         matKhau: values.matKhau,
       };
       await dispatch(actions.onGetUserRequest(data));
+      setIsLoading(false);
       history.push('/');
     } catch (e) {
+      setIsLoading(false);
       alert(e.message);
     }
   };
@@ -77,7 +84,6 @@ const LogIn = () => {
             Bạn quên mật khẩu? <Link to={'forgot-password'}>Quên mật khẩu</Link>
           </Text>
         </div>
-
         <Form
           {...layout}
           name="nest-messages"
@@ -124,6 +130,7 @@ const LogIn = () => {
           </Form.Item>
         </Form>
       </div>
+      <LoadingScreen isLoading={isLoading} />
     </StyledLogIn>
   );
 };

@@ -83,3 +83,15 @@ export const onChangePasswordRequest=async (data)=>{
     })
     
 }
+
+export const onCheckTokenRequest=async ()=>{
+    return new Promise( async(resolve, reject) => {
+        try{
+            const res= await axios.post("http://localhost:5000/api/taikhoans/check-token");
+            resolve(res)
+        }catch(e){
+            reject(e.response.data);
+        }
+    })
+    
+}

@@ -44,7 +44,7 @@ const Header = () => {
     <StyledHeader>
       <MainHeader className="site-layout-background" style={{ padding: 0 }}>
         <div className="right-side">
-          <Avatar src="https://joeschmoe.io/api/v1/random" />
+          <Avatar src="https://joeschmoe.io/api/v1/random" className="me-2"/>
           <Dropdown overlay={menu} placement="bottomCenter">
             <Link to="/">{user.tenTaiKhoan}</Link>
           </Dropdown>
