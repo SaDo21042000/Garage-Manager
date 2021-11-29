@@ -1,4 +1,4 @@
-const { PhieuSuaChua, Wage, Accessory, ChiTietSuaChua, Xe, PhieuTiepNhan } = require('../models');
+const { PhieuSuaChua, Wage, Accessory, ChiTietSuaChua, Xe, PhieuTiepNhan, DoanhSo, ChiTietDoanhSo } = require('../models');
 const { generateID } = require('../helpers/generateID');
 const { json } = require('express');
 
@@ -64,6 +64,43 @@ const createOne = async (req, res) => {
   //   console.log('PSC: ', res);
   // });
 
+  // cập nhât số lượng sửa trong chi tiết doanh số
+  let { maHieuXe } = await Xe.findOne({ bienSo }, { maHieuXe: 1 });
+  let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
+    {$match: { month: today.getMonth() + 1, year: today.getFullYear()}}]);
+
+    if(!ds[0]){
+        let newDS = await new DoanhSo({ThoiDiemDS: date, tongDS: 0});
+        await newDS.save();
+        let { _id } = await DoanhSo.findOne({ ThoiDiemDS: date }, { _id: 1 })
+        let newCtds = await new ChiTietDoanhSo({
+            maHieuXe: maHieuXe,
+            soLuongSua: 1,
+            tiLe: 0,
+            tongTien: 0,
+            maDoanhSo: _id
+        });
+        await newCtds.save();
+    } else {
+        let ctds = await ChiTietDoanhSo.findOne({ maDoanhSo: ds[0]._id, maHieuXe: maHieuXe });
+        if(!ctds) {
+            let newCtds = await new ChiTietDoanhSo({
+                maHieuXe: maHieuXe,
+                soLuongSua: 1,
+                tiLe: 0.5,
+                tongTien: 0,
+                maDoanhSo: ds[0]._id
+            });
+            await newCtds.save();
+        } else {
+            await ChiTietDoanhSo.updateOne({ _id: ctds._id }, { soLuongSua: ctds.soLuongSua + 1 });
+        }      
+    }
+
+  return res.status(201).json({
+    statusCode: 201,
+    message: 'Receiving your form succesfully'
+  });
 }
 
 const getAllCTSC = async (req, res) => {
