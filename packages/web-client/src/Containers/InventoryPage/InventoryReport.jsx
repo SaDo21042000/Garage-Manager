@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { DownloadOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Divider, Form, InputNumber, Table, Typography, notification } from 'antd';
 import React, { useState } from 'react';

@@ -26,7 +26,12 @@ const Sidebar = () => {
   return (
     <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo" />
-      <Menu theme="dark" defaultSelectedKeys={[location.pathname]} selectedKeys={[location.pathname]} mode="inline">
+      <Menu
+        theme="dark"
+        defaultSelectedKeys={[location.pathname]}
+        selectedKeys={[location.pathname]}
+        mode="inline"
+      >
         <Menu.Item key="/" icon={<HomeOutlined />}>
           <span>Home Page</span>
           <Link to="/"></Link>
@@ -73,12 +78,12 @@ const Sidebar = () => {
           </Menu.Item> */}
         </SubMenu>
         <SubMenu key="/inventory-report" icon={<FormOutlined />} title="Báo cáo tồn">
-          <Menu.Item key="/inventory-report-page">
+          <Menu.Item key="inventory-report-page">
             <Link to="inventory-report-page">Báo cáo tồn</Link>
           </Menu.Item>
-          {/* <Menu.Item key="inventory-report-form">
+          <Menu.Item key="inventory-report-form">
             <Link to="inventory-report-form">Form báo cáo tồn</Link>
-          </Menu.Item> */}
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="admin" icon={<UserOutlined />} title="Quản lý user">
           <Menu.Item key="/sign-up">

@@ -6,7 +6,7 @@ const { initHieuXe } = require('./HieuXe');
 const { initXe } = require('./Xe');
 const { initChiTietDoanhSo } = require('./ChiTietDoanhSo');
 const { initTaiKhoan } = require('./TaiKhoan');
-const { initQuyDinh } = require('./QuyDinh')
+const { initQuyDinh } = require('./QuyDinh');
 const { initChiTietSuaChua } = require('./ChiTietSuaChua');
 const { initAccessory } = require('./Accessory');
 const { initAccessoryImportForm } = require('./AccessoryImportForm');
@@ -17,8 +17,8 @@ const { initParameter } = require('./Parameter');
 const { initLoaiVatTu } = require('./LoaiVatTu');
 const { initPhieuTiepNhan } = require('./PhieuTiepNhan');
 const { initPhieuSuaChua } = require('./PhieuSuaChua');
+const { initPhieuThuTien } = require('./PhieuThuTien');
 const { initDoanhSo } = require('./DoanhSo');
-
 
 const db = {};
 
@@ -31,9 +31,9 @@ db.Xe = initXe(mongoose);
 db.HieuXe = initHieuXe(mongoose);
 db.ChiTietDoanhSo = initChiTietDoanhSo(mongoose);
 db.TaiKhoan = initTaiKhoan(mongoose);
-db.QuyDinh = initQuyDinh(mongoose)
-db.ChiTietSuaChua = initChiTietSuaChua(mongoose)
-db.LoaiVatTu= initLoaiVatTu(mongoose);
+db.QuyDinh = initQuyDinh(mongoose);
+db.ChiTietSuaChua = initChiTietSuaChua(mongoose);
+db.LoaiVatTu = initLoaiVatTu(mongoose);
 db.Accessory = initAccessory(mongoose);
 db.AccessoryImportForm = initAccessoryImportForm(mongoose);
 db.Wage = initWage(mongoose);
@@ -42,7 +42,7 @@ db.InventoryReportDetail = initInventoryReportDetail(mongoose);
 db.Parameter = initParameter(mongoose);
 db.PhieuTiepNhan = initPhieuTiepNhan(mongoose);
 db.PhieuSuaChua = initPhieuSuaChua(mongoose);
-db.DoanhSo = initDoanhSo(mongoose)
-
+db.PhieuThuTien = initPhieuThuTien(mongoose);
+db.DoanhSo = initDoanhSo(mongoose);
 
 module.exports = db;
