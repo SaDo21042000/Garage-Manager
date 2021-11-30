@@ -7,7 +7,6 @@ import {
   Popconfirm,
   Table,
   Button,
-  Select,
   Form,
   Divider,
   Typography,
@@ -75,7 +74,6 @@ const WageList = () => {
   const [checkEdit, setCheckEdit] = useState(false);
   const [inputSearch, setInputSearch] = useState('');
   const [dataEdit, setDataEditWage] = useState({
-    maTienCong: '',
     idWage: '',
     nameWage: '',
     price: '',
@@ -134,7 +132,7 @@ const WageList = () => {
         try {
           await axiosClient.post('/wages', values);
           notification.success({
-            message: 'Import Wage Successfully',
+            message: 'Nhập tiền công thành công',
           });
         } catch (error) {
           console.log(error);
@@ -149,7 +147,7 @@ const WageList = () => {
         try {
           await axiosClient.put(`/wages/${dataEdit.idWage}`, values);
           notification.success({
-            message: 'Edit Wage Successfully',
+            message: 'Chỉnh sửa tiền công thành công',
           });
         } catch (error) {
           console.log(error);
@@ -158,7 +156,7 @@ const WageList = () => {
       getAPI();
       postData();
       getAPI();
-      setDataEditWage({ maTienCong: '', idWage: '', nameWage: '', price: '' });
+      setDataEditWage({ idWage: '', nameWage: '', price: '' });
       formWage.resetFields();
       setCheckEdit(false);
     }
@@ -175,7 +173,7 @@ const WageList = () => {
       try {
         await axiosClient.delete(`/wages/${idWage}`);
         notification.success({
-          message: 'Delete Wage Successfully',
+          message: 'Xóa tiền công thành công',
         });
       } catch (error) {
         console.log(error);
@@ -190,7 +188,6 @@ const WageList = () => {
   const onFinishEditWage = (wage) => {
     console.log(wage);
     const dataEdit = {
-      maTienCong: wage.maTienCong,
       idWage: wage._id,
       nameWage: wage.name,
       price: wage.price,
@@ -202,7 +199,6 @@ const WageList = () => {
     console.log(formWage.getFieldValue());
   };
 
-
   //Header table
   const columns = [
     {
@@ -212,12 +208,6 @@ const WageList = () => {
       render: (v, i) => {
         return <span>{dataListWage.indexOf(i) + 1}</span>;
       },
-    },
-    {
-      title: 'Mã tiền công',
-      dataIndex: 'maTienCong',
-      key: 'maTienCong',
-      width: 150,
     },
     {
       title: 'Tên tiền công',
@@ -252,7 +242,7 @@ const WageList = () => {
       return (
         <>
           <Divider />
-
+          <p style={{ fontSize: 20, fontWeight: '600' }}>Nhập tiền công:</p>
           <Form
             name="basic"
             initialValues={{
@@ -264,10 +254,7 @@ const WageList = () => {
             onFinish={onFinishWage}
             form={formWage}
           >
-            <Form.Item label="Mã tiền công" name="maTienCong">
-              <Input style={{ width: '100%' }} defaultValue={dataEdit.nameWage} />
-            </Form.Item>
-            <Form.Item label="Tên tên tiền công" name="name">
+            <Form.Item label="Tên tiền công" name="name">
               <Input style={{ width: '100%' }} defaultValue={dataEdit.nameWage} />
             </Form.Item>
             <Form.Item label="Đơn giá" name="price">
@@ -293,6 +280,7 @@ const WageList = () => {
               Danh sách tiền công
             </Title>
             {displayAddOnlyAdmin()}
+            <p style={{ fontSize: 20, fontWeight: '600' }}>Tìm kiếm tiền công:</p>
             <Form
               name="basic"
               initialValues={{
@@ -334,7 +322,7 @@ const WageList = () => {
       <Content style={{ margin: '0 16px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Quản lý phụ tùng</Breadcrumb.Item>
-          <Breadcrumb.Item>Danh sách phụ tùng</Breadcrumb.Item>
+          <Breadcrumb.Item>Danh sách tiền công</Breadcrumb.Item>
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <WageListView />

@@ -3,7 +3,7 @@ exports.initWage = function(mongoose) {
 
   // Create Wage Schema
   const WageSchema = new Schema({
-      maTienCong: String,
+      //maTienCong: String,
       name: String,
       price: Number
   })

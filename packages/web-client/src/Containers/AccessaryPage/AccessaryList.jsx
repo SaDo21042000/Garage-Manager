@@ -83,7 +83,6 @@ const AccessaryList = () => {
   });
 
   //Form
-  const [formTypeAcccessary] = Form.useForm();
   const [formAcccessary] = Form.useForm();
   const [formSearch] = Form.useForm();
 
@@ -132,23 +131,7 @@ const AccessaryList = () => {
   }, [inputSearch]);
 
   //FUNCTION HANDLE
-  //Thêm loại vật tư
-  const onFinishTypeAccessary = (values) => {
-    const postData = async () => {
-      try {
-        await axiosClient.post('/loaivattus/create', values);
-        notification.success({
-          message: 'Import Type Accessory Successfully',
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    postData();
-    formTypeAcccessary.resetFields();
-  };
-
-  //Thêm loại vật tư và sửa chữa
+  //Thêm  phụ tùng và sửa chữa
   const onFinishAccessary = (values) => {
     if (!checkEdit) {
       const postData = async () => {
@@ -253,7 +236,6 @@ const AccessaryList = () => {
       dataIndex: 'handle',
       width: 150,
       render: (v, i) => {
-        //console.log(i);
         return (
           <TableActions
             onDelete={() => onFinishDeleteAccessary(i._id)}
@@ -268,29 +250,6 @@ const AccessaryList = () => {
     const displayAddOnlyAdmin = () => {
       return (
         <>
-          <Form
-            name="basic"
-            initialValues={{
-              remember: true,
-            }}
-            autoComplete="off"
-            layout="inline"
-            validateMessages={validateMessages}
-            onFinish={onFinishTypeAccessary}
-            form={formTypeAcccessary}
-          >
-            <Form.Item label="Tên loại phụ tùng" name="tenLoaiVatTu">
-              <Input style={{ width: '100%' }} />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Thêm mới
-              </Button>
-            </Form.Item>
-          </Form>
-
-          <Divider />
-
           <Form
             name="basic"
             initialValues={{
@@ -327,7 +286,11 @@ const AccessaryList = () => {
               <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.nameAccessary} />
             </Form.Item>
             <Form.Item label="Đơn giá" name="unitPrice">
-              <Input type="number" style={{ width: '100%' }} defaultValue={dataEditAccessary.unitPrice} />
+              <Input
+                type="number"
+                style={{ width: '100%' }}
+                defaultValue={dataEditAccessary.unitPrice}
+              />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -348,7 +311,10 @@ const AccessaryList = () => {
             <Title className="main-title" level={2}>
               Danh sách phụ tùng
             </Title>
+            <Divider />
+            <p style={{ fontSize: 20, fontWeight: '600' }}>Nhập phụ tùng:</p>
             {displayAddOnlyAdmin()}
+            <p style={{ fontSize: 20, fontWeight: '600' }}>Tìm kiếm phụ tùng:</p>
             <Form
               name="basic"
               initialValues={{
