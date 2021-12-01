@@ -18,7 +18,7 @@ router.post('/delete', deleteOne);
 
 router.post('/create', create);
 
-router.post('/get', getAll);
+router.get('/get', getAll);
 
 
 module.exports = router;
