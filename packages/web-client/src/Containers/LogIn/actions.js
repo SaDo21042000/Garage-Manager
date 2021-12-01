@@ -25,7 +25,7 @@ export const onGetUserRequest=(user)=>{
                 resolve(data);
                 dispatch(onGetUser(data.object));
             }catch(e){
-                reject(e.response.data)
+                reject(e?.response?.data);
             }
         })
         
@@ -41,7 +41,7 @@ export const onRegisterRequest=async (user)=>{
             const data= await axios.post("http://localhost:5000/api/taikhoans/register",user);
             resolve(data)
         }catch(e){
-            reject(e.response.data);
+            reject(e?.response?.data);
         }
     })
     
@@ -54,7 +54,7 @@ export const onValidateAccountRequest=async (userName)=>{
             const data= await axios.post("http://localhost:5000/api/taikhoans/validate-user",{userName:userName});
             resolve(data)
         }catch(e){
-            reject(e.response.data);
+            reject(e?.response?.data);
         }
     })
     
@@ -66,7 +66,7 @@ export const onForgotPasswordRequest=async (data)=>{
             const res= await axios.post("http://localhost:5000/api/taikhoans/forgot-password",data);
             resolve(res)
         }catch(e){
-            reject(e.response.data);
+            reject(e?.response?.data);
         }
     })
     
@@ -78,7 +78,7 @@ export const onChangePasswordRequest=async (data)=>{
             const res= await axios.post("http://localhost:5000/api/taikhoans/change-password",data);
             resolve(res)
         }catch(e){
-            reject(e.response.data);
+            reject(e?.response?.data);
         }
     })
     
@@ -90,7 +90,7 @@ export const onCheckTokenRequest=async ()=>{
             const res= await axios.post("http://localhost:5000/api/check-token");
             resolve(res)
         }catch(e){
-            reject(e.response.data);
+            reject(e?.response?.data);
         }
     })
     
