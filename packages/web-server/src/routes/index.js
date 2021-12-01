@@ -14,6 +14,7 @@ const AccessoryImportFormRouter = require('./AccessoryImportForm');
 const InventoryReportRouter = require('./InventoryReport');
 const PhieuThuTien = require('./PhieuThuTien');
 const DoanhSo = require('./DoanhSo');
+const CheckToken = require('./CheckToken');
 
 const route = (app) => {
   app.use('/api/bills', BillRouter);
@@ -31,6 +32,7 @@ const route = (app) => {
   app.use('/api/inventory-reports', InventoryReportRouter);
   app.use('/api/phieuthutiens', PhieuThuTien);
   app.use('/api/doanhsos', DoanhSo);
+  app.use('/api/check-token', CheckToken);
 };
 
 module.exports = route;

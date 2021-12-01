@@ -5,14 +5,15 @@ const bcrypt = require('bcrypt');
 const {successResponse,errorResponse}= require('../utils/objResponse');
 
 // Thời gian sống của token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "10d";
-
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE? process.env.ACCESS_TOKEN_LIFE : "10d";
+console.log(accessTokenLife);
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "quocdeptrai-access";
-
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET? process.env.ACCESS_TOKEN_SECRET: 'QuocDepTrai';
+console.log(accessTokenSecret);
 
 let login = async (req, res) => {
   try {
+    //console.log(accessTokenSecret);
     var dataLogin=req.body;
     var taikhoan= await TaiKhoanService.findOne({tenTaiKhoan:dataLogin.tenTaiKhoan});
     if(taikhoan.status===0) return res.status(401).json(errorResponse("Tên tài khoản chưa được kích hoạt. Vui lòng kiểm tra email để kích hoạt tài khoản"))
