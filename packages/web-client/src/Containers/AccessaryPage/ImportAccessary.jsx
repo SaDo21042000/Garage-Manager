@@ -52,6 +52,7 @@ const ImportAccessary = () => {
     const getAPI = async () => {
       try {
         const response = await axiosClient.get('/accessories')
+        console.log(response);
         setData(response)
       } catch (error) {
         console.log(error);
