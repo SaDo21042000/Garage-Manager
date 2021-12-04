@@ -83,7 +83,7 @@ const InventoryReport = () => {
   );
 
   return (
-    <InventoryReportStyles menuSelectedKey={'inventory-report-page'}>
+    <InventoryReportStyles >
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Báo cáo tồn</Breadcrumb.Item>
         <Breadcrumb.Item>Báo cáo tồn tháng</Breadcrumb.Item>

@@ -69,7 +69,7 @@ const Bill = () => {
   // const [form] = Form.useForm();
 
   return (
-    <StyledBill menuSelectedKey={'sales-report-form'}>
+    <StyledBill >
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Phiếu sữa chữa</Breadcrumb.Item>
         <Breadcrumb.Item>Lập phiếu thu tiền</Breadcrumb.Item>

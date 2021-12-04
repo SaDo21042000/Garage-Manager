@@ -77,7 +77,6 @@ const RepairForm = () => {
     let CTSC = [];
    
     axiosClient.get('/phieusuachua/getAllCTSC').then( async (res) => {
-      console.log("DATA: ", res);
       
       for(var i in res) {
         let ctsc = {
@@ -229,7 +228,7 @@ const RepairForm = () => {
   };
 
   return (
-    <StyledRepairForm menuSelectedKey={'sales-report-form'}>
+    <StyledRepairForm >
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Phiếu sửa chữa</Breadcrumb.Item>
         <Breadcrumb.Item>Lập phiếu sửa chữa</Breadcrumb.Item>

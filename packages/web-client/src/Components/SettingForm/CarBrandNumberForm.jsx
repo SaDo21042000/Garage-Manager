@@ -16,7 +16,10 @@ const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 
-const CarBrandNumberForm = () => {
+const CarBrandNumberForm = (props) => {
+
+  const {setIsLoading} = props;
+
   const [visibleSupply, setVisibleSupply] = useState(false);
   const [form] = Form.useForm();
   const [dataSourceCarNumber, setDataSourceCarNumber] = useState([]);
@@ -24,11 +27,14 @@ const CarBrandNumberForm = () => {
   useEffect(() => {
     const getAPI = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosClient.post('/quydinhs/get');
         form.setFieldsValue({
           soHieuXe: response.object.quyDinh.soHieuXe,
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -38,9 +44,12 @@ const CarBrandNumberForm = () => {
   useEffect(() => {
     const getAPI = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosClient.post('/hieuxes/get');
         setDataSourceCarNumber(response.object.listHieuXe);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -81,6 +90,7 @@ const CarBrandNumberForm = () => {
     console.log(maHieuXe);
     const deleteCarBrand = async () => {
       try {
+        setIsLoading(true);
         await axiosClient.post('/hieuxes/delete', { maHieuXe: maHieuXe });
         setDataSourceCarNumber(dataSourceCarNumber.filter((item) => item.maHieuXe !== maHieuXe));
         form.setFieldsValue({
@@ -89,7 +99,9 @@ const CarBrandNumberForm = () => {
         notification.success({
           message: 'Xóa hiệu xe thành công!',
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -101,6 +113,7 @@ const CarBrandNumberForm = () => {
     console.log(e.target[0].value);
     const addCarBrand = async () => {
       try {
+        setIsLoading(true);
         await axiosClient.post('/hieuxes/create', { tenHieuXe: e.target[0].value });
         const response = await axiosClient.post('/hieuxes/get');
         const newCarBrand = response.object.listHieuXe.filter(
@@ -113,7 +126,9 @@ const CarBrandNumberForm = () => {
         notification.success({
           message: 'Thêm hiệu xe thành công!',
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };

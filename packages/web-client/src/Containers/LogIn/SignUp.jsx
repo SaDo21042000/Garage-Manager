@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import styled from 'styled-components';
-import { Breadcrumb, Layout as AntLayout, Typography, Form, Input, Button } from 'antd';
+import { Breadcrumb, Layout as AntLayout, Typography, Form, Input, Button, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import * as actions from './actions';
 import {useSelector} from 'react-redux'
@@ -51,11 +51,16 @@ const SignUp = () => {
             }
             await actions.onRegisterRequest(dataRequest);
             setIsLoading(false);
-            alert("Bạn vui lòng truy cập email tài khoản này để kích hoạt tài khoản trước khi sử dụng account này để truy cập website")
+            notification.success({
+                message: "Bạn vui lòng truy cập email tài khoản này để kích hoạt tài khoản trước khi sử dụng account này để truy cập website",
+            });
             history.push('/');    
         }catch(e){
             setIsLoading(false);
-            alert(e.message);
+            notification.error({
+                message: e.message,
+            });
+
         }
         
     }

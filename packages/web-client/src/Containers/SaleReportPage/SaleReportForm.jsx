@@ -202,7 +202,7 @@ const SaleReportForm = () => {
   };
 
   return (
-    <StyledSaleReportForm menuSelectedKey={'sales-report-form'}>
+    <StyledSaleReportForm >
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Báo cáo doanh số</Breadcrumb.Item>
         <Breadcrumb.Item>Form doanh thu tháng</Breadcrumb.Item>

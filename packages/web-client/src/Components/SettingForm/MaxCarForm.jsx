@@ -11,18 +11,23 @@ const StyledForm = styled(Form)`
   }
 `;
 
-const MaxCarForm = () => {
+const MaxCarForm = (props) => {
+
+  const {setIsLoading} = props;
+
   const [form] = Form.useForm();
 
   useEffect(() => {
     const getAPI = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosClient.post('/quydinhs/get');
-        // console.log(response);
         form.setFieldsValue({
           soXeMax: response.object.quyDinh.soXeMax,
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -30,9 +35,10 @@ const MaxCarForm = () => {
   }, [form]);
 
   const onFinishMaxCar = (values) => {
-    console.log('Success:', values);
+
     const postData = async () => {
       try {
+        setIsLoading(true);
         await axiosClient.post('/quydinhs/update', {
           ...values,
           maQuyDinh: 'QD-598-867-527',
@@ -40,7 +46,9 @@ const MaxCarForm = () => {
         notification.success({
           message: 'Cập nhật số xe tiếp nhận tối đa thành công!',
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -48,7 +56,6 @@ const MaxCarForm = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
 
   return (

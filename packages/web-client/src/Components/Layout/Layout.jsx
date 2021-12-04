@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import { Layout as AntLayout } from 'antd';
+import { Layout as AntLayout, notification} from 'antd';
 import styled from 'styled-components';
 import { useLocation, useHistory } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -33,12 +33,16 @@ const Layout = ({ menuSelectedKey, children }) => {
   const isPubicRoutes = pathname === '/log-in'|| pathname ==='/forgot-password' ? true : false;
 
   useEffect(()=>{ 
-    isCheckToken()
-    .then((res)=>{
-      if(!res){
-        localStorage.removeItem('token')
-      }
+    let isLoginPage = pathname !== '/log-in';
+    let isForGotPasswordPage = pathname !== '/forgot-password';
+    if(isLoginPage&&isForGotPasswordPage){
+      isCheckToken()
+      .then((res)=>{
+        if(!res){
+          localStorage.removeItem('token')
+        }
     })
+    }
   })
    
   const isCheckToken=async()=>{
@@ -70,8 +74,10 @@ const Layout = ({ menuSelectedKey, children }) => {
       }
       if(!isCheckRight){
         setIsLoading(false);
-          alert("Bạn vui lòng đăng nhập để truy cập trang này. ");
-          history.push("/log-in");
+        notification.error({
+          message: "Bạn vui lòng đăng nhập để truy cập trang này. ",
+        });
+        history.push("/log-in");
       }
     }
     setIsLoading(false);

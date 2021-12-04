@@ -108,6 +108,7 @@ const getAllCTSC = async (req, res) => {
     await ChiTietSuaChua.find({}).then(res => {
       data = res;
     })
+    console.log('data',  data);
     
     return res.status(200).json(data);
 } catch (err) {

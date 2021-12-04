@@ -16,7 +16,10 @@ const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 
-const SupplyTypeForm = () => {
+const SupplyTypeForm = (props) => {
+
+  const {setIsLoading} = props;
+
   const [visibleSupplyType, setVisibleSupplyType] = useState(false);
   const [form] = Form.useForm();
   const [dataSourceSupply, setDataSourceSupply] = useState([]);
@@ -24,11 +27,14 @@ const SupplyTypeForm = () => {
   useEffect(() => {
     const getAPI = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosClient.post('/quydinhs/get');
         form.setFieldsValue({
           soLoaiVatTu: response.object.quyDinh.soLoaiVatTu,
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -38,9 +44,12 @@ const SupplyTypeForm = () => {
   useEffect(() => {
     const getAPI = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosClient.post('/loaivattus/get');
         setDataSourceSupply(response.object.listLoaiVatTu);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -78,9 +87,9 @@ const SupplyTypeForm = () => {
   ];
 
   const handleDelete = (maLoaiVatTu) => {
-    console.log(maLoaiVatTu);
     const deleteSupplyType = async () => {
       try {
+        setIsLoading(true);
         await axiosClient.post('/loaivattus/delete', { maLoaiVatTu: maLoaiVatTu });
         setDataSourceSupply(dataSourceSupply.filter((item) => item.maLoaiVatTu !== maLoaiVatTu));
         form.setFieldsValue({
@@ -89,7 +98,9 @@ const SupplyTypeForm = () => {
         notification.success({
           message: 'Xóa loại vật tư thành công!',
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };
@@ -101,6 +112,7 @@ const SupplyTypeForm = () => {
     console.log(e.target[0].value);
     const addSupplyType = async () => {
       try {
+        setIsLoading(true);
         await axiosClient.post('/loaivattus/create', { tenLoaiVatTu: e.target[0].value });
         const response = await axiosClient.post('/loaivattus/get');
         const newSupplyType = response.object.listLoaiVatTu.filter(
@@ -113,7 +125,9 @@ const SupplyTypeForm = () => {
         notification.success({
           message: 'Thêm loại vật tư thành công!',
         });
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log(error);
       }
     };

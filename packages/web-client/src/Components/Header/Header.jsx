@@ -43,10 +43,10 @@ const Header = () => {
   return (
     <StyledHeader>
       <MainHeader className="site-layout-background" style={{ padding: 0 }}>
-        <div className="right-side">
+        <div className="right-side me-5">
           <Avatar src="https://joeschmoe.io/api/v1/random" className="me-2"/>
           <Dropdown overlay={menu} placement="bottomCenter">
-            <Link to="/">{user.tenTaiKhoan}</Link>
+            <Link to="/" className="text-dark">Xin chào <b className="text-primary">{user.tenTaiKhoan}</b></Link>
           </Dropdown>
         </div>
       </MainHeader>

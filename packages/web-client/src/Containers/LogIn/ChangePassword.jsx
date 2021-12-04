@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import { Layout as AntLayout, Form, Input, Button } from 'antd';
+import { Layout as AntLayout, Form, Input, Button, notification } from 'antd';
 import {useSelector } from 'react-redux';
 import * as actions from './actions';
 import { useHistory } from 'react-router-dom';
@@ -50,11 +50,15 @@ const ChangePassword = () => {
       };
       await actions.onChangePasswordRequest(data);
       setIsLoading(false);
-      alert('Đổi mật khẩu thành công');
+      notification.success({
+        message: 'Đổi mật khẩu thành công!',
+      });
       history.push('/');
     } catch (e) {
       setIsLoading(false);
-      alert(e.message);
+      notification.error({
+        message: e.message,
+      });
     }
   };
 

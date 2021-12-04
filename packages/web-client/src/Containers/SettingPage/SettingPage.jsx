@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import {
   Layout as AntLayout,
@@ -10,6 +10,7 @@ import {
 } from 'antd';
 
 import { MaxCarForm, CarBrandNumberForm, SupplyTypeForm } from '../../Components/SettingForm';
+import {LoadingScreenCustom } from './../../Components'
 
 const { Title } = Typography;
 
@@ -35,8 +36,10 @@ const StyledSaleReportPage = styled(AntLayout)`
 
 const SettingPage = () => {
 
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
-    <StyledSaleReportPage menuSelectedKey={'sales-report-page'}>
+    <StyledSaleReportPage >
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Cài đặt và thay đổi quy định</Breadcrumb.Item>
       </Breadcrumb>
@@ -48,15 +51,16 @@ const SettingPage = () => {
 
         <Divider />
 
-        <MaxCarForm />
+        <MaxCarForm  setIsLoading={setIsLoading}/>
 
         <Divider />
 
-        <CarBrandNumberForm />
+        <CarBrandNumberForm  setIsLoading={setIsLoading}/>
 
         <Divider />
 
-        <SupplyTypeForm />
+        <SupplyTypeForm  setIsLoading={setIsLoading}/>
+        <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledSaleReportPage>
   );

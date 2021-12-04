@@ -162,7 +162,7 @@ const SaleReportPage = () => {
   };
 
   return (
-    <StyledSaleReportPage menuSelectedKey={'sales-report-page'}>
+    <StyledSaleReportPage >
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Báo cáo doanh số</Breadcrumb.Item>
         <Breadcrumb.Item>Báo cáo doanh thu tháng</Breadcrumb.Item>

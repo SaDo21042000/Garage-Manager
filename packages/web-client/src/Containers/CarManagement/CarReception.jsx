@@ -196,7 +196,7 @@ const CarReception = () => {
   };
 
   return (
-    <StyledCarReception menuSelectedKey={'sales-report-form'}>
+    <StyledCarReception >
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Quản lý xe</Breadcrumb.Item>
         <Breadcrumb.Item>Tiếp nhận xe sửa</Breadcrumb.Item>

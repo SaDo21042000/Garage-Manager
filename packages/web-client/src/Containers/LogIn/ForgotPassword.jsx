@@ -1,25 +1,42 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import { Layout as AntLayout, Typography, Form, Input, Button} from 'antd';
+import { Layout as AntLayout, Typography, Form, Input, Button, notification} from 'antd';
 import { Link } from 'react-router-dom';
 import * as actions from './actions'
 import {useHistory} from 'react-router-dom'
 import {LoadingScreen } from './../../Components'
+import background from './../../assets/background-login.jpg'; 
 const { Text } = Typography;
 
 const StyleForgotPassword = styled(AntLayout)`
-  .site-layout-background {
-    background: #fff;
-  }
+.site-layout-background {
+  position: 'relative';
+  width:100%;
+  background-size: 100% 100%;
+  background-image: url(${background}); 
+  background-repeat: no-repeat;
+  height:100vh;  
+  
+}
 
-  .main-title {
-    margin-bottom: 30px;
+.form-login{
+  width:550px;
+  position:absolute;
+  height:230px;
+  top:calc(50% - 115px);
+  left:calc(50% - 275px);
+  background-color:rgba(0,0,0,0.6);
+  border-radius: 7px;
+}
+
+.main-title {
+  margin-bottom: 15px;
+  text-align: center;
+
+  &-result {
     text-align: center;
-
-    &-result {
-      text-align: center;
-    }
   }
+}
 `;
 
 const ForgotPassword = () => {
@@ -28,7 +45,7 @@ const ForgotPassword = () => {
       span: 8,
     },
     wrapperCol: {
-      span:8,
+      span:12,
     },
   };
   let history = useHistory();
@@ -46,28 +63,34 @@ const ForgotPassword = () => {
       }
       await actions.onForgotPasswordRequest(data);
       setIsLoading(false);
-      alert('Account của bạn đã được cấp mật khẩu mới. Bạn vui lòng truy cập email để lấy mật khẩu này!');
+      notification.success({
+        message: 'Account của bạn đã được cấp mật khẩu mới. Bạn vui lòng truy cập email để lấy mật khẩu này!',
+      });
       history.push('/log-in');
     }catch(e){
       setIsLoading(false);
-      alert(e.message);
+      notification.error({
+        message: e.message,
+      });
     }
 }
   return (
     <StyleForgotPassword>
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 20 }}>
-        <div className="main-title">
-          <h3 style={{ marginTop: '5em', marginBottom: '0px'}} >
-            Quên mật khẩu
-          </h3>
-          <Text>Quay lại trang đăng nhập <Link to="/" >Đăng nhập ngay!</Link></Text>
-        </div>
-
-        
-        <Form {...layout} name="nest-messages" validateMessages={validateMessages} onFinish={onFinish}>
-          <Form.Item
+      <div className="site-layout-background">
+        <div className="form-login" style={{ padding: 15 }}>
+          <div className="main-title">
+            <h3 style={{  marginBottom: '0px' ,color:'white'}}>Quên mật khẩu</h3>
+            <Text style={{color:'white'}}>Quay lại trang đăng nhập <Link to="/log-in" >Đăng nhập ngay!</Link></Text>
+          </div>
+          <Form
+            {...layout}
+            name="nest-messages"
+            validateMessages={validateMessages}
+            onFinish={onFinish}
+          >
+            <Form.Item
             name="email"
-            label="Email"
+            label={<label style={{ color: "white" }}>Email đã đăng kí</label>}
             rules={[
               {
                 required: true,
@@ -77,16 +100,15 @@ const ForgotPassword = () => {
             <Input />
             
           </Form.Item>
-          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-            <div>
+            <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 9 }}>
               <Button type="primary" htmlType="submit">
-                Xác nhận
+                Lấy lại mật khẩu
               </Button>
-            </div>
-          </Form.Item>
-        </Form>
+            </Form.Item>
+          </Form>
+        </div>
+        <LoadingScreen isLoading={isLoading} />
       </div>
-      <LoadingScreen isLoading ={isLoading} />
     </StyleForgotPassword>
   );
 };
