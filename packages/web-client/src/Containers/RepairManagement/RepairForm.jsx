@@ -80,6 +80,8 @@ const RepairForm = () => {
       
       for(var i in res) {
         let ctsc = {
+          _id: '',
+          maPSC: '',
           numner: 0,
           content: '',
           sparePart: '',
@@ -91,8 +93,9 @@ const RepairForm = () => {
         await callAPI(res[i].maVaTu, res[i].maTienCong, ctsc, () => {
           // console.log(ctsc);
         });
-
-        console.log(i);
+        console.log(res[i]);
+        ctsc._id = res[i]._id;
+        ctsc.maPSC = res[i].maPSC;
         ctsc.content = res[i].noiDung;
         ctsc.numberSpare = res[i].soLuong;
         ctsc.money = res[i].thanhTien;
@@ -184,7 +187,6 @@ const RepairForm = () => {
       dataIndex: 'action',
       render: (v, index) => (
         <>
-          <Button className="btn" icon={<EditOutlined />} />
           <Popconfirm
             placement="top"
             title="Are you sure to delete this customer?"
@@ -203,12 +205,14 @@ const RepairForm = () => {
 
   // const [form] = Form.useForm();
 
-  dataSource.map((item, index) => (item.number = index + 1));
-
-  const handleDelete = (number) => {
-    console.log(number);
-    setDataSource(dataSource.filter((item) => item.number !== number));
+  
+  const handleDelete = async (number) => {
+    console.log(dataCTSC[number-1]);
+    setDataCTSC(dataCTSC.filter((item) => item.number !== number));
+    
     message.info('Clicked on Yes.');
+    await axiosClient.post('/phieusuachua/xoaPSC', dataCTSC[number-1])
+
   };
 
   const onFinishAddItem = async (values) => {
