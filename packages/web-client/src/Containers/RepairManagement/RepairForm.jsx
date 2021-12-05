@@ -56,6 +56,7 @@ const RepairForm = () => {
   const [dataLVT, setDataLVT] = useState([]);
   const [dataTenTienCong, setDataTenTienCong] = useState([]);
   const [dataCTSC, setDataCTSC] = useState([]);
+  
   let CTSC = [];
 
 
@@ -127,6 +128,7 @@ const RepairForm = () => {
   
 
   useEffect(() => {
+    // console.log("PREV DATASOURCE: ", dataSource);
     const callAPI = async (maVatTu, maTienCong, ctsc,callback) => {
       await axiosClient.get(`/phieusuachua/getVatTu/?maVatTu=${maVatTu}`).then(res1 => {
         ctsc.sparePart = res1.name;
@@ -141,43 +143,43 @@ const RepairForm = () => {
      let CTSC2 = [];
 
      const hi = async (dataCTSC) => {
+
+
       for(var i in dataCTSC) {
         console.log("I: ", i)
-       let ctsc = {
-         _id: '',
-         maPSC: '',
-         numner: 0,
-         content: '',
-         sparePart: '',
-         price: '',
-         numberSpare: '',
-         wage: '',
-         money: '',
-       }
-       ctsc._id = dataCTSC[i]._id;
+        let ctsc = {
+          _id: '',
+          maPSC: '',
+          numner: 0,
+          content: '',
+          sparePart: '',
+          price: '',
+          numberSpare: '',
+          wage: '',
+          money: '',
+          key: 0,
+        }
+        ctsc._id = dataCTSC[i]._id;
         ctsc.maPSC = dataCTSC[i].maPSC;
         ctsc.content = dataCTSC[i].noiDung;
         ctsc.numberSpare = dataCTSC[i].soLuong;
         ctsc.money = dataCTSC[i].thanhTien;
-        ctsc.number = parseInt(i)+1;
+        ctsc.key = i;
         console.log("CTSC la: ", ctsc);
 
-       await callAPI(dataCTSC[i].maVaTu, dataCTSC[i].maTienCong, ctsc, () => {
-          // console.log(ctsc);
+        await callAPI(dataCTSC[i].maVaTu, dataCTSC[i].maTienCong, ctsc, () => {
+          console.log("RUn");
           CTSC2.push(ctsc);
           if(CTSC2.length === dataCTSC.length) {
             console.log("CTSC2: ", CTSC2);
             setDataSource(CTSC2);
           }
         });
-        
-      
-       }
+      }
      } 
 
-     
+    console.log("dataCTSC: ", dataCTSC);
     hi(dataCTSC);
-    console.log("dataL ", dataCTSC)
    
   }, [dataCTSC])
 
@@ -295,7 +297,7 @@ const RepairForm = () => {
                   console.log("maPSC la: ", maPSC);
                   await axiosClient.get(`/phieusuachua/getCTSCByMaPSC?maPSC=${maPSC}`)
                     .then(res3 => {
-                      CTSC.push(res3[0])
+                      CTSC.push(res3[0]);
                       setDataCTSC(CTSC);
                     })
                 }

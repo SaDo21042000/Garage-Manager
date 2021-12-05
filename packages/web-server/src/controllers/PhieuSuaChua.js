@@ -95,6 +95,7 @@ const createOne = async (req, res) => {
             await ChiTietDoanhSo.updateOne({ _id: ctds._id }, { soLuongSua: ctds.soLuongSua + 1 });
         }      
     }
+  await Xe.updateOne({bienSo: bienSo}, {tienNo: maXe.tienNo + soLuong*maVT.unitPrice});
 
   return res.status(201).json({
     statusCode: 201,
