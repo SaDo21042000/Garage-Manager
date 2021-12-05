@@ -48,6 +48,7 @@ const CarReception = () => {
 
       await axiosClient.get('/phieutiepnhan/getPhieuTiepNhan')
         .then(res => {
+          console.log(res);
           // Tien xu ly nhung du lieu au
           // for(var i in res['khachang']) {
           //   if(res['khachang'][i][0]){

@@ -92,22 +92,23 @@ const getPhieuTiepNhan = async (req, res) => {
   };
 
   let query = req.query;
+
+  var today = new Date();
+  var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+
   try {
-      let xe = await Xe.find({});
-      data.xe = xe;
-      for(var i of xe){
-        const response = await KhachHang.find({_id: i.maKhachHang});
-        
-        if(response) {
-          data.khachang.push(response);
-        }
+      let PTNToday = await PhieuTiepNhan.find({ ngayTN: date });
+      for(var i of PTNToday) {
+        let xe = await Xe.find({ _id: i.maXe });
+        console.log("xE: ", xe);
+        let khachhang = await KhachHang.find({ _id: xe[0].maKhachHang });
+        console.log("KHACH-Hang: ", khachhang);
+
+
+        data.xe.push(xe[0]);
+        data.khachang.push(khachhang);
       }
-      if (query.name)
-          xe = xe.filter(accessory => {
-              return nonAccentVietnamese(accessory.name.toLowerCase()).indexOf(nonAccentVietnamese(query.name.toLowerCase())) !== -1;
-          })
-        // phieutiepnhan.filter()
-      // console.log(data);
+;
 
       return res.status(200).json(data);
   } catch (err) {
@@ -116,6 +117,7 @@ const getPhieuTiepNhan = async (req, res) => {
           message: err.message || `Some errors happened when finding accessory`
       });
   }
+
 }
 const getPTNbyMaXe = async (req, res) => {
 
