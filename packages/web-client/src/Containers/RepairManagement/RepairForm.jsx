@@ -17,6 +17,7 @@ import {
 import { DownloadOutlined } from '@ant-design/icons';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axiosClient from '../../Configs/Axios';
+import axios from 'axios';
 
 const { Title } = Typography;
 
@@ -55,6 +56,7 @@ const RepairForm = () => {
   const [dataLVT, setDataLVT] = useState([]);
   const [dataTenTienCong, setDataTenTienCong] = useState([]);
   const [dataCTSC, setDataCTSC] = useState([]);
+  let CTSC = [];
 
 
   useEffect(() => {
@@ -74,40 +76,39 @@ const RepairForm = () => {
     }).catch(err => {console.log("ERROR GET TIENCONG: ", err)})
 
     // Lay danh sach CTSC hien tai dang co trong database
-    let CTSC = [];
-   
-    axiosClient.get('/phieusuachua/getAllCTSC').then( async (res) => {
-      
-      for(var i in res) {
-        let ctsc = {
-          _id: '',
-          maPSC: '',
-          numner: 0,
-          content: '',
-          sparePart: '',
-          price: '',
-          numberSpare: '',
-          wage: '',
-          money: '',
-        }
-        await callAPI(res[i].maVaTu, res[i].maTienCong, ctsc, () => {
-          // console.log(ctsc);
-        });
-        console.log(res[i]);
-        ctsc._id = res[i]._id;
-        ctsc.maPSC = res[i].maPSC;
-        ctsc.content = res[i].noiDung;
-        ctsc.numberSpare = res[i].soLuong;
-        ctsc.money = res[i].thanhTien;
-        ctsc.number = parseInt(i)+1;
 
-        CTSC.push(ctsc);
-        if(CTSC.length === res.length) {
-          setDataCTSC(CTSC);
-          
-        }
-      }
-    }).catch(err => {console.log("ERROR GET CTSC: ", err)});
+   
+    // axiosClient.get('/phieusuachua/getAllCTSC').then( async (res) => {
+      
+    //   for(var i in res) {
+    //     let ctsc = {
+    //       _id: '',
+    //       maPSC: '',
+    //       numner: 0,
+    //       content: '',
+    //       sparePart: '',
+    //       price: '',
+    //       numberSpare: '',
+    //       wage: '',
+    //       money: '',
+    //     }
+    //     await callAPI(res[i].maVaTu, res[i].maTienCong, ctsc, () => {
+    //       // console.log(ctsc);
+    //     });
+    //     console.log(res[i]);
+    //     ctsc._id = res[i]._id;
+    //     ctsc.maPSC = res[i].maPSC;
+    //     ctsc.content = res[i].noiDung;
+    //     ctsc.numberSpare = res[i].soLuong;
+    //     ctsc.money = res[i].thanhTien;
+    //     ctsc.number = parseInt(i)+1;
+
+    //     CTSC.push(ctsc);
+    //     if(CTSC.length === res.length) {
+    //       setDataCTSC(CTSC);
+    //     }
+    //   }
+    // }).catch(err => {console.log("ERROR GET CTSC: ", err)});
 
    const callAPI = async (maVatTu, maTienCong, ctsc,callback) => {
     await axiosClient.get(`/phieusuachua/getVatTu/?maVatTu=${maVatTu}`).then(res1 => {
@@ -123,6 +124,62 @@ const RepairForm = () => {
 
  
   }, [])
+  
+
+  useEffect(() => {
+    const callAPI = async (maVatTu, maTienCong, ctsc,callback) => {
+      await axiosClient.get(`/phieusuachua/getVatTu/?maVatTu=${maVatTu}`).then(res1 => {
+        ctsc.sparePart = res1.name;
+        ctsc.price = res1.unitPrice;
+      })
+      await axiosClient.get(`/phieusuachua/getTienCong/?maTienCong=${maTienCong}`).then(res2 => {
+        ctsc.wage = res2.name;
+      })
+      callback();
+     }
+   
+     let CTSC2 = [];
+
+     const hi = async (dataCTSC) => {
+      for(var i in dataCTSC) {
+        console.log("I: ", i)
+       let ctsc = {
+         _id: '',
+         maPSC: '',
+         numner: 0,
+         content: '',
+         sparePart: '',
+         price: '',
+         numberSpare: '',
+         wage: '',
+         money: '',
+       }
+       ctsc._id = dataCTSC[i]._id;
+        ctsc.maPSC = dataCTSC[i].maPSC;
+        ctsc.content = dataCTSC[i].noiDung;
+        ctsc.numberSpare = dataCTSC[i].soLuong;
+        ctsc.money = dataCTSC[i].thanhTien;
+        ctsc.number = parseInt(i)+1;
+        console.log("CTSC la: ", ctsc);
+
+       await callAPI(dataCTSC[i].maVaTu, dataCTSC[i].maTienCong, ctsc, () => {
+          // console.log(ctsc);
+          CTSC2.push(ctsc);
+          if(CTSC2.length === dataCTSC.length) {
+            console.log("CTSC2: ", CTSC2);
+            setDataSource(CTSC2);
+          }
+        });
+        
+      
+       }
+     } 
+
+     
+    hi(dataCTSC);
+    console.log("dataL ", dataCTSC)
+   
+  }, [dataCTSC])
 
   const layout = {
     labelCol: {
@@ -215,6 +272,44 @@ const RepairForm = () => {
 
   };
 
+  const onFinishFilterPlate = async (values) => { 
+    const { plateFilter } = values;
+
+    await axiosClient.get(`/phieusuachua/getPlate?plateFilter=${plateFilter}`)
+      .then(async res => {
+        let maXe = res[0]._id;
+        // lat tat ca cac phieu tiep nhan ma co maXe res[0]._id;
+        await axiosClient.get(`/phieutiepnhan/getPTNbyMaXe?maXe=${maXe}`)
+        .then(async res1=> {
+          // Mot Xe co nhieu PTN
+          for(var i of res1) {
+            let maPTN = i._id;
+            console.log("maPTN la: ", maPTN);
+            // Lay cac phieu sua chua ma co maPTN la i._id;
+            await axiosClient.get(`/phieusuachua/getPSCByMaPTN?maPTN=${maPTN}`)
+              .then(async res2 => {
+                // Mot PSC co nhieu CTSC
+                console.log("RES2: ", res2);
+                for(var j of res2) {
+                  let maPSC = j._id;
+                  console.log("maPSC la: ", maPSC);
+                  await axiosClient.get(`/phieusuachua/getCTSCByMaPSC?maPSC=${maPSC}`)
+                    .then(res3 => {
+                      CTSC.push(res3[0])
+                      setDataCTSC(CTSC);
+                    })
+                }
+               
+              })
+          }
+        })
+    
+       
+      })
+
+    
+  } 
+
   const onFinishAddItem = async (values) => {
     console.log("DATA: ", values);
   
@@ -228,7 +323,7 @@ const RepairForm = () => {
 
     await axiosClient.post('/phieusuachua/createOne', newData);
 
-    
+  
   };
 
   return (
@@ -353,7 +448,6 @@ const RepairForm = () => {
                   <Option key={id} value={item.name}>{item.name}</Option>
                 )
               })}
-              
             </Select>
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
@@ -363,10 +457,54 @@ const RepairForm = () => {
           </Form.Item>
         </Form>
 
+        <Form
+          style={{
+            width: 250,
+          }}
+          name="nest1-messages"
+          onFinish={onFinishFilterPlate}
+        >
+          <Form.Item
+            label="Tìm phiếu sữa chữa theo biển số"
+            name="plateFilter"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              filterSort={(optionA, optionB) =>
+                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+              }
+            >
+              {dataBienSo.map((item, id) => {
+                return(
+                  <Option key={id} value={item.bienSo}>{item.bienSo}</Option>
+                )
+              })}
+              
+            </Select>
+            
+          </Form.Item>
+          <Form.Item style={{
+              marginTop: '15px'
+            }}>
+              <Button type="primary" htmlType="submit">
+                OK
+              </Button>
+          </Form.Item>
+        </Form>
+
         <Table
           className="result-table"
           columns={columns}
-          dataSource={dataCTSC}
+          dataSource={dataSource}
           pagination={false}
         />
         <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">

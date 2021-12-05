@@ -158,10 +158,47 @@ const getTienCong = async (req, res) => {
   });
   })
 }
+
+const getPlate = async (req, res) => {
+  const plateFilter = req.query.plateFilter;
+  try {
+    let data;
+    await Xe.find({ bienSo: plateFilter }).then(res => {
+      data = res;
+    })
+    console.log('data',  data);
+    
+    return res.status(200).json(data);
+} catch (err) {
+    return res.status(500).json({
+        statusCode: 500,
+        message: err.message || `Some errors happened when finding accessory`
+    });
+}
+  
+}
+
+const getPSCByMaPTN = async (req, res) => {
+  const maPTN = req.query.maPTN;
+  await PhieuSuaChua.find({ maPTN }).then(res1 => {
+    return res.status(200).json(res1);
+  })
+}
+
+const getCTSCByMaPSC = async (req, res) => {
+  const maPSC = req.query.maPSC;
+  await ChiTietSuaChua.find({ maPSC }).then(res1 => {
+    return res.status(200).json(res1);
+  })
+}
+
 module.exports = {
   createOne,
   getAllCTSC,
   getVatTu,
   getTienCong,
-  xoaPSC
+  xoaPSC,
+  getPlate,
+  getPSCByMaPTN,
+  getCTSCByMaPSC
 }

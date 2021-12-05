@@ -117,9 +117,21 @@ const getPhieuTiepNhan = async (req, res) => {
       });
   }
 }
+const getPTNbyMaXe = async (req, res) => {
+
+  let maXe = req.query.maXe;
+  
+  // Lay ma PhieuTiepNhan tu maXe ma nguoi dung nhap len
+  await PhieuTiepNhan.find({ maXe }).then( async res1 => {
+    let data = res1;
+    return res.status(200).json(data);
+    
+  })
+}
 
 module.exports = {
   createOne,
   getPhieuTiepNhan,
-  xoaXeSua
+  xoaXeSua,
+  getPTNbyMaXe
 }
