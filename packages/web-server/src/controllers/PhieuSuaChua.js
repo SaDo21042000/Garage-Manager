@@ -102,6 +102,22 @@ const createOne = async (req, res) => {
   });
 }
 
+const xoaPSC = async (req, res) => {
+  const idCTSC =  req.body._id;
+  const idPSC = req.body.maPSC;
+
+  try {
+    await PhieuSuaChua.deleteOne({ _id: idPSC });
+
+    await ChiTietSuaChua.deleteOne({ _id: idCTSC })
+    res.status(201).json({
+      statusCode: 201,
+      message: 'Xoa thanh cong' })  
+  } catch (err){
+    console.log("Error xoa xe: ", err);
+  }
+}
+
 const getAllCTSC = async (req, res) => {
   try {
     let data;
@@ -146,5 +162,6 @@ module.exports = {
   createOne,
   getAllCTSC,
   getVatTu,
-  getTienCong
+  getTienCong,
+  xoaPSC
 }
