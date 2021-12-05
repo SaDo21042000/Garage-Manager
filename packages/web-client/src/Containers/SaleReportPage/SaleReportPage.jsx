@@ -64,32 +64,14 @@ const StyledSaleReportPage = styled(AntLayout)`
   }
 `;
 
+const DATE = new Date();
+const MONTH = DATE.getMonth();
+const YEAR = DATE.getFullYear();
+
 const SaleReportPage = () => {
   const [showReportResult, setShowReportResult] = useState(false);
   const [dateData, setDateData] = useState({ month: '', year: '' });
-  const [dataSource] = useState([
-    {
-      key: '1',
-      carName: 'Toyota',
-      numberRepair: '521452',
-      ratio: '100%',
-      total: 5000000,
-    },
-    {
-      key: '2',
-      carName: 'Honda',
-      numberRepair: '521452',
-      ratio: '100%',
-      total: 5000000,
-    },
-    {
-      key: '3',
-      carName: 'Suzuki',
-      numberRepair: '521452',
-      ratio: '100%',
-      total: 5000000,
-    },
-  ]);
+  const [dataSource, setDataSource] = useState([]);
 
   const columns = [
     {
@@ -99,23 +81,23 @@ const SaleReportPage = () => {
     },
     {
       title: 'Mã Hiệu Xe',
-      dataIndex: 'carName',
-      key: 'carName',
+      dataIndex: 'maHieuXe',
+      key: 'maHieuXe',
     },
     {
       title: 'Số Lượng Sửa',
-      dataIndex: 'numberRepair',
-      key: 'numberRepair',
+      dataIndex: 'soLuongSua',
+      key: 'soLuongSua',
     },
     {
       title: 'Tỉ Lệ',
-      dataIndex: 'ratio',
-      key: 'ratio',
+      dataIndex: 'tiLe',
+      key: 'tiLe',
     },
     {
       title: 'Tổng Tiền',
-      dataIndex: 'total',
-      key: 'total',
+      dataIndex: 'tongTien',
+      key: 'tongTien',
     },
   ];
 
@@ -134,16 +116,24 @@ const SaleReportPage = () => {
     },
   };
 
-  const onFinishCreateTable = (values) => {
+  const onFinishCreateTable = async (values) => {
     const { month, year } = values;
     setDateData({ ...dateData, month: month, year: year });
-    // axios.get(`http://localhost:5000/api/doanhsos?month=${month}&year=${year}`);
-    axios
-      .get(`http://localhost:5000/api/chitietdoanhsos?maDoanhSo=61951d84609a0e7842149340`)
-      .then((data) => console.log(data))
-      .catch((err) => console.error('Error: ', err));
+
+    try {
+      const dataRaw = await axios.get(
+        `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=61951d84609a0e7842149340`,
+      );
+      const { data } = dataRaw;
+      setDataSource(data);
+    } catch (error) {
+      console.error('Error: ', error.message);
+    }
+
     setShowReportResult(true);
   };
+
+  console.log(dataSource);
 
   const onFinishFailedCreateTable = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -157,12 +147,12 @@ const SaleReportPage = () => {
   );
 
   const TotalValues = () => {
-    const total = dataSource.reduce((a, b) => a + b.total, 0);
+    const total = dataSource.reduce((a, b) => a + b.tongTien, 0);
     return <Text className="result-total">Tổng doanh thu tháng: {total} đồng</Text>;
   };
 
   return (
-    <StyledSaleReportPage >
+    <StyledSaleReportPage>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Báo cáo doanh số</Breadcrumb.Item>
         <Breadcrumb.Item>Báo cáo doanh thu tháng</Breadcrumb.Item>
@@ -178,6 +168,8 @@ const SaleReportPage = () => {
           className="filter-form"
           initialValues={{
             remember: true,
+            month: MONTH,
+            year: YEAR,
           }}
           onFinish={onFinishCreateTable}
           onFinishFailed={onFinishFailedCreateTable}

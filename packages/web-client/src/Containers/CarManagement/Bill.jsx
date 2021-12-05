@@ -1,75 +1,37 @@
 /* eslint-disable no-template-curly-in-string */
 import React from 'react';
-import styled from 'styled-components';
-import {
-  Layout as AntLayout,
-  Breadcrumb,
-  Typography,
-  Form,
-  Input,
-  Button,
-  InputNumber,
-  DatePicker,
-} from 'antd';
+import { Breadcrumb, Typography, Form, Input, Button, InputNumber, DatePicker } from 'antd';
 import { PrinterFilled } from '@ant-design/icons';
+import { DATEFORMAT, layout, StyledBill, validateMessages } from './Bill.constants';
+import axiosClient from '../../Configs/Axios';
+import axios from 'axios';
 
 const { Title } = Typography;
 
-const StyledBill = styled(AntLayout)`
-  .site-layout-background {
-    background: #fff;
-  }
-
-  .main-title {
-    margin-bottom: 30px;
-    text-align: center;
-
-    &-result {
-      text-align: center;
-    }
-  }
-
-  .result-table {
-    margin-bottom: 30px;
-  }
-
-  .button-finish {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    border-radius: 10px;
-    border-color: #058d23;
-    background-color: #058d23;
-  }
-`;
-
 const Bill = () => {
-  const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 8,
-    },
+  const onFinish = (values) => {
+    const { plate, date, money, name, phone, email } = values;
+    console.log();
+    const dataPost = {
+      bienSo: plate,
+      ngayTT: date.format(DATEFORMAT),
+      soTienThu: money,
+      hoTen: name,
+      dienThoai: phone,
+      email,
+    };
+
+    try {
+      axios.post(`${process.env.REACT_APP_API_URL}/phieuthutiens`, dataPost);
+    } catch (error) {
+      console.log('Error:', error.message);
+    }
   };
-
-  const validateMessages = {
-    required: 'Nhập ${label}!',
-    types: {
-      email: '${label} không phải là email hợp lệ!',
-      number: '${label} không phải là số hợp lệ!',
-    },
-    number: {
-      min: "'${label}' không thể nhỏ hơn ${min}",
-      max: "'${label}' không thể lớn hơn ${max}",
-      range: '${label} phải ở giữa ${min} và ${max}',
-    },
+  const onFinishFailed = (errorInfo) => {
+    console.error(errorInfo);
   };
-
-  // const [form] = Form.useForm();
-
   return (
-    <StyledBill >
+    <StyledBill>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Phiếu sữa chữa</Breadcrumb.Item>
         <Breadcrumb.Item>Lập phiếu thu tiền</Breadcrumb.Item>
@@ -80,7 +42,13 @@ const Bill = () => {
           Lập phiếu thu tiền
         </Title>
 
-        <Form {...layout} name="nest-messages" validateMessages={validateMessages}>
+        <Form
+          {...layout}
+          name="nest-messages"
+          validateMessages={validateMessages}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
           <Form.Item
             label="Biển Số"
             name="plate"
