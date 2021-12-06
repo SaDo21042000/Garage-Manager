@@ -125,7 +125,7 @@ const CarList = () => {
 
   const onFinish = async (values) => {
     const { plate } = values;
-    if(plate !== "all") {
+    if(plate != "all") {
       await axiosClient.get(`/phieutiepnhan/getCarByPlate?bienSo=${plate}`)
       .then(res => {
         console.log("DATA RETURN: ", res);
@@ -158,7 +158,7 @@ const CarList = () => {
           data.tienNo = xe[i].tienNo;
           data._id = xe[i]._id;
           for(var j of kh) {
-            if(xe[i].maKhachHang === j[0]._id) {
+            if(xe[i].maKhachHang == j[0]._id) {
               data.tenKhachHang = j[0].tenKhachHang;
               data.soDT = j[0].soDT;
             }
@@ -177,13 +177,30 @@ const CarList = () => {
   };
 
   const handleDelete = async (number) => {
+    const postData = async () => {
     console.log(number); 
     notification.success({
       message: 'Xóa xe thành công',
     })
     const itemDelete = dataDisplay[number-1];
     await axiosClient.post('/phieutiepnhan/deleteXe', itemDelete);
+  }
+  getAPI();
+  postData();
+  getAPI();
   };
+
+  const getAPI = async () => {
+    try {
+      const response = await axiosClient.get('/xes');
+      setDataDisplay(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAPI();
+  }, []);
 
 
 
