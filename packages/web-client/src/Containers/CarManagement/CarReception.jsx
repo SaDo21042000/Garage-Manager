@@ -39,7 +39,7 @@ const StyledCarReception = styled(AntLayout)`
 
 const CarReception = () => {
 
-  const [dataSource, setDataSource] = useState();
+  const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
     const getAPI = async () => {

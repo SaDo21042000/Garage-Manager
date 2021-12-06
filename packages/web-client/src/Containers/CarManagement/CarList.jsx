@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Layout as AntLayout,
   Breadcrumb,
@@ -10,12 +10,16 @@ import {
   message,
   Form,
   Input,
+  Select,
+  Option
 } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import axios from 'axios';
+import axiosClient from '../../Configs/Axios';
 
 const { Title } = Typography;
+
+
 
 const StyledHomePage = styled(AntLayout)`
   .site-layout-background {n
@@ -38,6 +42,10 @@ const StyledHomePage = styled(AntLayout)`
 `;
 
 const CarList = () => {
+  const { Option } = Select;
+  const [dataBienso, setDataBienSo] = useState([]);
+  const [dataDisplay, setDataDisplay] = useState([]);
+
   const validateMessages = {
     required: 'Nhập ${label}!',
     types: {
@@ -85,13 +93,13 @@ const CarList = () => {
     {
       title: 'Action',
       dataIndex: 'action',
-      render: (v, i) => (
+      render: (v, index) => (
         <>
           <Button className="btn" icon={<EditOutlined />} />
           <Popconfirm
             placement="top"
             title="Are you sure to delete this customer?"
-            onConfirm={confirm}
+             onConfirm={() => handleDelete(index.number)}
             okText="Yes"
             cancelText="No"
           >
@@ -136,16 +144,36 @@ const CarList = () => {
     message.info('Clicked on Yes.');
   }
 
-  const onFinish = async (values) => {
-    const { plate, owner, phone } = values;
+  useEffect(() => {
+    axiosClient.get('/xes/').then((res) => {
+      setDataBienSo(res);
+    }).catch((err) => {console.log("ERROR GET XE: ", err)});
+  }, [])
 
-    try {
-      const getBienSo = await axios.get(`/api/car-list/search?number?plate=${plate}`);
-      const getSoDT = await axios.get(`/api/car-list/search?phone=${phone}`);
-      const getKhachHang = await axios.get(`/api/car-list/search?name=${owner}`);
-    } catch (error) {
-      console.error('Error: ', error);
+  const onFinish = async (values) => {
+    const { plate } = values;
+    if(plate != "all") {
+      await axiosClient.get(`/phieutiepnhan/getCarByPlate?bienSo=${plate}`)
+      .then(res => {
+        console.log("DATA RETURN: ", res);
+      }).catch(err => {
+        {console.log("ERROR GET XE: ", err)}
+      })
     }
+    else {
+      await axiosClient.get(`/phieutiepnhan/getCarByPlate`)
+      .then(res => {
+        console.log("DATA RETURN: ", res);
+      }).catch(err => {
+        {console.log("ERROR GET XE: ", err)}
+      })
+    }
+  };
+
+  const handleDelete = async (number) => {
+    console.log(number);  
+    const itemDelete = dataDisplay[number-1];
+    await axiosClient.post('/phieutiepnhan/deleteXe', itemDelete);
   };
 
   return (
@@ -169,16 +197,30 @@ const CarList = () => {
           validateMessages={validateMessages}
           onFinish={onFinish}
         >
-          <Form.Item label="Biển Số" name="plate">
-            <Input style={{ width: '100%' }} />
+          <Form.Item label="Biển Số" name="plate" style={{ width: '500px' }}>
+          <Select
+              
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              filterSort={(optionA, optionB) =>
+                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+              }
+            >
+              <Option key='123' value="all">Tất cả</Option>
+              {dataBienso.map((item, id) => {
+                return(
+                  <Option key={id} value={item.bienSo}>{item.bienSo}</Option>
+                )
+              })}
+            
+              
+            </Select>
           </Form.Item>
 
-          <Form.Item label="Chủ Xe" name="owner">
-            <Input style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item label="Phone" name="phone">
-            <Input style={{ width: '100%' }} />
-          </Form.Item>
+          
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Tìm kiếm

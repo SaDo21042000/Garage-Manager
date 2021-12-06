@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { find, create, findOne, update, deleteOne } = require('../controllers/Xe');
+const { find, create, findOne, update, deleteOne, getCarByPlate } = require('../controllers/Xe');
 
 /* GET find by id list */
 router.get('/:id', findOne);
@@ -16,6 +16,8 @@ router.put('/:id', update);
 
 /* DELETE */
 router.delete('/:id', deleteOne);
+
+router.get('/getCarByPlate', getCarByPlate);
 
 
 module.exports = router;

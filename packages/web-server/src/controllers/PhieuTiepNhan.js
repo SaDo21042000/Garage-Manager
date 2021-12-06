@@ -1,4 +1,4 @@
-const { PhieuTiepNhan } = require('../models');
+const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua } = require('../models');
 const { Xe } = require('../models');
 const { KhachHang } = require('../models');
 const { generateID } = require('../helpers/generateID');
@@ -86,12 +86,32 @@ const xoaXeSua = async (req, res) => {
 
 const getPhieuTiepNhan = async (req, res) => {
 
+  // await PhieuTiepNhan.find({}).then(res => {
+  //   console.log('PTN: ', res);
+  // })
+  // await Xe.find({}).then(res => {
+  //   console.log('Xe: ', res);
+  // })
+  
+  // await KhachHang.find({}).then(res => {
+  //   console.log('KH: ', res);
+  // })
+  // await PhieuSuaChua.find({}).then(res => {
+  //   console.log('PSC: ', res);
+  // })
+  // await ChiTietSuaChua.find({}).then(res => {
+  //   console.log('CTSC: ', res);
+  // })
+  // await KhachHang.remove({});
+  // await Xe.remove({});
+  // await PhieuTiepNhan.remove({});
+  // await PhieuSuaChua.remove({});
+  // await ChiTietSuaChua.remove({});
+
   let data = {
     xe: [],
     khachang: []
   };
-
-  let query = req.query;
 
   var today = new Date();
   var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
@@ -131,9 +151,59 @@ const getPTNbyMaXe = async (req, res) => {
   })
 }
 
+const getCarByPlate = async (req, res) => {
+  const bienSo = req.query.bienSo;
+  if(bienSo) {
+        let data = {
+            bienSo,
+            hieuXe: '',
+            tenKhachHang: '',
+            soDT: '',
+            tienNo: 0,
+            _id: ''
+        }
+        await Xe.findOne({ bienSo }).then(async res1 => {
+            await KhachHang.findOne({ _id: res1.maKhachHang }).then(res2 => {
+                data.hieuXe = res1.maHieuXe;
+                data.tenKhachHang = res2.tenKhachHang;
+                data.soDT = res2.soDT;
+                data.tienNo = res1.tienNo,
+                data._id = res1._id
+            })
+        })
+
+        return res.status(200).json(data);
+    }
+    else {
+      let data = {
+        xe: [],
+        khachang: []
+      };
+      let xe = await Xe.find({});
+      console.log("XE: ", xe);
+      for(var i of xe) {
+        let khachhang = await KhachHang.find({ _id: i.maKhachHang });
+        data.xe = xe;
+        data.khachang = khachhang;
+      }
+      return res.status(200).json(data);
+    }
+    
+}
+
+const deleteXe = async (req, res) => {
+  const maXe = req.body._id;
+  await Xe.deleteOne({ _id: maXe }).then(res1 => {
+    console.log("XE: ", res1);
+  }).catch(err => console.log("ERR xoa xe: ", err));
+  return res.status(200);
+}
+
 module.exports = {
   createOne,
   getPhieuTiepNhan,
   xoaXeSua,
-  getPTNbyMaXe
+  getPTNbyMaXe,
+  getCarByPlate,
+  deleteXe
 }
