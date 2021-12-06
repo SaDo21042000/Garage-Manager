@@ -48,7 +48,7 @@ const InventoryReport = () => {
     form.setFieldsValue(params);
     getInventoryReportByMonth(params);
     
-  },[])
+  },[form])
 
   const onFinishCreateTable = async (values) => {
     const { month, year } = values;

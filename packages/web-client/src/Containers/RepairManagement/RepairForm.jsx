@@ -56,7 +56,7 @@ const RepairForm = () => {
   const [dataTenTienCong, setDataTenTienCong] = useState([]);
   const [dataCTSC, setDataCTSC] = useState([]);
   
-  let CTSC = [];
+  // let CTSC = [];
 
 
   useEffect(() => {
@@ -274,9 +274,9 @@ const RepairForm = () => {
   };
 
   const onFinishFilterPlate = async (values) => { 
-    const { plateFilter } = values;
+    // const { plateFilter } = values;
 
-    const  phieuSuaChua =await axiosClient.get(`/phieusuachua/getPlate?plateFilter=${plateFilter}`);
+    // const  phieuSuaChua =await axiosClient.get(`/phieusuachua/getPlate?plateFilter=${plateFilter}`);
     
 
       // .then(async res => {
@@ -324,7 +324,7 @@ const RepairForm = () => {
     //1 xe chỉ có 1 phieu tiep nhan
     const phieuTiepNhan = lstPhieuTiepNhan[0];
     console.log(phieuTiepNhan)
-    const listPhieuSuaChua = await axiosClient.get(`/phieusuachua/getPSCByMaPTN?maPTN=${phieuTiepNhan._id}`)
+    // const listPhieuSuaChua = await axiosClient.get(`/phieusuachua/getPSCByMaPTN?maPTN=${phieuTiepNhan._id}`)
     }catch(e){
 
     }
