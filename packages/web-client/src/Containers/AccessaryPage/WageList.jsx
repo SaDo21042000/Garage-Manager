@@ -262,7 +262,7 @@ const WageList = () => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                {checkEdit == true ? 'Chỉnh sửa' : 'Thêm mới'}
+                {checkEdit === true ? 'Chỉnh sửa' : 'Thêm mới'}
               </Button>
             </Form.Item>
           </Form>

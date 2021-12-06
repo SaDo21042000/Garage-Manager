@@ -32,7 +32,7 @@ const MaxCarForm = (props) => {
       }
     };
     getAPI();
-  }, [form]);
+  }, [form, setIsLoading]);
 
   const onFinishMaxCar = (values) => {
 

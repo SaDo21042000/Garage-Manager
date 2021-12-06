@@ -125,13 +125,13 @@ const CarList = () => {
 
   const onFinish = async (values) => {
     const { plate } = values;
-    if(plate != "all") {
+    if(plate !== "all") {
       await axiosClient.get(`/phieutiepnhan/getCarByPlate?bienSo=${plate}`)
       .then(res => {
         console.log("DATA RETURN: ", res);
         setDataDisplay([res]);
       }).catch(err => {
-        {console.log("ERROR GET XE: ", err)}
+        console.log("ERROR GET XE: ", err)
       })
     }
     else {
@@ -158,7 +158,7 @@ const CarList = () => {
           data.tienNo = xe[i].tienNo;
           data._id = xe[i]._id;
           for(var j of kh) {
-            if(xe[i].maKhachHang == j[0]._id) {
+            if(xe[i].maKhachHang === j[0]._id) {
               data.tenKhachHang = j[0].tenKhachHang;
               data.soDT = j[0].soDT;
             }
@@ -171,7 +171,7 @@ const CarList = () => {
 
 
       }).catch(err => {
-        {console.log("ERROR GET XE: ", err)}
+        console.log("ERROR GET XE: ", err)
       })
     }
   };

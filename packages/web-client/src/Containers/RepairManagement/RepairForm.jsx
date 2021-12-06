@@ -15,9 +15,8 @@ import {
   Select,
 } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import axiosClient from '../../Configs/Axios';
-import axios from 'axios';
 
 const { Title } = Typography;
 
@@ -111,16 +110,16 @@ const RepairForm = () => {
     //   }
     // }).catch(err => {console.log("ERROR GET CTSC: ", err)});
 
-   const callAPI = async (maVatTu, maTienCong, ctsc,callback) => {
-    await axiosClient.get(`/phieusuachua/getVatTu/?maVatTu=${maVatTu}`).then(res1 => {
-      ctsc.sparePart = res1.name;
-      ctsc.price = res1.unitPrice;
-    })
-    await axiosClient.get(`/phieusuachua/getTienCong/?maTienCong=${maTienCong}`).then(res2 => {
-      ctsc.wage = res2.name;
-    })
-    callback();
-   }
+  //  const callAPI = async (maVatTu, maTienCong, ctsc,callback) => {
+  //   await axiosClient.get(`/phieusuachua/getVatTu/?maVatTu=${maVatTu}`).then(res1 => {
+  //     ctsc.sparePart = res1.name;
+  //     ctsc.price = res1.unitPrice;
+  //   })
+  //   await axiosClient.get(`/phieusuachua/getTienCong/?maTienCong=${maTienCong}`).then(res2 => {
+  //     ctsc.wage = res2.name;
+  //   })
+  //   callback();
+  //  }
 
 
  

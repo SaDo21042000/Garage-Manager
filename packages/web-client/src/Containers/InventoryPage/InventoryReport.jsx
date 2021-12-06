@@ -29,18 +29,6 @@ const columns = [
   },
 ];
 
-const validateMessages = {
-  required: 'Nhập ${label}',
-  type: {
-    number: "'${label}' không phải là số hợp lệ!",
-  },
-  number: {
-    min: "'${label}' không thể nhỏ hơn ${min}!",
-    max: "'${label}' không thể lớn hơn ${max}!",
-    range: '${label} phải ở giữa ${min} và ${max}!',
-  },
-};
-
 const InventoryReport = () => {
   const [showReportResult, setShowReportResult] = useState(false);
   const [time, setTime] = useState({ month: '', year: '' });
@@ -102,7 +90,6 @@ const InventoryReport = () => {
           onFinishFailed={onFinishFailedCreateTable}
           autoComplete="off"
           layout="inline"
-          validateMessages={validateMessages}
           form={form}
         >
           <Form.Item

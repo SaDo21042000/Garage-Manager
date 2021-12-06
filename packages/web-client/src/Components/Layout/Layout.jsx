@@ -81,7 +81,7 @@ const Layout = ({ menuSelectedKey, children }) => {
       }
     }
     setIsLoading(false);
-    })
+    },[history, pathname, user])
 
     //Không cho truy cập các page admin khi chưa đăng nhập tài khoản admin
     useEffect(() => {
@@ -113,7 +113,7 @@ const Layout = ({ menuSelectedKey, children }) => {
         setIsLoading(false);
       }
       setIsLoading(false);
-      })
+      },[history, pathname, user.quyenHan])
 
   return isPubicRoutes ? (
     <>{children}</>

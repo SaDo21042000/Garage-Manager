@@ -3,7 +3,7 @@ import React from 'react';
 import { Breadcrumb, Typography, Form, Input, Button, InputNumber, DatePicker } from 'antd';
 import { PrinterFilled } from '@ant-design/icons';
 import { DATEFORMAT, layout, StyledBill, validateMessages } from './Bill.constants';
-import axiosClient from '../../Configs/Axios';
+// import axiosClient from '../../Configs/Axios';
 import axios from 'axios';
 
 const { Title } = Typography;

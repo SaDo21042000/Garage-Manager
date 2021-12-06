@@ -13,7 +13,7 @@ import {
   message,
   DatePicker,
 } from 'antd';
-import { EditOutlined, DeleteOutlined, FieldNumberOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axiosClient from '../../Configs/Axios'
 
 const { Title } = Typography;

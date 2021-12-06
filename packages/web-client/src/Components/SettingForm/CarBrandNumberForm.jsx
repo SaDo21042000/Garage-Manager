@@ -39,7 +39,7 @@ const CarBrandNumberForm = (props) => {
       }
     };
     getAPI();
-  }, [form]);
+  }, [form, setIsLoading]);
 
   useEffect(() => {
     const getAPI = async () => {
@@ -54,7 +54,7 @@ const CarBrandNumberForm = (props) => {
       }
     };
     getAPI();
-  }, [form]);
+  }, [form, setIsLoading]);
 
   const columnsCarNumber = [
     {
