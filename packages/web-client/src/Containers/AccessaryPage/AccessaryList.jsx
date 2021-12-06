@@ -16,7 +16,7 @@ import {
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-
+import {LoadingScreenCustom } from './../../Components'
 const { Content } = AntLayout;
 const { Title } = Typography;
 
@@ -75,6 +75,7 @@ const AccessaryList = () => {
   const [dataListAccessary, setDataListAccessary] = useState([]);
   const [checkEdit, setCheckEdit] = useState(false);
   const [inputSearch, setInputSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [dataEditAccessary, setDataEditAccessay] = useState({
     typeAccessory: '',
     idAccessary: '',
@@ -103,13 +104,18 @@ const AccessaryList = () => {
   //Get data
   const getAPI = async () => {
     try {
+      setIsLoading(true);
       const typeAccessary = await axiosClient.get('/loaivattus/get');
       const listAccessay = await axiosClient.get('/accessories');
 
       setDataTypeAccessay(typeAccessary.object.listLoaiVatTu);
       setDataListAccessary(listAccessay);
+      setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      notification.error({
+        message: 'Đã có khi lấy dữ liệu danh sách loại vật tư. Vui lòng thử lại',
+      })
+      setIsLoading(false);
     }
   };
   console.log(dataListAccessary);
@@ -120,11 +126,15 @@ const AccessaryList = () => {
   useEffect(() => {
     const getApiSearch = async () => {
       try {
-        console.log(inputSearch);
+        setIsLoading(true);
         const dataResultSearch = await axiosClient.get(`/accessories/search?name=${inputSearch}`);
         setDataListAccessary(dataResultSearch);
+        setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        notification.error({
+          message: 'Đã có khi lấy dữ liệu danh sách phụ tùng. Vui lòng thử lại',
+        })
+        setIsLoading(false);
       }
     };
     getApiSearch();
@@ -136,12 +146,17 @@ const AccessaryList = () => {
     if (!checkEdit) {
       const postData = async () => {
         try {
+          setIsLoading(true);
           await axiosClient.post('/accessories', values);
           notification.success({
             message: 'Nhập phụ tùng thành công',
           });
+          setIsLoading(false);
         } catch (error) {
-          console.log(error);
+          notification.error({
+            message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+          })
+          setIsLoading(false);
         }
       };
       postData();
@@ -150,12 +165,17 @@ const AccessaryList = () => {
     } else {
       const postData = async () => {
         try {
+          setIsLoading(true);
           await axiosClient.put(`/accessories/${dataEditAccessary.idAccessary}`, values);
           notification.success({
             message: 'Chỉnh sửa phụ tùng thành công',
           });
+          setIsLoading(false);
         } catch (error) {
-          console.log(error);
+          notification.error({
+            message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+          })
+          setIsLoading(false);
         }
       };
       postData();
@@ -199,8 +219,6 @@ const AccessaryList = () => {
     setDataEditAccessay(dataEdit);
     setCheckEdit(true);
     formAcccessary.setFieldsValue(dataEdit);
-    console.log(formAcccessary);
-    console.log(formAcccessary.getFieldValue());
   };
 
   //Header table
@@ -261,7 +279,12 @@ const AccessaryList = () => {
             onFinish={onFinishAccessary}
             form={formAcccessary}
           >
-            <Form.Item label="Loại phụ tùng" name="typeAccessory">
+            <Form.Item label="Loại phụ tùng" name="typeAccessory" 
+            rules={[
+                    {
+                        required: true,
+                    },
+                    ]}>
               <Select
                 placeholder="Select a option"
                 showSearch="true"
@@ -282,10 +305,20 @@ const AccessaryList = () => {
                 })}
               </Select>
             </Form.Item>
-            <Form.Item label="Tên phụ tùng" name="name">
+            <Form.Item label="Tên phụ tùng" name="name"
+              rules={[
+                {
+                    required: true,
+                },
+                ]}>
               <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.nameAccessary} />
             </Form.Item>
-            <Form.Item label="Đơn giá" name="unitPrice">
+            <Form.Item label="Đơn giá" name="unitPrice"
+              rules={[
+              {
+                  required: true,
+              },
+              ]}>
               <Input
                 type="number"
                 style={{ width: '100%' }}
@@ -360,6 +393,7 @@ const AccessaryList = () => {
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <AccessaryListView />
+          <LoadingScreenCustom isLoading ={isLoading} />
         </div>
       </Content>
     </StyledAccessaryList>

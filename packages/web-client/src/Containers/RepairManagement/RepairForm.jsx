@@ -277,40 +277,61 @@ const RepairForm = () => {
   const onFinishFilterPlate = async (values) => { 
     const { plateFilter } = values;
 
-    await axiosClient.get(`/phieusuachua/getPlate?plateFilter=${plateFilter}`)
-      .then(async res => {
-        let maXe = res[0]._id;
-        // lat tat ca cac phieu tiep nhan ma co maXe res[0]._id;
-        await axiosClient.get(`/phieutiepnhan/getPTNbyMaXe?maXe=${maXe}`)
-        .then(async res1=> {
-          // Mot Xe co nhieu PTN
-          for(var i of res1) {
-            let maPTN = i._id;
-            console.log("maPTN la: ", maPTN);
-            // Lay cac phieu sua chua ma co maPTN la i._id;
-            await axiosClient.get(`/phieusuachua/getPSCByMaPTN?maPTN=${maPTN}`)
-              .then(async res2 => {
-                // Mot PSC co nhieu CTSC
-                console.log("RES2: ", res2);
-                for(var j of res2) {
-                  let maPSC = j._id;
-                  console.log("maPSC la: ", maPSC);
-                  await axiosClient.get(`/phieusuachua/getCTSCByMaPSC?maPSC=${maPSC}`)
-                    .then(res3 => {
-                      CTSC.push(res3[0]);
-                      setDataCTSC(CTSC);
-                    })
-                }
+    const  phieuSuaChua =await axiosClient.get(`/phieusuachua/getPlate?plateFilter=${plateFilter}`);
+    
+
+      // .then(async res => {
+      //   let maXe = res[0]._id;
+      //   // lat tat ca cac phieu tiep nhan ma co maXe res[0]._id;
+      //   await axiosClient.get(`/phieutiepnhan/getPTNbyMaXe?maXe=${maXe}`)
+      //   .then(async res1=> {
+      //     // Mot Xe co nhieu PTN
+      //     for(var i of res1) {
+      //       let maPTN = i._id;
+      //       console.log("maPTN la: ", maPTN);
+      //       // Lay cac phieu sua chua ma co maPTN la i._id;
+      //       await axiosClient.get(`/phieusuachua/getPSCByMaPTN?maPTN=${maPTN}`)
+      //         .then(async res2 => {
+      //           // Mot PSC co nhieu CTSC
+      //           console.log("RES2: ", res2);
+      //           for(var j of res2) {
+      //             let maPSC = j._id;
+      //             console.log("maPSC la: ", maPSC);
+      //             await axiosClient.get(`/phieusuachua/getCTSCByMaPSC?maPSC=${maPSC}`)
+      //               .then(res3 => {
+      //                 CTSC.push(res3[0]);
+      //                 setDataCTSC(CTSC);
+      //               })
+      //           }
                
-              })
-          }
-        })
+      //         })
+        //   }
+        // })
     
        
-      })
+      // })
 
     
   } 
+
+  const onHandleBienSo = async (maXe) =>{
+    try{
+      // console.log(bienSo)
+      // const  phieuSuaChua =await axiosClient.get(`/phieusuachua/getPlate?plateFilter=${bienSo}`);
+      // console.log(phieuSuaChua)
+      // console.log(dataBienSo);
+
+    const  lstPhieuTiepNhan =await axiosClient.get(`/phieutiepnhan/getPTNbyMaXe?maXe=${maXe}`);
+    //1 xe chỉ có 1 phieu tiep nhan
+    const phieuTiepNhan = lstPhieuTiepNhan[0];
+    console.log(phieuTiepNhan)
+    const listPhieuSuaChua = await axiosClient.get(`/phieusuachua/getPSCByMaPTN?maPTN=${phieuTiepNhan._id}`)
+    }catch(e){
+
+    }
+    
+
+  }
 
   const onFinishAddItem = async (values) => {
     console.log("DATA: ", values);
@@ -358,6 +379,7 @@ const RepairForm = () => {
             <Select
               showSearch
               optionFilterProp="children"
+              
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
@@ -477,6 +499,7 @@ const RepairForm = () => {
           >
             <Select
               showSearch
+              onChange={onHandleBienSo}
               optionFilterProp="children"
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -487,7 +510,7 @@ const RepairForm = () => {
             >
               {dataBienSo.map((item, id) => {
                 return(
-                  <Option key={id} value={item.bienSo}>{item.bienSo}</Option>
+                  <Option key={id} value={item._id}>{item.bienSo}</Option>
                 )
               })}
               

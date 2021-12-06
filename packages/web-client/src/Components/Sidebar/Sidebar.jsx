@@ -78,9 +78,9 @@ const Sidebar = () => {
           <Menu.Item key="/inventory-report-page">
             <Link to="/inventory-report-page">Báo cáo tồn</Link>
           </Menu.Item>
-          <Menu.Item key="/inventory-report-form">
+          {/* <Menu.Item key="/inventory-report-form">
             <Link to="/inventory-report-form">Form báo cáo tồn</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </SubMenu>
         <SubMenu key="admin" icon={<UserOutlined />} title="Quản lý user">
           <Menu.Item key="/sign-up">

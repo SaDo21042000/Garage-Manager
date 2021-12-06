@@ -15,6 +15,7 @@ import {
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
+import {LoadingScreenCustom } from './../../Components'
 
 const { Content } = AntLayout;
 const { Title } = Typography;
@@ -22,6 +23,7 @@ const { Title } = Typography;
 const StyledWageList = styled(AntLayout)`
   .site-layout-background {n
     background: #fff;
+    position: relative
   }
 
   .main-title {
@@ -73,6 +75,7 @@ const WageList = () => {
   const [dataListWage, setDataListWage] = useState([]);
   const [checkEdit, setCheckEdit] = useState(false);
   const [inputSearch, setInputSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [dataEdit, setDataEditWage] = useState({
     idWage: '',
     nameWage: '',
@@ -100,10 +103,13 @@ const WageList = () => {
   //Get data
   const getAPI = async () => {
     try {
+      setIsLoading(true);
       const listWage = await axiosClient.get('/wages');
 
       setDataListWage(listWage);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -114,10 +120,15 @@ const WageList = () => {
   useEffect(() => {
     const getApiSearch = async () => {
       try {
+        setIsLoading(true);
         const dataResultSearch = await axiosClient.get(`/wages/search?name=${inputSearch}`);
         setDataListWage(dataResultSearch);
+        setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        setIsLoading(false);
+        notification.error({
+          message: "Lỗi lấy danh sách tiền công. Vui lòng thử lại",
+        });
       }
     };
     getApiSearch();
@@ -130,12 +141,17 @@ const WageList = () => {
     if (!checkEdit) {
       const postData = async () => {
         try {
+          setIsLoading(true);
           await axiosClient.post('/wages', values);
           notification.success({
             message: 'Nhập tiền công thành công',
           });
+          setIsLoading(false);
         } catch (error) {
-          console.log(error);
+          setIsLoading(false);
+          notification.error({
+            message: 'Đã có lỗi vui lòng thử lại',
+          });
         }
       };
       getAPI();
@@ -145,12 +161,17 @@ const WageList = () => {
     } else {
       const postData = async () => {
         try {
+          setIsLoading(true);
           await axiosClient.put(`/wages/${dataEdit.idWage}`, values);
           notification.success({
             message: 'Chỉnh sửa tiền công thành công',
           });
+          setIsLoading(false);
         } catch (error) {
-          console.log(error);
+          setIsLoading(false);
+          notification.error({
+            message: 'Đã có lỗi vui lòng thử lại',
+          });
         }
       };
       getAPI();
@@ -326,6 +347,7 @@ const WageList = () => {
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <WageListView />
+          <LoadingScreenCustom isLoading ={isLoading} />
         </div>
       </Content>
     </StyledWageList>

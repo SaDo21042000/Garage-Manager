@@ -131,7 +131,7 @@ const CarList = () => {
         console.log("DATA RETURN: ", res);
         setDataDisplay([res]);
       }).catch(err => {
-        {console.log("ERROR GET XE: ", err)}
+        console.log("ERROR GET XE: ", err)
       })
     }
     else {
@@ -171,7 +171,7 @@ const CarList = () => {
 
 
       }).catch(err => {
-        {console.log("ERROR GET XE: ", err)}
+        console.log("ERROR GET XE: ", err)
       })
     }
   };
