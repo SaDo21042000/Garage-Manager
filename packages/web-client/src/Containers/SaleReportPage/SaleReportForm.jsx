@@ -67,29 +67,7 @@ const StyledSaleReportForm = styled(AntLayout)`
 const SaleReportForm = () => {
   const [showReportResult, setShowReportResult] = useState(false);
   const [dateData, setDateData] = useState({ month: '', year: '' });
-  const [dataSource, setDataSource] = useState([
-    {
-      key: '1',
-      carName: 'Toyota',
-      numberRepair: '521452',
-      ratio: '100%',
-      total: 5000000,
-    },
-    {
-      key: '2',
-      carName: 'Honda',
-      numberRepair: '521452',
-      ratio: '100%',
-      total: 5000000,
-    },
-    {
-      key: '3',
-      carName: 'Suzuki',
-      numberRepair: '521452',
-      ratio: '100%',
-      total: 5000000,
-    },
-  ]);
+  const [dataSource, setDataSource] = useState([]);
 
   dataSource.map((item, index) => (item.carNumber = index + 1));
 

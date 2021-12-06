@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {
   Layout as AntLayout,
@@ -65,13 +65,17 @@ const StyledSaleReportPage = styled(AntLayout)`
 `;
 
 const DATE = new Date();
-const MONTH = DATE.getMonth();
+const MONTH = DATE.getMonth()+1;
 const YEAR = DATE.getFullYear();
 
 const SaleReportPage = () => {
   const [showReportResult, setShowReportResult] = useState(false);
   const [dateData, setDateData] = useState({ month: '', year: '' });
   const [dataSource, setDataSource] = useState([]);
+
+  useEffect(()=>{
+
+  })
 
   const columns = [
     {

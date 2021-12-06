@@ -1,7 +1,7 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Divider, Form, InputNumber, Table, Typography, notification } from 'antd';
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import {LoadingScreenCustom } from './../../Components'
 import { InventoryReportStyles } from './styles';
 import axiosClient from '../../Configs/Axios';
 
@@ -34,29 +34,49 @@ const InventoryReport = () => {
   const [time, setTime] = useState({ month: '', year: '' });
   const [dataTable, setDataTable] = useState([]);
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onFinishCreateTable = (values) => {
-    const { month, year } = values;
-    const postData = async () => {
-      try {
-        const response = await axiosClient.post('/inventory-reports',values)
-        response.reportDetails.length === 0
-          ? notification.error({
-              message:
-                'Thông tin không hợp lệ. Không có vật tư được nhập hay sử dung trong thời gian bạn nhập',
-            })
-          : notification.success({
-              message: 'Lập báo cáo thành công',
-            });
-        setDataTable(response.reportDetails);
-      } catch (error) {
-        console.log(error);
-      }
+  useEffect(()=>{
+    const DATE = new Date();
+    const MONTH = DATE.getMonth()+1;
+    const YEAR = DATE.getFullYear();
+    
+    let params = {
+      month: MONTH,
+      year: YEAR
     }
-    postData();
+    form.setFieldsValue(params);
+    getInventoryReportByMonth(params);
+    
+  },[])
+
+  const onFinishCreateTable = async (values) => {
+    const { month, year } = values;
+    await getInventoryReportByMonth(values);
     setTime({ ...time, month: month, year: year });
-    setShowReportResult(true);
+    
   };
+
+  const getInventoryReportByMonth= async (dates)=>{
+    try {
+      setIsLoading(true);
+      const response = await axiosClient.post('/inventory-reports',dates)
+      response.reportDetails.length === 0
+        ? notification.warning({
+            message:
+              'Thông tin không hợp lệ. Không có vật tư được nhập hay sử dung trong thời gian bạn nhập',
+          })
+        : notification.success({
+            message: 'Lấy danh sách báo cáo thành công',
+          });
+      setDataTable(response.reportDetails);
+      setShowReportResult(true);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  }
 
 
   const onFinishFailedCreateTable = (errorInfo) => {
@@ -76,7 +96,7 @@ const InventoryReport = () => {
         <Breadcrumb.Item>Báo cáo tồn</Breadcrumb.Item>
         <Breadcrumb.Item>Báo cáo tồn tháng</Breadcrumb.Item>
       </Breadcrumb>
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+      <div className="site-layout-background" style={{ padding: 24, minHeight: 360, position:'relative' }}>
         <Title className="main-title" level={2}>
           Báo cáo tồn
         </Title>
@@ -145,6 +165,7 @@ const InventoryReport = () => {
             </Button>
           }
         </div>
+        <LoadingScreenCustom isLoading ={isLoading} />
       </div>
     </InventoryReportStyles>
   );

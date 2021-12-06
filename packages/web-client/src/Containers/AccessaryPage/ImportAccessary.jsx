@@ -1,18 +1,20 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Layout as AntLayout, Breadcrumb, Button, Form, InputNumber, Typography, Select, notification } from 'antd';
 import styled from 'styled-components';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 import axiosClient from '../../Configs/Axios';
-
+import {LoadingScreenCustom } from './../../Components'
 const { Content } = AntLayout;
 const { Title, Text } = Typography;
+
 
 const StyledImportAccessary = styled(AntLayout)`
   .site-layout-background {n
     background: #fff;
+    position:relative;
   }
 
   .main-title {
@@ -32,8 +34,9 @@ const StyledImportAccessary = styled(AntLayout)`
 
 const ImportAccessary = () => {
   const [data, setData] = useState([]);
-
+  const [isLoading, setIsLoading] = useState([]);
   const [form] = Form.useForm();
+  const history = useHistory();
 
   const validateMessages = {
     required: 'Nhập ${label}!',
@@ -51,11 +54,15 @@ const ImportAccessary = () => {
   useEffect(()=>{
     const getAPI = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosClient.get('/accessories')
-        console.log(response);
         setData(response)
+        setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        notification.error({
+          message: 'Đã có lỗi lấy danh sách tên loại phụ tùng. Vui lòng thử lại',
+        })
+        setIsLoading(false);
       }
     }
     getAPI();
@@ -64,12 +71,18 @@ const ImportAccessary = () => {
   const onFinish = (values) => {
     const postData = async () => {
       try {
+        setIsLoading(true);
         await axiosClient.post('/accessory-import-forms',values)
         notification.success({
-          message: 'Import Accessory Successfully',
+          message: 'Thêm vật tư phụ tùng thành công',
         })
+        history.push('/list-accessary');
+        setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        setIsLoading(false);
+        notification.error({
+          message: 'Đã có lỗi xảy ra vui lòng thử lại',
+        })
       }
     }
     postData();
@@ -89,10 +102,10 @@ const ImportAccessary = () => {
             remember: true,
           }}
           labelCol={{
-            span: 4,
+            span: 7,
           }}
           wrapperCol={{
-            span: 14,
+            span: 12,
           }}
           autoComplete="off"
           layout="horizontal"
@@ -133,8 +146,8 @@ const ImportAccessary = () => {
           </Form.Item>
           <Form.Item
             wrapperCol={{
-              offset: 8,
-              span: 16,
+              offset: 11,
+              span: 19,
             }}
           >
             <Button type="primary" htmlType="submit">
@@ -161,6 +174,7 @@ const ImportAccessary = () => {
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <ImportAccessaryView />
+          <LoadingScreenCustom isLoading ={isLoading} />
         </div>
       </Content>
     </StyledImportAccessary>
