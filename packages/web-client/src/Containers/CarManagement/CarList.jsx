@@ -7,13 +7,11 @@ import {
   Table,
   Button,
   Popconfirm,
-  message,
   Form,
-  Input,
   Select,
-  Option
+  notification,
 } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import DeleteOutlined from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
 
@@ -64,42 +62,50 @@ const CarList = () => {
       title: '#',
       dataIndex: 'number',
       key: 'number',
+      width: 60,
+      render: (v, index) => {
+        return <span>{dataDisplay.indexOf(index) + 1}</span>;
+      },
     },
     {
       title: 'Biển Số',
-      dataIndex: 'plate',
-      key: 'plate',
+      dataIndex: 'bienSo',
+      key: 'bienSo',
+      width: 120,
     },
     {
       title: 'Hiệu Xe',
-      dataIndex: 'carName',
-      key: 'carName',
+      dataIndex: 'hieuXe',
+      key: 'hieuXe',
+      width: 120,
     },
     {
       title: 'Chủ Xe',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'tenKhachHang',
+      key: 'tenKhachHang',
+      width: 250,
     },
     {
       title: 'Phone',
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'soDT',
+      key: 'soDT',
+      width: 160,
     },
     {
       title: 'Tiền Nợ',
-      dataIndex: 'debt',
-      key: 'debt',
+      dataIndex: 'tienNo',
+      key: 'tienNo',
+      width: 140,
     },
     {
       title: 'Action',
       dataIndex: 'action',
       render: (v, index) => (
         <>
-          <Button className="btn" icon={<EditOutlined />} />
           <Popconfirm
             placement="top"
             title="Are you sure to delete this customer?"
-             onConfirm={() => handleDelete(index.number)}
+            onConfirm={() => handleDelete(index.number)}
             okText="Yes"
             cancelText="No"
           >
@@ -110,42 +116,9 @@ const CarList = () => {
     },
   ];
 
-  const data = [
-    {
-      key: '1',
-      number: '1',
-      plate: '81A-12345',
-      carName: 'Audi',
-      name: 'Nguyen Van A',
-      phone: '0123456789',
-      debt: '0',
-    },
-    {
-      key: '2',
-      number: '2',
-      plate: '81A-12345',
-      carName: 'Mercedes',
-      name: 'Nguyen Van B',
-      phone: '0123456789',
-      debt: '0',
-    },
-    {
-      key: '3',
-      number: '3',
-      plate: '81A-12345',
-      carName: 'Toyota',
-      name: 'Nguyen Van C',
-      phone: '0123456789',
-      debt: '0',
-    },
-  ];
-
-  function confirm() {
-    message.info('Clicked on Yes.');
-  }
 
   useEffect(() => {
-    axiosClient.get('/xes/').then((res) => {
+    axiosClient.get('/xes').then((res) => {
       setDataBienSo(res);
     }).catch((err) => {console.log("ERROR GET XE: ", err)});
   }, [])
@@ -156,14 +129,47 @@ const CarList = () => {
       await axiosClient.get(`/phieutiepnhan/getCarByPlate?bienSo=${plate}`)
       .then(res => {
         console.log("DATA RETURN: ", res);
+        setDataDisplay([res]);
       }).catch(err => {
         {console.log("ERROR GET XE: ", err)}
       })
     }
     else {
       await axiosClient.get(`/phieutiepnhan/getCarByPlate`)
-      .then(res => {
-        console.log("DATA RETURN: ", res);
+      .then(async res => {
+        let dataDL = [];
+       
+        setDataDisplay([]);
+        let xe = res.xe;
+        let kh = res.khachang;
+       
+        for(var i in xe) {
+          let data = {
+            bienSo: '',
+            hieuXe: '',
+            soDT: '',
+            tenKhachHang: '',
+            tienNo: '',
+            _id: '',
+            number: parseInt(i) + 1
+          }
+          data.bienSo = xe[i].bienSo; 
+          data.hieuXe = xe[i].maHieuXe;
+          data.tienNo = xe[i].tienNo;
+          data._id = xe[i]._id;
+          for(var j of kh) {
+            if(xe[i].maKhachHang == j[0]._id) {
+              data.tenKhachHang = j[0].tenKhachHang;
+              data.soDT = j[0].soDT;
+            }
+          }
+          dataDL.push(data)
+        }
+        console.log("DATA RETURN: ", dataDL);
+        setDataDisplay(dataDL);
+        
+
+
       }).catch(err => {
         {console.log("ERROR GET XE: ", err)}
       })
@@ -171,10 +177,16 @@ const CarList = () => {
   };
 
   const handleDelete = async (number) => {
-    console.log(number);  
+    console.log(number); 
+    notification.success({
+      message: 'Xóa xe thành công',
+    })
     const itemDelete = dataDisplay[number-1];
     await axiosClient.post('/phieutiepnhan/deleteXe', itemDelete);
   };
+
+
+
 
   return (
     <StyledHomePage>
@@ -197,8 +209,9 @@ const CarList = () => {
           validateMessages={validateMessages}
           onFinish={onFinish}
         >
-          <Form.Item label="Biển Số" name="plate" style={{ width: '500px' }}>
+          <Form.Item label="Biển Số" name="plate" style={{ width: '300px' }}>
           <Select
+
               
               showSearch
               optionFilterProp="children"
@@ -227,7 +240,7 @@ const CarList = () => {
             </Button>
           </Form.Item>
         </Form>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={dataDisplay} />
       </div>
     </StyledHomePage>
   );
