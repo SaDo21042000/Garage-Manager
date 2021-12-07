@@ -11,7 +11,7 @@ import {
   Select,
   notification,
 } from 'antd';
-import DeleteOutlined from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
 
@@ -125,7 +125,7 @@ const CarList = () => {
 
   const onFinish = async (values) => {
     const { plate } = values;
-    if(plate != "all") {
+    if(plate !== "all") {
       await axiosClient.get(`/phieutiepnhan/getCarByPlate?bienSo=${plate}`)
       .then(res => {
         console.log("DATA RETURN: ", res);
@@ -158,7 +158,7 @@ const CarList = () => {
           data.tienNo = xe[i].tienNo;
           data._id = xe[i]._id;
           for(var j of kh) {
-            if(xe[i].maKhachHang == j[0]._id) {
+            if(xe[i].maKhachHang === j[0]._id) {
               data.tenKhachHang = j[0].tenKhachHang;
               data.soDT = j[0].soDT;
             }
@@ -177,13 +177,62 @@ const CarList = () => {
   };
 
   const handleDelete = async (number) => {
+    const postData = async () => {
     console.log(number); 
     notification.success({
       message: 'Xóa xe thành công',
     })
     const itemDelete = dataDisplay[number-1];
     await axiosClient.post('/phieutiepnhan/deleteXe', itemDelete);
+  }
+  getAPI();
+  postData();
+  getAPI();
   };
+
+  const getAPI = async () => {
+    await axiosClient.get(`/phieutiepnhan/getCarByPlate`)
+    .then(async res => {
+      let dataDL = [];
+     
+      setDataDisplay([]);
+      let xe = res.xe;
+      let kh = res.khachang;
+     
+      for(var i in xe) {
+        let data = {
+          bienSo: '',
+          hieuXe: '',
+          soDT: '',
+          tenKhachHang: '',
+          tienNo: '',
+          _id: '',
+          number: parseInt(i) + 1
+        }
+        data.bienSo = xe[i].bienSo; 
+        data.hieuXe = xe[i].maHieuXe;
+        data.tienNo = xe[i].tienNo;
+        data._id = xe[i]._id;
+        for(var j of kh) {
+          if(xe[i].maKhachHang === j[0]._id) {
+            data.tenKhachHang = j[0].tenKhachHang;
+            data.soDT = j[0].soDT;
+          }
+        }
+        dataDL.push(data)
+      }
+      console.log("DATA RETURN: ", dataDL);
+      setDataDisplay(dataDL);
+      
+
+
+    }).catch(err => {
+      console.log("ERROR GET XE: ", err)
+    })
+  };
+  useEffect(() => {
+    getAPI();
+  }, []);
 
 
 

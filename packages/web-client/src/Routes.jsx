@@ -6,7 +6,7 @@ import { LogIn, SignUp, ForgotPassword, ChangePassword } from './Containers/LogI
 import { CarList, CarReception, Bill } from './Containers/CarManagement';
 import { RepairForm, RepairPage } from './Containers/RepairManagement';
 import { SaleReportPage, SaleReportForm } from './Containers/SaleReportPage';
-import { InventoryReport, InventoryReportForm } from './Containers/InventoryPage';
+import { InventoryReport } from './Containers/InventoryPage';
 import SettingPage from './Containers/SettingPage';
 
 function Routes() {
@@ -27,7 +27,6 @@ function Routes() {
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/change-password" component={ChangePassword} />
           <Route path="/inventory-report-page" component={InventoryReport} />
-          <Route path="/inventory-report-form" component={InventoryReportForm} />
           <Route path="/setting" component={SettingPage} />
           <Route path="/import-accessary" component={ImportAccessary} />
           <Route path="/list-accessary" component={AccessaryList} />

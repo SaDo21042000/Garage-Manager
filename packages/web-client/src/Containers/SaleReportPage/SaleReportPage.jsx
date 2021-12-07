@@ -125,8 +125,11 @@ const SaleReportPage = () => {
     setDateData({ ...dateData, month: month, year: year });
 
     try {
+      const dataId = await axios.get(
+        `http://localhost:5000/api/doanhsos?month=${month}&year=${year}`,
+      );
       const dataRaw = await axios.get(
-        `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=61951d84609a0e7842149340`,
+        `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${dataId.data[0]._id}`,
       );
       const { data } = dataRaw;
       setDataSource(data);

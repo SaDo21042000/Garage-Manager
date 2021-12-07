@@ -5,7 +5,6 @@ import { PrinterFilled } from '@ant-design/icons';
 import { DATEFORMAT, layout, StyledBill, validateMessages } from './Bill.constants';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-import axiosClient from '../../Configs/Axios';
 import axios from 'axios';
 
 const { Title } = Typography;
