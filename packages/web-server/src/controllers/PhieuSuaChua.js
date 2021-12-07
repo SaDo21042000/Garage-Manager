@@ -64,6 +64,7 @@ const createOne = async (req, res) => {
   // });
 
   // cập nhât số lượng sửa trong chi tiết doanh số
+  today = new Date(date);
   let { maHieuXe } = await Xe.findOne({ bienSo }, { maHieuXe: 1 });
   let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
     {$match: { month: today.getMonth() + 1, year: today.getFullYear()}}]);
