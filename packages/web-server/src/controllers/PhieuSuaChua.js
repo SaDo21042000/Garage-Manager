@@ -53,7 +53,7 @@ const createOne = async (req, res) => {
   await newCTSC.save().then((res) => {
     console.log("CTSC: ", res);
   })
-  
+ 
   // await ChiTietSuaChua.remove({});
   // await PhieuSuaChua.remove({});
   // await ChiTietSuaChua.find({}).then(res => {
@@ -64,6 +64,7 @@ const createOne = async (req, res) => {
   // });
 
   // cập nhât số lượng sửa trong chi tiết doanh số
+  date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+ today.getDate();
   today = new Date(date);
   let { maHieuXe } = await Xe.findOne({ bienSo }, { maHieuXe: 1 });
   let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
@@ -96,28 +97,14 @@ const createOne = async (req, res) => {
             await ChiTietDoanhSo.updateOne({ _id: ctds._id }, { soLuongSua: ctds.soLuongSua + 1 });
         }      
     }
-  await Xe.updateOne({bienSo: bienSo}, {tienNo: maXe.tienNo + soLuong*maVT.unitPrice});
+
+  // cập nhật tiền nợ trong xe
+  await Xe.updateOne({ bienSo: bienSo }, { tienNo: maXe.tienNo + soLuong*maVT.unitPrice })
 
   return res.status(201).json({
     statusCode: 201,
     message: 'Receiving your form succesfully'
   });
-}
-
-const xoaPSC = async (req, res) => {
-  const idCTSC =  req.body._id;
-  const idPSC = req.body.maPSC;
-
-  try {
-    await PhieuSuaChua.deleteOne({ _id: idPSC });
-
-    await ChiTietSuaChua.deleteOne({ _id: idCTSC })
-    res.status(201).json({
-      statusCode: 201,
-      message: 'Xoa thanh cong' })  
-  } catch (err){
-    console.log("Error xoa xe: ", err);
-  }
 }
 
 const getAllCTSC = async (req, res) => {
@@ -126,7 +113,6 @@ const getAllCTSC = async (req, res) => {
     await ChiTietSuaChua.find({}).then(res => {
       data = res;
     })
-    console.log('data',  data);
     
     return res.status(200).json(data);
 } catch (err) {
@@ -160,47 +146,9 @@ const getTienCong = async (req, res) => {
   });
   })
 }
-
-const getPlate = async (req, res) => {
-  const plateFilter = req.query.plateFilter;
-  try {
-    let data;
-    await Xe.find({ bienSo: plateFilter }).then(res => {
-      data = res;
-    })
-    console.log('data',  data);
-    
-    return res.status(200).json(data);
-} catch (err) {
-    return res.status(500).json({
-        statusCode: 500,
-        message: err.message || `Some errors happened when finding accessory`
-    });
-}
-  
-}
-
-const getPSCByMaPTN = async (req, res) => {
-  const maPTN = req.query.maPTN;
-  await PhieuSuaChua.find({ maPTN }).then(res1 => {
-    return res.status(200).json(res1);
-  })
-}
-
-const getCTSCByMaPSC = async (req, res) => {
-  const maPSC = req.query.maPSC;
-  await ChiTietSuaChua.find({ maPSC }).then(res1 => {
-    return res.status(200).json(res1);
-  })
-}
-
 module.exports = {
   createOne,
   getAllCTSC,
   getVatTu,
-  getTienCong,
-  xoaPSC,
-  getPlate,
-  getPSCByMaPTN,
-  getCTSCByMaPSC
+  getTienCong
 }
