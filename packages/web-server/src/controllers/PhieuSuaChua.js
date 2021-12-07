@@ -3,18 +3,41 @@ const { generateID } = require('../helpers/generateID');
 const { json } = require('express');
 
 const createOne = async (req, res) => {
+  try{
+    const { bienSo } = req.body;
+    console.log(bienSo);
+    console.log('có');
+    var today = new Date();
+    var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+    let xe =await Xe.findOne({ bienSo });
+    let phieuTiepNhan = await PhieuTiepNhan.findOne({ maXe: xe._id });
+    let newPSC = new PhieuSuaChua({
+      maPTN: phieuTiepNhan._id,
+      ngaySC: date,
+      tongTienSC: 0
+    })
+    let phieuSuaChua = await newPSC.save();
+    return res.status(200).json(phieuSuaChua);
+  }catch(e){
+    console.log(e);
+    return res.status(500).json({
+      statusCode: 500,
+      message: 'Create failed'
+    });
+  }
+}
+
+const createCTSC = async (req, res) => {
   console.log("BODY: ", req.body);
-  const { bienSo, noiDung, nameLoaiVatTu, nameTienCong, soLuong } = req.body;
+  const { bienSo, noiDung, maVatTu, maTienCong, soLuong, MaPSC } = req.body;
   let maVT, maTC, maXe, maPTN, maPSC;
-  
   var today = new Date();
   var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
-
   //  Truy xuat vao bang loai vat tu va tien cong de lat maVT va maTC
-  await Accessory.findOne({ name: nameLoaiVatTu }).then(res => {
+  await Accessory.findOne({ _id: maVatTu }).then(res => {
     maVT = res;
   }).catch(err => {console.log()});
-  await Wage.findOne({ name: nameTienCong }).then(res => {
+  await Wage.findOne({ _id: maTienCong }).then(res => {
     maTC = res;
   }).catch(err => {console.log()});
 
@@ -25,43 +48,19 @@ const createOne = async (req, res) => {
   await PhieuTiepNhan.findOne({ maXe: maXe._id }).then(res => {
     maPTN = res;
   }).catch(err => {console.log()});
-
-  console.log("maVT: ", maVT);
-  console.log("maTC: ", maTC);
-  console.log("maXe: ", maXe);
-
-
-  let newPSC = new PhieuSuaChua({
-    maPTN: maPTN._id,
-    ngaySC: date,
-    tongTienSC: 0
-  })
-  await newPSC.save().then(res => {
-    maPSC = res;
-    console.log("PSC: ", res);
-  })
-
+  console.log('VT',maVT);
+  console.log('maTC',maTC)
   let newCTSC = new ChiTietSuaChua({
     noiDung,
-    maVaTu: maVT._id,
+    maVaTu: maVatTu,
     soLuong,
-    maTienCong: maTC._id,
+    maTienCong: maTienCong,
     thanhTien: soLuong*maVT.unitPrice,
-    maPSC: maPSC._id
+    maPSC: MaPSC
   })
-  console.log("CTST: ", newCTSC)
-  await newCTSC.save().then((res) => {
-    console.log("CTSC: ", res);
-  })
-  
-  // await ChiTietSuaChua.remove({});
-  // await PhieuSuaChua.remove({});
-  // await ChiTietSuaChua.find({}).then(res => {
-  //   console.log('CTSC: ', res);
-  // });
-  // await PhieuSuaChua.find({}).then(res => {
-  //   console.log('PSC: ', res);
-  // });
+  console.log("CTSC1: ", newCTSC)
+  let ctsc = await newCTSC.save()
+    console.log("CTSC2: ", ctsc);
 
   // cập nhât số lượng sửa trong chi tiết doanh số
   let { maHieuXe } = await Xe.findOne({ bienSo }, { maHieuXe: 1 });
@@ -79,7 +78,8 @@ const createOne = async (req, res) => {
             tongTien: 0,
             maDoanhSo: _id
         });
-        await newCtds.save();
+        console.log(newCtds);
+        //await newCtds.save();
     } else {
         let ctds = await ChiTietDoanhSo.findOne({ maDoanhSo: ds[0]._id, maHieuXe: maHieuXe });
         if(!ctds) {
@@ -105,11 +105,8 @@ const createOne = async (req, res) => {
 
 const xoaPSC = async (req, res) => {
   const idCTSC =  req.body._id;
-  const idPSC = req.body.maPSC;
 
   try {
-    await PhieuSuaChua.deleteOne({ _id: idPSC });
-
     await ChiTietSuaChua.deleteOne({ _id: idCTSC })
     res.status(201).json({
       statusCode: 201,
@@ -187,6 +184,7 @@ const getPSCByMaPTN = async (req, res) => {
 }
 
 const getCTSCByMaPSC = async (req, res) => {
+  console.log('cos')
   const maPSC = req.query.maPSC;
   await ChiTietSuaChua.find({ maPSC }).then(res1 => {
     return res.status(200).json(res1);
@@ -201,5 +199,6 @@ module.exports = {
   xoaPSC,
   getPlate,
   getPSCByMaPTN,
-  getCTSCByMaPSC
+  getCTSCByMaPSC,
+  createCTSC
 }
