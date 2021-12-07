@@ -114,7 +114,7 @@ const getAllCTSC = async (req, res) => {
       data = res;
     })
     console.log('data',  data);
-    
+
     return res.status(200).json(data);
 } catch (err) {
     return res.status(500).json({
@@ -147,9 +147,62 @@ const getTienCong = async (req, res) => {
   });
   })
 }
+
+const xoaPSC = async (req, res) => {
+  const idCTSC =  req.body._id;
+  const idPSC = req.body.maPSC;
+
+  try {
+    await PhieuSuaChua.deleteOne({ _id: idPSC });
+
+    await ChiTietSuaChua.deleteOne({ _id: idCTSC })
+    res.status(201).json({
+      statusCode: 201,
+      message: 'Xoa thanh cong' })  
+  } catch (err){
+    console.log("Error xoa xe: ", err);
+  }
+}
+
+const getPlate = async (req, res) => {
+  const plateFilter = req.query.plateFilter;
+  try {
+    let data;
+    await Xe.find({ bienSo: plateFilter }).then(res => {
+      data = res;
+    })
+    console.log('data',  data);
+
+    return res.status(200).json(data);
+} catch (err) {
+    return res.status(500).json({
+        statusCode: 500,
+        message: err.message || `Some errors happened when finding accessory`
+    });
+}
+
+}
+
+const getPSCByMaPTN = async (req, res) => {
+  const maPTN = req.query.maPTN;
+  await PhieuSuaChua.find({ maPTN }).then(res1 => {
+    return res.status(200).json(res1);
+  })
+}
+
+const getCTSCByMaPSC = async (req, res) => {
+  const maPSC = req.query.maPSC;
+  await ChiTietSuaChua.find({ maPSC }).then(res1 => {
+    return res.status(200).json(res1);
+  })
+}
 module.exports = {
   createOne,
   getAllCTSC,
   getVatTu,
-  getTienCong
+  getTienCong,
+  xoaPSC,
+  getPlate,
+  getPSCByMaPTN,
+  getCTSCByMaPSC
 }
