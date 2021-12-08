@@ -194,12 +194,24 @@ const RepairForm = () => {
         let listPhieuCTSC = await axiosClient.get(
           `/phieusuachua/getCTSCByMaPSC?maPSC=${phieuSuaChua._id}`,
         );
-        listPhieuCTSC = listPhieuCTSC.map((item, index) => {
-          return {
-            ...item,
-            key: index + 1,
-          };
-        });
+        listPhieuCTSC = await Promise.all(
+          listPhieuCTSC.map(async (item, index) => {
+            let vatTu = await axiosClient.get(`phieusuachua/getVatTu?maVatTu=${item.maVaTu}`);
+            let tienCong = await axiosClient.get(
+              `phieusuachua/getTienCong?maTienCong=${item.maTienCong}`,
+            );
+
+            return {
+              noiDung: item.noiDung,
+              maVaTu: vatTu.name,
+              price: vatTu.unitPrice,
+              wage: tienCong.name,
+              soLuong: item.soLuong,
+              thanhTien: item.thanhTien,
+              key: index + 1,
+            };
+          }),
+        );
         setDataSource(listPhieuCTSC);
         setIsExistPSC(true);
         setMaPSC(phieuSuaChua._id);
