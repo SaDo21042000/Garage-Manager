@@ -2,7 +2,6 @@ import React from 'react';
 import { Spin } from 'antd';
 
 const LoadingScreen = ({isLoading}) => {
-  console.log(isLoading);
   return (
     isLoading?
     <div style={styles.centered} >
