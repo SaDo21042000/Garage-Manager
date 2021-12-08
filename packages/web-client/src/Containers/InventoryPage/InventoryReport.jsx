@@ -1,7 +1,16 @@
 import { DownloadOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Divider, Form, InputNumber, Table, Typography, notification } from 'antd';
+import {
+  Breadcrumb,
+  Button,
+  Divider,
+  Form,
+  InputNumber,
+  Table,
+  Typography,
+  notification,
+} from 'antd';
 import React, { useState, useEffect } from 'react';
-import {LoadingScreenCustom } from './../../Components'
+import { LoadingScreenCustom } from './../../Components';
 import { InventoryReportStyles } from './styles';
 import axiosClient from '../../Configs/Axios';
 
@@ -10,7 +19,7 @@ const { Title } = Typography;
 const columns = [
   {
     title: 'Tên Vật tư',
-    render: (value) => (value.accessory.name)
+    render: (value) => value.accessory.name,
   },
   {
     title: 'Tồn đầu',
@@ -36,32 +45,30 @@ const InventoryReport = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     const DATE = new Date();
-    const MONTH = DATE.getMonth()+1;
+    const MONTH = DATE.getMonth() + 1;
     const YEAR = DATE.getFullYear();
-    
+
     let params = {
       month: MONTH,
-      year: YEAR
-    }
+      year: YEAR,
+    };
     form.setFieldsValue(params);
     getInventoryReportByMonth(params);
-    
-  },[form])
+  }, [form]);
 
   const onFinishCreateTable = async (values) => {
     const { month, year } = values;
     await getInventoryReportByMonth(values);
     setTime({ ...time, month: month, year: year });
-    
   };
 
-  const getInventoryReportByMonth= async (dates)=>{
+  const getInventoryReportByMonth = async (dates) => {
     try {
       setIsLoading(true);
-      const response = await axiosClient.post('/inventory-reports',dates)
-      response.reportDetails.length === 0
+      const response = await axiosClient.post('/inventory-reports', dates);
+      response?.reportDetails.length === 0
         ? notification.warning({
             message:
               'Thông tin không hợp lệ. Không có vật tư được nhập hay sử dung trong thời gian bạn nhập',
@@ -69,15 +76,14 @@ const InventoryReport = () => {
         : notification.success({
             message: 'Lấy danh sách báo cáo thành công',
           });
-      setDataTable(response.reportDetails);
+      setDataTable(response?.reportDetails);
       setShowReportResult(true);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.log(error);
     }
-  }
-
+  };
 
   const onFinishFailedCreateTable = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -91,12 +97,15 @@ const InventoryReport = () => {
   );
 
   return (
-    <InventoryReportStyles >
+    <InventoryReportStyles>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Báo cáo tồn</Breadcrumb.Item>
         <Breadcrumb.Item>Báo cáo tồn tháng</Breadcrumb.Item>
       </Breadcrumb>
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 360, position:'relative' }}>
+      <div
+        className="site-layout-background"
+        style={{ padding: 24, minHeight: 360, position: 'relative' }}
+      >
         <Title className="main-title" level={2}>
           Báo cáo tồn
         </Title>
@@ -148,14 +157,16 @@ const InventoryReport = () => {
         <div className={showReportResult ? 'show' : 'hide'}>
           {dataTable.length !== 0 && <Divider plain>Kết quả</Divider>}
           {dataTable.length !== 0 && <ResultTitle />}
-          {dataTable.length !== 0 && <Table
-            className="result-table"
-            columns={columns}
-            dataSource={dataTable}
-            pagination={{ defaultPageSize: 5 }}
-          />}
-          {
-            dataTable.length !== 0 && <Button
+          {dataTable.length !== 0 && (
+            <Table
+              className="result-table"
+              columns={columns}
+              dataSource={dataTable}
+              pagination={{ defaultPageSize: 5 }}
+            />
+          )}
+          {dataTable.length !== 0 && (
+            <Button
               className="button-finish"
               icon={<DownloadOutlined />}
               type="primary"
@@ -163,9 +174,9 @@ const InventoryReport = () => {
             >
               In báo cáo
             </Button>
-          }
+          )}
         </div>
-        <LoadingScreenCustom isLoading ={isLoading} />
+        <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </InventoryReportStyles>
   );

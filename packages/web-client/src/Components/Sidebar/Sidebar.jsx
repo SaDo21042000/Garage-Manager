@@ -25,8 +25,8 @@ const Sidebar = () => {
 
   return (
     <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <div class="logo-car">
-        <img src={logo} alt="LOGO" width="100px"/>
+      <div className="logo-car">
+        <img src={logo} alt="LOGO" width="100px" />
       </div>
       <Menu
         theme="dark"

@@ -3,7 +3,7 @@ import React from 'react';
 import { Breadcrumb, Typography, Form, Input, Button, InputNumber, DatePicker } from 'antd';
 import { PrinterFilled } from '@ant-design/icons';
 import { DATEFORMAT, layout, StyledBill, validateMessages } from './Bill.constants';
-import * as FileSaver from 'file-saver';
+import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 
@@ -22,10 +22,9 @@ const Bill = () => {
       email,
     };
 
-
     try {
       axios.post(`${process.env.REACT_APP_API_URL}/phieuthutiens`, dataPost);
-      exportToCSV (["Phiếu thu tiền",dataPost], "Phiếu thu tiền");
+      exportToCSV(['Phiếu thu tiền', dataPost], 'Phiếu thu tiền');
     } catch (error) {
       console.log('Error:', error.message);
     }
@@ -35,15 +34,16 @@ const Bill = () => {
   };
 
   const exportToCSV = (csvData, fileName) => {
-    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileType =
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
 
     const ws = XLSX.utils.json_to_sheet(csvData);
-    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], {type: fileType});
+    const data = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(data, fileName + fileExtension);
-  }
+  };
   return (
     <StyledBill>
       <Breadcrumb style={{ margin: '16px 0' }}>

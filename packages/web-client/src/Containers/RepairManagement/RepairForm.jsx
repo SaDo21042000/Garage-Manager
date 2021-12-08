@@ -1,31 +1,28 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
 import {
-  Layout as AntLayout,
   Breadcrumb,
-  Typography,
+  Button,
   Form,
   Input,
-  Button,
-  Table,
-  Popconfirm,
-  message,
   InputNumber,
+  Layout as AntLayout,
+  Popconfirm,
   Select,
+  Table,
+  Typography,
 } from 'antd';
-import {  DownloadOutlined } from '@ant-design/icons';
-import {  DeleteOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import {LoadingScreenCustom } from './../../Components'
-import axios from 'axios';
+import { LoadingScreenCustom } from './../../Components';
 
 const { Title } = Typography;
 
 const StyledRepairForm = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
-    position:relative
+    position: relative;
   }
 
   .main-title {
@@ -52,7 +49,6 @@ const StyledRepairForm = styled(AntLayout)`
 `;
 
 const RepairForm = () => {
-
   const validateMessages = {
     required: 'Nhập ${label}!',
     types: {
@@ -130,7 +126,6 @@ const RepairForm = () => {
     },
   };
 
-
   const { Option } = Select;
   const [dataSource, setDataSource] = useState([]);
   const [dataBienSo, setDataBienSo] = useState([]);
@@ -139,99 +134,101 @@ const RepairForm = () => {
   const [isExistPSC, setIsExistPSC] = useState(true);
   const [maPSC, setMaPSC] = useState('');
   const [form] = Form.useForm();
-  const [isLoading, setIsLoading] =useState(false);
-  const [initMaXe,setMaXe] = useState('');
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const [initMaXe, setMaXe] = useState('');
+
   useEffect(() => {
     // Lay tat ca cac xe hien tai co trong database.
     getInitData();
-  }, [])
+  }, []);
 
-  const getInitData = async() =>{
-    try{
+  const getInitData = async () => {
+    try {
       setIsLoading(true);
-      let listBS = await axiosClient.get('/xes/')
-        setDataBienSo(listBS);
-  
+      let listBS = await axiosClient.get('/xes/');
+      setDataBienSo(listBS);
+
       // Lat tat ca cac loai vat tu co trong database
-      let lstVL = await axiosClient.get('/accessories/')
+      let lstVL = await axiosClient.get('/accessories/');
       setDataLVT(lstVL);
 
       // Lat tat ca cac ten tien cong co trong database
-      let lstLoaiTC = await axiosClient.get('/wages/')
+      let lstLoaiTC = await axiosClient.get('/wages/');
       setDataTenTienCong(lstLoaiTC);
       setIsLoading(false);
-    }catch(e){
-      setIsLoading(false);
-    }
-  }
-  
-
-  const handleDelete = async (ctsc) => {
-    console.log(ctsc);
-    try{
-      setIsLoading(true);
-      await axiosClient.post('/phieusuachua/xoaPSC', {_id:ctsc._id})
-      await changeDataTable(initMaXe)
-      setIsLoading(false);
-    }catch(err){
+    } catch (e) {
       setIsLoading(false);
     }
   };
 
-  const onHandleBienSo = async (maXe) =>{
-    setMaXe(maXe);
-    await changeDataTable(maXe)
-    
-  }
-  const changeDataTable = async (maXe) =>{
-    try{
+  const handleDelete = async (ctsc) => {
+    console.log(ctsc);
+    try {
       setIsLoading(true);
-      const  lstPhieuTiepNhan =await axiosClient.get(`/phieutiepnhan/getPTNbyMaXe?maXe=${maXe}`);
+      await axiosClient.post('/phieusuachua/xoaPSC', { _id: ctsc._id });
+      await changeDataTable(initMaXe);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+    }
+  };
+
+  const onHandleBienSo = async (maXe) => {
+    setMaXe(maXe);
+    await changeDataTable(maXe);
+  };
+  const changeDataTable = async (maXe) => {
+    try {
+      setIsLoading(true);
+      const lstPhieuTiepNhan = await axiosClient.get(`/phieutiepnhan/getPTNbyMaXe?maXe=${maXe}`);
       //1 xe chỉ có 1 phieu tiep nhan
       const phieuTiepNhan = lstPhieuTiepNhan[0];
-      const listPhieuSuaChua = await axiosClient.get(`/phieusuachua/getPSCByMaPTN?maPTN=${phieuTiepNhan._id}`)
-      if(listPhieuSuaChua.length===0){
+      const listPhieuSuaChua = await axiosClient.get(
+        `/phieusuachua/getPSCByMaPTN?maPTN=${phieuTiepNhan._id}`,
+      );
+      if (listPhieuSuaChua.length === 0) {
         setIsExistPSC(false);
-        setDataSource ([]);
-      }else{
+        setDataSource([]);
+      } else {
         let phieuSuaChua = listPhieuSuaChua[0];
-        let listPhieuCTSC = await axiosClient.get(`/phieusuachua/getCTSCByMaPSC?maPSC=${phieuSuaChua._id}`);
-        listPhieuCTSC = listPhieuCTSC.map((item,index)=>{
+        let listPhieuCTSC = await axiosClient.get(
+          `/phieusuachua/getCTSCByMaPSC?maPSC=${phieuSuaChua._id}`,
+        );
+        listPhieuCTSC = listPhieuCTSC.map((item, index) => {
           return {
             ...item,
-            key:index+1,
-          }
-        })
+            key: index + 1,
+          };
+        });
         setDataSource(listPhieuCTSC);
         setIsExistPSC(true);
         setMaPSC(phieuSuaChua._id);
       }
       setIsLoading(false);
-      }catch(e){
-        setIsLoading(false);
-      }
-  }
+    } catch (e) {
+      setIsLoading(false);
+    }
+  };
 
-  const onChangeBienSo = async(bx) =>{
-    let obj = dataBienSo.find(item=>item.bienSo==bx);
+  const onChangeBienSo = async (bx) => {
+    let obj = dataBienSo.find((item) => item.bienSo === bx);
     form.setFieldsValue({
       plateFilter: obj._id,
     });
     setMaXe(obj._id);
-    await changeDataTable(obj._id)
-  }
+    await changeDataTable(obj._id);
+  };
 
   const onFinishAddItem = async (values) => {
-    try{
+    try {
       setIsLoading(true);
       let id = maPSC;
-      if(!isExistPSC){
-        let params ={
+      if (!isExistPSC) {
+        let params = {
           bienSo: values.bienSo,
-        }
+        };
         let PSC = await axiosClient.post('/phieusuachua/createOne', params);
-        id=PSC._id;
+        id = PSC._id;
       }
       const newData = {
         bienSo: values.bienSo,
@@ -239,21 +236,20 @@ const RepairForm = () => {
         maVatTu: values.maVatTu,
         maTienCong: values.maTienCong,
         soLuong: values.soLuong,
-        MaPSC: id
+        MaPSC: id,
       };
       await axiosClient.post('/phieusuachua/create-CTSC', newData);
-      let obj = dataBienSo.find(item=>item.bienSo==values.bienSo);
+      let obj = dataBienSo.find((item) => item.bienSo === values.bienSo);
       await changeDataTable(obj._id);
       setIsLoading(false);
-
-    }catch(e){
+    } catch (e) {
       setIsLoading(false);
       console.log(e);
     }
   };
 
   return (
-    <StyledRepairForm >
+    <StyledRepairForm>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Phiếu sửa chữa</Breadcrumb.Item>
         <Breadcrumb.Item>Lập phiếu sửa chữa</Breadcrumb.Item>
@@ -281,9 +277,8 @@ const RepairForm = () => {
           >
             <Select
               showSearch
-              onChange = {onChangeBienSo}
+              onChange={onChangeBienSo}
               optionFilterProp="children"
-              
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
@@ -292,11 +287,12 @@ const RepairForm = () => {
               }
             >
               {dataBienSo.map((item, id) => {
-                return(
-                  <Option key={id} value={item.bienSo}>{item.bienSo}</Option>
-                )
+                return (
+                  <Option key={id} value={item.bienSo}>
+                    {item.bienSo}
+                  </Option>
+                );
               })}
-              
             </Select>
           </Form.Item>
           <Form.Item
@@ -331,11 +327,12 @@ const RepairForm = () => {
               }
             >
               {dataLVT.map((item, id) => {
-                return(
-                  <Option key={id} value={item._id}>{item.name}</Option>
-                )
+                return (
+                  <Option key={id} value={item._id}>
+                    {item.name}
+                  </Option>
+                );
               })}
-              
             </Select>
           </Form.Item>
           <Form.Item
@@ -372,9 +369,11 @@ const RepairForm = () => {
               }
             >
               {dataTenTienCong.map((item, id) => {
-                return(
-                  <Option key={id} value={item._id}>{item.name}</Option>
-                )
+                return (
+                  <Option key={id} value={item._id}>
+                    {item.name}
+                  </Option>
+                );
               })}
             </Select>
           </Form.Item>
@@ -413,13 +412,13 @@ const RepairForm = () => {
               }
             >
               {dataBienSo.map((item, id) => {
-                return(
-                  <Option key={id} value={item._id}>{item.bienSo}</Option>
-                )
+                return (
+                  <Option key={id} value={item._id}>
+                    {item.bienSo}
+                  </Option>
+                );
               })}
-              
             </Select>
-            
           </Form.Item>
         </Form>
 
@@ -432,7 +431,7 @@ const RepairForm = () => {
         <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">
           In phiếu sửa chữa
         </Button>
-        <LoadingScreenCustom isLoading ={isLoading} />
+        <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledRepairForm>
   );

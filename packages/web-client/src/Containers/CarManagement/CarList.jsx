@@ -1,25 +1,22 @@
 /* eslint-disable no-template-curly-in-string */
-import React, { useEffect, useState } from 'react';
-import {
-  Layout as AntLayout,
-  Breadcrumb,
-  Typography,
-  Table,
-  Button,
-  Popconfirm,
-  Form,
-  Select,
-  notification,
-  Input
-} from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
+import {
+  Breadcrumb,
+  Button,
+  Form,
+  Input,
+  Layout as AntLayout,
+  notification,
+  Popconfirm,
+  Table,
+  Typography,
+} from 'antd';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import {LoadingScreenCustom } from './../../Components'
+import { LoadingScreenCustom } from './../../Components';
 
 const { Title } = Typography;
-
-
 
 const StyledHomePage = styled(AntLayout)`
   .site-layout-background {n
@@ -43,7 +40,6 @@ const StyledHomePage = styled(AntLayout)`
 `;
 
 const CarList = () => {
-
   const [dataDisplay, setDataDisplay] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -119,59 +115,57 @@ const CarList = () => {
     },
   ];
 
-
   useEffect(() => {
     getDataListCar();
-  }, [])
+  }, []);
 
-  const getDataListCar =  async (data = null)=>{
-    try{
+  const getDataListCar = async (data = null) => {
+    try {
       setIsLoading(true);
-      let url ='/phieutiepnhan/getCarByPlate';
-      if(data){
-        url+=`?bienSo=${data}`
+      let url = '/phieutiepnhan/getCarByPlate';
+      if (data) {
+        url += `?bienSo=${data}`;
       }
       let listCar = await axiosClient.get(url);
-      listCar =listCar.map((item,index)=>{
+      listCar = listCar.map((item, index) => {
         return {
           ...item,
-          key:index+1
-        }
-      })
+          key: index + 1,
+        };
+      });
       setDataDisplay(listCar);
       setIsLoading(false);
-    }catch(e){
+    } catch (e) {
       setIsLoading(false);
-      console.log(e)
+      console.log(e);
       notification.error({
         message: 'Lỗi lấy danh sách xe. Vui lòng thử lại',
-      })
+      });
     }
-  }
+  };
 
   const onFinish = async (values) => {
-    let {plate} = values;
+    let { plate } = values;
     await getDataListCar(plate);
   };
 
   const handleDelete = async (item) => {
-    try{
+    try {
       setIsLoading(true);
-      await axiosClient.post('/phieutiepnhan/deleteXe', {_id:item._id});
+      await axiosClient.post('/phieutiepnhan/deleteXe', { _id: item._id });
       await getDataListCar();
       notification.success({
         message: 'Xóa xe thành công',
-      })
+      });
       setIsLoading(false);
-    }catch(e){
+    } catch (e) {
       setIsLoading(false);
       notification.error({
         message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
-      })
+      });
     }
   };
 
- 
   return (
     <StyledHomePage>
       <Breadcrumb style={{ margin: '16px 0' }}>
@@ -197,7 +191,6 @@ const CarList = () => {
             <Input />
           </Form.Item>
 
-          
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Tìm kiếm
@@ -205,7 +198,7 @@ const CarList = () => {
           </Form.Item>
         </Form>
         <Table columns={columns} dataSource={dataDisplay} />
-        <LoadingScreenCustom isLoading ={isLoading} />
+        <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledHomePage>
   );

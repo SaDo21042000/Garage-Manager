@@ -1,19 +1,21 @@
 /* eslint-disable no-template-curly-in-string */
 
-import React, { useState, useEffect} from 'react';
-import styled from 'styled-components';
+import { DownloadOutlined } from '@ant-design/icons';
 import {
-  Layout as AntLayout,
   Breadcrumb,
-  Typography,
-  Form,
-  InputNumber,
   Button,
   Divider,
+  Form,
+  InputNumber,
+  Layout as AntLayout,
+  notification,
   Table,
+  Typography,
 } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { LoadingScreenCustom } from '../../Components';
 
 const { Title, Text } = Typography;
 
@@ -65,17 +67,14 @@ const StyledSaleReportPage = styled(AntLayout)`
 `;
 
 const DATE = new Date();
-const MONTH = DATE.getMonth()+1;
+const MONTH = DATE.getMonth() + 1;
 const YEAR = DATE.getFullYear();
 
 const SaleReportPage = () => {
   const [showReportResult, setShowReportResult] = useState(false);
-  const [dateData, setDateData] = useState({ month: '', year: '' });
+  const [dateData, setDateData] = useState({ month: MONTH, year: YEAR });
   const [dataSource, setDataSource] = useState([]);
-
-  useEffect(()=>{
-
-  })
+  const [isLoading, setIsLoading] = useState(false);
 
   const columns = [
     {
@@ -114,7 +113,7 @@ const SaleReportPage = () => {
       number: '${label} không phải là số hợp lệ!',
     },
     number: {
-      min: "'${label}' không thể nhỏ hơn ${min}",
+      min: '${label} không thể nhỏ hơn ${min}',
       max: "'${label}' không thể lớn hơn ${max}",
       range: '${label} phải ở giữa ${min} và ${max}',
     },
@@ -123,21 +122,36 @@ const SaleReportPage = () => {
   const onFinishCreateTable = async (values) => {
     const { month, year } = values;
     setDateData({ ...dateData, month: month, year: year });
+    console.log(dateData);
 
     try {
+      setIsLoading(true);
       const dataId = await axios.get(
         `http://localhost:5000/api/doanhsos?month=${month}&year=${year}`,
       );
-      const dataRaw = await axios.get(
-        `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${dataId.data[0]._id}`,
-      );
-      const { data } = dataRaw;
-      setDataSource(data);
+
+      if (dataId.data.length === 0) {
+        setIsLoading(false);
+        setShowReportResult(false);
+
+        notification.warning({
+          message: 'Thông tin không hợp lệ. Không có báo cáo trong thời gian bạn nhập',
+        });
+      } else {
+        notification.success({
+          message: 'Lấy danh sách báo cáo thành công',
+        });
+        const dataRaw = await axios.get(
+          `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${dataId.data[0]._id}`,
+        );
+        const { data } = dataRaw;
+        setDataSource(data);
+        setShowReportResult(true);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.error('Error: ', error.message);
     }
-
-    setShowReportResult(true);
   };
 
   console.log(dataSource);
@@ -239,6 +253,7 @@ const SaleReportPage = () => {
             In báo cáo doanh thu
           </Button>
         </div>
+        <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledSaleReportPage>
   );
