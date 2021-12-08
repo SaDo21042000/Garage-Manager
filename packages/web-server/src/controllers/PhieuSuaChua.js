@@ -63,6 +63,8 @@ const createCTSC = async (req, res) => {
     console.log("CTSC2: ", ctsc);
 
   // cập nhât số lượng sửa trong chi tiết doanh số
+  date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+ today.getDate();
+  today = new Date(date);
   let { maHieuXe } = await Xe.findOne({ bienSo }, { maHieuXe: 1 });
   let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
     {$match: { month: today.getMonth() + 1, year: today.getFullYear()}}]);
@@ -95,7 +97,9 @@ const createCTSC = async (req, res) => {
             await ChiTietDoanhSo.updateOne({ _id: ctds._id }, { soLuongSua: ctds.soLuongSua + 1 });
         }      
     }
-  await Xe.updateOne({bienSo: bienSo}, {tienNo: maXe.tienNo + soLuong*maVT.unitPrice});
+
+  // cập nhật tiền nợ trong xe
+  await Xe.updateOne({ bienSo: bienSo }, { tienNo: maXe.tienNo + soLuong*maVT.unitPrice })
 
   return res.status(201).json({
     statusCode: 201,
@@ -123,7 +127,7 @@ const getAllCTSC = async (req, res) => {
       data = res;
     })
     console.log('data',  data);
-    
+
     return res.status(200).json(data);
 } catch (err) {
     return res.status(500).json({
@@ -157,6 +161,8 @@ const getTienCong = async (req, res) => {
   })
 }
 
+
+
 const getPlate = async (req, res) => {
   const plateFilter = req.query.plateFilter;
   try {
@@ -165,7 +171,7 @@ const getPlate = async (req, res) => {
       data = res;
     })
     console.log('data',  data);
-    
+
     return res.status(200).json(data);
 } catch (err) {
     return res.status(500).json({
@@ -173,7 +179,7 @@ const getPlate = async (req, res) => {
         message: err.message || `Some errors happened when finding accessory`
     });
 }
-  
+
 }
 
 const getPSCByMaPTN = async (req, res) => {
@@ -190,7 +196,6 @@ const getCTSCByMaPSC = async (req, res) => {
     return res.status(200).json(res1);
   })
 }
-
 module.exports = {
   createOne,
   getAllCTSC,

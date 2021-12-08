@@ -152,51 +152,54 @@ const getPTNbyMaXe = async (req, res) => {
 }
 
 const getCarByPlate = async (req, res) => {
-  const bienSo = req.query.bienSo;
-  if(bienSo) {
-        let data = {
-            bienSo,
-            hieuXe: '',
-            tenKhachHang: '',
-            soDT: '',
-            tienNo: 0,
-            _id: ''
-        }
-        await Xe.findOne({ bienSo }).then(async res1 => {
-            await KhachHang.findOne({ _id: res1.maKhachHang }).then(res2 => {
-                data.hieuXe = res1.maHieuXe;
-                data.tenKhachHang = res2.tenKhachHang;
-                data.soDT = res2.soDT;
-                data.tienNo = res1.tienNo,
-                data._id = res1._id
-            })
-        })
+  try{
+    const bienSo = req.query.bienSo;
+    let list = [];
+    let lstXe = await Xe.find();
 
-        return res.status(200).json(data);
+    if(bienSo){
+      lstXe = lstXe.filter(item=>item.bienSo.toLowerCase().indexOf(bienSo.toLowerCase())!==-1)
     }
-    else {
-      let data = {
-        xe: [],
-        khachang: []
-      };
-      let xe = await Xe.find({});
-      console.log("XE: ", xe);
-      for(var i of xe) {
-        let khachhang = await KhachHang.find({ _id: i.maKhachHang });
-        data.xe = xe;
-        data.khachang = khachhang;
+    let lstKhachHang = await KhachHang.find();
+    list=lstKhachHang.map(item=>{
+      let xe= lstXe.find(data=>data.maKhachHang == item._id.toString());
+      if(xe){
+        console.log(xe);
+          return {
+          _id:xe._id.toString(),
+          bienSo:xe.bienSo,
+          hieuXe:xe.maHieuXe,
+          tenKhachHang:item.tenKhachHang,
+          soDT:item.soDT,
+          tienNo:xe.tienNo
+        }
       }
-      return res.status(200).json(data);
-    }
+    })
+    console.log(list.length);
+    list = list.filter(item => item)
+    return res.status(200).json(list);
+  }catch(e){
+    return res.status(500).json({
+      message:'Đã có lỗi xảy ra vui lòng thử lại',
+      error:e
+    });
+  }
+  
     
 }
 
 const deleteXe = async (req, res) => {
-  const maXe = req.body._id;
-  await Xe.deleteOne({ _id: maXe }).then(res1 => {
-    console.log("XE: ", res1);
-  }).catch(err => console.log("ERR xoa xe: ", err));
-  return res.status(200);
+  try{
+    const maXe = req.body._id;
+    await Xe.deleteOne({ _id: maXe })
+    return res.status(200).json({});
+  }catch(e){
+    return res.status(500).json({
+      message:'Đã có lỗi xảy ra vui lòng thử lại',
+      error:e
+    });
+  }
+  
 }
 
 module.exports = {

@@ -4,13 +4,13 @@ import { Layout, Menu } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { HomeOutlined, UserOutlined, FormOutlined, SettingOutlined } from '@ant-design/icons';
+import logo from '../../assets/logocar.png';
 
 const { Sider } = Layout;
 const StyledSider = styled(Sider)`
-  .logo {
+  .logo-car {
     height: 32px;
-    margin: 16px;
-    background: rgba(255, 255, 255, 0.3);
+    margin: 20px;
   }
 `;
 const { SubMenu } = Menu;
@@ -25,7 +25,9 @@ const Sidebar = () => {
 
   return (
     <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <div className="logo" />
+      <div class="logo-car">
+        <img src={logo} alt="LOGO" width="100px"/>
+      </div>
       <Menu
         theme="dark"
         defaultSelectedKeys={[location.pathname]}
