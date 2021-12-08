@@ -1,5 +1,4 @@
 import axios from 'axios';
-console.log(process.env.REACT_APP_API_URL);
 var axiosClient = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   // `withCredentials` chỉ định có thực hiện các request cross-site Access-Control sử dụng credential hay không

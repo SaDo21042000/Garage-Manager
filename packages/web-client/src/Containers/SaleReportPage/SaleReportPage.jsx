@@ -122,7 +122,6 @@ const SaleReportPage = () => {
   const onFinishCreateTable = async (values) => {
     const { month, year } = values;
     setDateData({ ...dateData, month: month, year: year });
-    console.log(dateData);
 
     try {
       setIsLoading(true);
@@ -135,17 +134,23 @@ const SaleReportPage = () => {
         setShowReportResult(false);
 
         notification.warning({
-          message: 'Thông tin không hợp lệ. Không có báo cáo trong thời gian bạn nhập',
+          message: 'Thông tin nhập không hợp lệ. Không có báo cáo trong thời gian trên',
         });
       } else {
         notification.success({
           message: 'Lấy danh sách báo cáo thành công',
         });
+
         const dataRaw = await axios.get(
           `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${dataId.data[0]._id}`,
         );
         const { data } = dataRaw;
-        setDataSource(data);
+        const total = data.reduce((a, b) => a + b.tongTien, 0);
+        const finalData = data.map((i) => ({
+          ...i,
+          tiLe: `${Number(i.tongTien / total).toFixed(2) * 100}%`,
+        }));
+        setDataSource(finalData);
         setShowReportResult(true);
         setIsLoading(false);
       }
@@ -153,8 +158,6 @@ const SaleReportPage = () => {
       console.error('Error: ', error.message);
     }
   };
-
-  console.log(dataSource);
 
   const onFinishFailedCreateTable = (errorInfo) => {
     console.log('Failed:', errorInfo);
