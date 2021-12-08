@@ -76,7 +76,7 @@ exports.create = async (formInput) => {
       await newCtds.save();
     } else {
       await ChiTietDoanhSo.updateOne(
-        { maDoanhSo: ds[0]._id },
+        { _id: ctds._id },
         { tongTien: ctds.tongTien + formInput.soTienThu }
       );
     }
