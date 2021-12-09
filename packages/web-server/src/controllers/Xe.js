@@ -1,4 +1,5 @@
 const { Xe, KhachHang } = require('../models');
+const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua, Wage, Accessory } = require('../models');
 
 const XeService = require('../services/Xe');
 
@@ -18,26 +19,47 @@ const find = async (_, res) => {
 
 const getCarByPlate = async (req, res) => {
     const bienSo = req.query.bienSo;
-    // if(bienSo) {
-    //     let data = {
-    //         bienSo,
-    //         hieuXe: '',
-    //         tenKhachHang: '',
-    //         soDT: '',
-    //         tienNo: 0
-    //     }
-    //     await Xe.findOne({ bienSo }).then(async res1 => {
-    //         await KhachHang.findOne({ _id: res1.maKhachHang }).then(res2 => {
-    //             data.hieuXe = res1.maHieuXe;
-    //             data.tenKhachHang = res2.tenKhachHang;
-    //             data.dienThoai = res2.soDT;
-    //             data.tienNo = res1.tienNo
-    //         })
-    //     })
-    // }
+}
+ 
+const getListCTSCByMaXe = async (req,res) =>{
+    console.log('có');
+    try{
+        const maXe =req.query.maXe;
+        //1 xe chỉ có 1 phieu tiep nhan
+        const objPhieuTiepNhan = await phieuTiepNhan.findOne({maXe:maXe});
+        if(!objPhieuTiepNhan ) return res.status(404).json({
+            statusCode: 404,
+            message: err.message || `Xe này chưa lập phiếu tiếp nhận`
+        })
+        //1 xe chỉ có 1 phieu tiep nhan
+        const objPhieuSuaChua = await phieuSuaChua.findOne({maPTN:objPhieuTiepNhan._id.toString()}) 
+        if(!objPhieuSuaChua ) return res.status(404).json({
+            statusCode: 404,
+            message: err.message || `Xe này chưa lập phiếu sửa chữa`
+        })
+        const listPhieuCTSC = await ChiTietSuaChua.find({maPSC:objPhieuSuaChua._id.toSTring()});
+        let lstVatTu = await Accessory.find();
+        let lstTienCong = await Wage.find();
+        let list = listPhieuCTSC.map(item=>{
+            let vatTu = lstVatTu.find(data=>data._id.toString()==item.maVaTu);
+            let tienCong =lstTienCong.find(data=>data._id.toString()==item.maTienCong);
+            return {
+                noiDung: item.noiDung,
+                maVaTu: vatTu.name,
+                price: vatTu.unitPrice,
+                wage: tienCong.name,
+                soLuong: item.soLuong,
+                thanhTien: item.thanhTien,
+            }
+        })
+        return res.status(200).json(list);
+    }catch(e){
+        return res.status(500).json({
+            statusCode: 500,
+            message: err.message || `Đã có lỗi xảy ra`
+        });
+    }
     
-    // console.log("DATA: ", data);
-    // return res.status(200).json(data);
 }
 
 module.exports = {
@@ -46,5 +68,6 @@ module.exports = {
     create,
     update,
     deleteOne,
-    getCarByPlate
+    getCarByPlate,
+    getListCTSCByMaXe
 }

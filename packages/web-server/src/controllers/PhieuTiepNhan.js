@@ -4,71 +4,74 @@ const { KhachHang } = require('../models');
 const { generateID } = require('../helpers/generateID');
 
 const createOne = async (req, res) => {
-  console.log("BODY: ", req.body);
-  const { tenChuXe, diaChi, email, dienThoai } = req.body;
-  const { bienSo, maHieuXe } = req.body;
-  let maKH, maXe; 
+  try{
+    console.log("BODY: ", req.body);
+    const { tenChuXe, diaChi, email, dienThoai } = req.body;
+    const { bienSo, maHieuXe } = req.body;
+    var today = new Date();
+    var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+    let xe = await Xe .findOne({bienSo:bienSo});
+    console.log('xe',xe);
+    if(xe){
+      let phieuTiepNhan = await PhieuTiepNhan.findOne({maXe:xe._id.toString(),isDeleted:0})
+      console.log('phieu',phieuTiepNhan);
+      if(!phieuTiepNhan){
+        console.log('có')
+        let newPhieuTiepNhan = new PhieuTiepNhan({
+          maXe: xe._id.toString(),
+          ngayTN: date,
+          isDeleted:0
+        })
+        await newPhieuTiepNhan.save()
+        return res.status(200).json({
+          status:0,
+          message:'Lập phiếu tiếp nhận thành công'
+        })
+      }else{
+        return res.status(200).json({
+          status:1,
+          message:'Xe này đã lập phiếu tiếp nhận. Vui lòng kiểm tra lại'
+        })
+      }
+       
+    }else{
+      let newUser =  new KhachHang({
+        tenKhachHang: tenChuXe,
+        diaChi,
+        email,
+        soDT: dienThoai
+      })
+      let user = await newUser.save();
+      // Tao mot Xe moi
+      let newXe = new Xe({
+        maKhachHang: user._id,
+        bienSo,
+        tienNo: 0,
+        trangThai: 0,
+        maHieuXe,
+      })
+      let xe = await newXe.save()
+      let newPhieuTiepNhan = new PhieuTiepNhan({
+        maXe: xe._id.toString(),
+        ngayTN: date,
+        isDeleted:0
+      })
+      await newPhieuTiepNhan.save()
+      return res.status(200).json({
+        status:0,
+        message:'Lập phiếu tiếp nhận thành công',
+        isDeleted:0
+      })
+    }
 
-  var today = new Date();
-  var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
-
-  //Kiem tra xe thong tin khach hang da duoc dien vao database chua?
-  let user = await KhachHang.findOne({ email });
-
-  console.log("USER: ", user);
-  if(!user) {
-    let newUser =  new KhachHang({
-      tenKhachHang: tenChuXe,
-      diaChi,
-      email,
-      soDT: dienThoai
-    })
-    await newUser.save()
-    .then(res => {
-      console.log("Tạo khách hàng mới (nếu như chưa tồn tại) từ PTN: ", res)
-      maKH = res;
+  }
+  catch(e){
+    return res.status(500).json({
+      message:'Đã có lỗi xảy ra vui lòng thử lại',
+      error:e
     });
   }
-  else {
-    await KhachHang.findOne({ email }).then(res => {
-      maKH = res;
-      console.log("RES: ", res);
-    })
-  }
-
-  // Tao mot Xe moi
-  let newXe = new Xe({
-    maKhachHang: maKH._id,
-    bienSo,
-    tienNo: 0,
-    trangThai: 0,
-    maHieuXe,
-  })
-  await newXe.save()
-    .then(res => {
-      console.log("Lưu vào bảng Xe từ PhieuTiepNhan: ", res);
-      maXe = res;
-    })
-
-  // Cuoi cung la tao PhieuTiepNhan
-  let newPhieuTiepNhan = new PhieuTiepNhan({
-    maXe: maXe._id,
-    ngayTN: date
-  })
-  try {
-    await newPhieuTiepNhan.save()
-    .then(res => {
-     console.log("Them PTN Thanh cong: ", res)
-    })
-  }
-  catch (err) {
-    console.log("Loi them PTN: ", err)
-  }
-
-  res.status(201).json({
-    statusCode: 201,
-    message: 'Create new PTN successfully'
-})
+  
 }
 
 const xoaXeSua = async (req, res) => {
@@ -85,28 +88,6 @@ const xoaXeSua = async (req, res) => {
 }
 
 const getPhieuTiepNhan = async (req, res) => {
-
-  // await PhieuTiepNhan.find({}).then(res => {
-  //   console.log('PTN: ', res);
-  // })
-  // await Xe.find({}).then(res => {
-  //   console.log('Xe: ', res);
-  // })
-  
-  // await KhachHang.find({}).then(res => {
-  //   console.log('KH: ', res);
-  // })
-  // await PhieuSuaChua.find({}).then(res => {
-  //   console.log('PSC: ', res);
-  // })
-  // await ChiTietSuaChua.find({}).then(res => {
-  //   console.log('CTSC: ', res);
-  // })
-  // await KhachHang.remove({});
-  // await Xe.remove({});
-  // await PhieuTiepNhan.remove({});
-  // await PhieuSuaChua.remove({});
-  // await ChiTietSuaChua.remove({});
 
   let data = {
     xe: [],
@@ -151,6 +132,7 @@ const getPTNbyMaXe = async (req, res) => {
   })
 }
 
+
 const getCarByPlate = async (req, res) => {
   try{
     const bienSo = req.query.bienSo;
@@ -175,7 +157,39 @@ const getCarByPlate = async (req, res) => {
         }
       }
     })
-    console.log(list.length);
+    list = list.filter(item => item)
+    return res.status(200).json(list);
+  }catch(e){
+    return res.status(500).json({
+      message:'Đã có lỗi xảy ra vui lòng thử lại',
+      error:e
+    });
+  }
+}
+
+const getCarToday = async (req, res) => {
+  try{
+    var today = new Date();
+    let date = today.getDate();
+    let month = today.getMonth()+1;
+    let year = today.getFullYear();
+    let stringDate =date+'-'+month+'-'+year;
+    let listPTN = await PhieuTiepNhan.find({ngayTN:stringDate, isDeleted:0});
+    let lstXe = await Xe.find();
+    let lstKhachHang = await KhachHang.find();
+    let list=listPTN.map(item=>{
+      let xe= lstXe.find(data=>data._id.toString() == item.maXe);
+      if(xe){
+        let khachHang = lstKhachHang.find(data=>data._id.toString() == xe.maKhachHang);
+          return {
+          _id:item._id.toString(),
+          bienSo:xe.bienSo,
+          hieuXe:xe.maHieuXe,
+          tenKhachHang:khachHang.tenKhachHang,
+          soDT:khachHang.soDT,
+        }
+      }
+    })
     list = list.filter(item => item)
     return res.status(200).json(list);
   }catch(e){
@@ -186,7 +200,37 @@ const getCarByPlate = async (req, res) => {
   }
   
     
+
 }
+
+const getListXe = async (req, res) => {
+  try{
+    let xe = await Xe.find();
+    let phieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0});
+    console.log('xe',xe)
+    console.log('phieuTiepNhan',phieuTiepNhan)
+    let list = phieuTiepNhan.map(item=>{
+      let objXe = xe.find(data=>data._id.toString()==item.maXe);
+      if(objXe){
+        return {
+          _id:objXe._id,
+          bienSo:objXe.bienSo
+        }
+      }
+      
+    })
+    list = list.filter(item => item)
+    return res.status(200).json(list);
+  }catch(e){
+    console.log(e)
+    return res.status(500).json({
+      message:'Đã có lỗi xảy ra vui lòng thử lại',
+      error:e
+    });
+  }
+  
+}
+
 
 const deleteXe = async (req, res) => {
   try{
@@ -202,11 +246,29 @@ const deleteXe = async (req, res) => {
   
 }
 
+const deletePTNbyPTN = async (req, res) => {
+  try{
+    const maPTN = req.body.maPTN;
+    console.log('body', req.body)
+    console.log('maPTN', maPTN);
+    await PhieuTiepNhan.update({ _id: maPTN }, {isDeleted:1})
+    return res.status(200).json({});
+  }catch(e){
+    return res.status(500).json({
+      message:'Đã có lỗi xảy ra vui lòng thử lại',
+      error:e
+    });
+  }
+  
+}
 module.exports = {
   createOne,
   getPhieuTiepNhan,
   xoaXeSua,
   getPTNbyMaXe,
   getCarByPlate,
-  deleteXe
+  deleteXe,
+  getCarToday,
+  deletePTNbyPTN,
+  getListXe
 }

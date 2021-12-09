@@ -1,9 +1,10 @@
-const { PhieuThuTien, Xe, DoanhSo, ChiTietDoanhSo } = require('../models');
+const { PhieuThuTien, Xe, DoanhSo, ChiTietDoanhSo, PhieuTiepNhan, PhieuSuaChua } = require('../models');
 
 /* `````````````````````````````````` */
 // Put your custom services code below this line
 exports.create = async (formInput) => {
-  let date = new Date(formInput.ngayTT);
+  try{
+    let date = new Date(formInput.ngayTT);
 
   let xe = await Xe.findOne(
     { bienSo: formInput.bienSo },
@@ -27,7 +28,13 @@ exports.create = async (formInput) => {
     { tienNo: xe.tienNo - formInput.soTienThu }
   );
 
-  await newPTT.save();
+  let ptt = await newPTT.save();
+   
+  let objPhieuTiepNhan = await PhieuTiepNhan.findOne({maXe:xe._id.toString(),isDeleted:0});
+  let objPhieuSuaChua = await PhieuSuaChua.findOne({maPTN:objPhieuTiepNhan._id.toString(),isDeleted:0});
+ 
+  await PhieuTiepNhan.update({_id:objPhieuTiepNhan._id.toString(),isDeleted:0},{isDeleted:1,maPhieuThuTien:ptt._id.toString()});
+  await PhieuSuaChua.update({_id:objPhieuSuaChua._id.toString(),isDeleted:0},{isDeleted:1,maPhieuThuTien:ptt._id.toString()});
 
   let ds = await DoanhSo.aggregate([
     {
@@ -83,6 +90,11 @@ exports.create = async (formInput) => {
   }
 
   return newPTT;
+  }
+  catch(e){
+    console.log(e);
+  }
+  
 };
 
 exports.find = () => {

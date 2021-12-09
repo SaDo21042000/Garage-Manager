@@ -39,21 +39,21 @@ const Sidebar = () => {
           <Link to="/"></Link>
         </Menu.Item>
         <SubMenu key="car-management" icon={<FormOutlined />} title="Quản Lý Xe">
-          <Menu.Item key="/cart-list">
-            <Link to="/car-list">Danh sách xe</Link>
-          </Menu.Item>
           <Menu.Item key="/car-reception">
             <Link to="/car-reception">Tiếp Nhận Xe Sửa</Link>
           </Menu.Item>
+          <Menu.Item key="/cart-list">
+            <Link to="/car-list">Danh sách xe</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="AccessaryManagement" icon={<FormOutlined />} title="Quản lý phụ tùng">
-          <Menu.Item key="/import-accessary">
-            <span>Nhập vật tư phụ tùng</span>
-            <Link to="/import-accessary"></Link>
-          </Menu.Item>
           <Menu.Item key="/list-accessary">
             <span>Danh sách phụ tùng</span>
             <Link to="/list-accessary"></Link>
+          </Menu.Item>
+          <Menu.Item key="/import-accessary">
+            <span>Nhập vật tư phụ tùng</span>
+            <Link to="/import-accessary"></Link>
           </Menu.Item>
           <Menu.Item key="/wage-list">
             <span>Danh sách tiền công</span>

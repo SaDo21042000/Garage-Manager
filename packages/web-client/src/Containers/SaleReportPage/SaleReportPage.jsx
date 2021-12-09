@@ -13,7 +13,7 @@ import {
   Typography,
 } from 'antd';
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { LoadingScreenCustom } from '../../Components';
 
@@ -119,10 +119,14 @@ const SaleReportPage = () => {
     },
   };
 
-  const onFinishCreateTable = async (values) => {
-    const { month, year } = values;
-    setDateData({ ...dateData, month: month, year: year });
+  useEffect(()=>{
+    const DATE = new Date();
+    const MONTH = DATE.getMonth() + 1;
+    const YEAR = DATE.getFullYear();
+    onGetDataFromDB(MONTH,YEAR );
+  },[])
 
+  const onGetDataFromDB = async (month,year) =>{
     try {
       setIsLoading(true);
       const dataId = await axios.get(
@@ -155,8 +159,17 @@ const SaleReportPage = () => {
         setIsLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       console.error('Error: ', error.message);
     }
+  }
+
+  const onFinishCreateTable = async (values) => {
+    const { month, year } = values;
+    setDateData({ ...dateData, month: month, year: year });
+    onGetDataFromDB(month,year);
+
+    
   };
 
   const onFinishFailedCreateTable = (errorInfo) => {

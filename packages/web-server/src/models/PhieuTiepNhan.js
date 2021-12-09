@@ -12,6 +12,12 @@ exports.initPhieuTiepNhan = function(mongoose) {
                 type:String,
                 require: true
             },
+            isDeleted:{
+                type:Number
+            },
+            maPhieuThuTien:{
+                type:String
+            }
         })
     
         const PhieuTiepNhan = mongoose.model('phieutiepnhans', PhieuTiepNhanSchema);

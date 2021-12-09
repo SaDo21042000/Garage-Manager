@@ -70,31 +70,26 @@ const CarList = () => {
       title: 'Biển Số',
       dataIndex: 'bienSo',
       key: 'bienSo',
-      width: 120,
     },
     {
       title: 'Hiệu Xe',
       dataIndex: 'hieuXe',
       key: 'hieuXe',
-      width: 120,
     },
     {
       title: 'Chủ Xe',
       dataIndex: 'tenKhachHang',
       key: 'tenKhachHang',
-      width: 250,
     },
     {
       title: 'Phone',
       dataIndex: 'soDT',
       key: 'soDT',
-      width: 160,
     },
     {
       title: 'Tiền Nợ',
       dataIndex: 'tienNo',
       key: 'tienNo',
-      width: 140,
     },
     {
       title: 'Action',

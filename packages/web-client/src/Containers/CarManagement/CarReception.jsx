@@ -10,17 +10,19 @@ import {
   Button,
   Table,
   Popconfirm,
-  message,
-  DatePicker,
+  Select
 } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {LoadingScreenCustom } from './../../Components'
 import axiosClient from '../../Configs/Axios'
 
 const { Title } = Typography;
+const { Option} = Select;
 
 const StyledCarReception = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
+    position:relative
   }
 
   .main-title {
@@ -40,52 +42,47 @@ const StyledCarReception = styled(AntLayout)`
 const CarReception = () => {
 
   const [dataSource, setDataSource] = useState([]);
+  const [isLoading, setIsLoading] =useState(false);
+  const [dataHieuXe, setDataHieuXe] = useState([]);
 
   useEffect(() => {
-    const getAPI = async () => {
-      let data = [];
-      let finalData = [];
-
-      await axiosClient.get('/phieutiepnhan/getPhieuTiepNhan')
-        .then(res => {
-          console.log(res);
-          // Tien xu ly nhung du lieu au
-          // for(var i in res['khachang']) {
-          //   if(res['khachang'][i][0]){
-          //     for(var j in res['xe']) {
-          //       if(res['khachang'][i][0]._id == res['xe'][j]._id)
-          //         data.push({
-          //           khachang: res['khachang'][i][0],
-          //           xe: res['xe'][j]
-          //         })
-          //     }
-          //   }   
-          // }
-          for(var i in res['khachang']) {
-            data.push({
-              khachang: res['khachang'][i][0],
-              xe: res['xe'][i]
-            })
-          }
-        })
-
-      for(var i in data) {
-        var child = {
-          plate: data[i].xe.bienSo,
-          carName: data[i].xe.maHieuXe,
-          name: data[i].khachang.tenKhachHang,
-          phone: data[i].khachang.soDT,
-          number: data.length - i,
-          key: i
-        }
-        finalData.push(child);
-      }
-      setDataSource(finalData.reverse());
-      console.log(finalData)
-    }
-    getAPI();
+    
+    getListPTNInDB();
+    getHieuXe();
 
   }, []);
+
+  const getHieuXe = async ()=>{
+    try{
+      setIsLoading(true);
+      let data = await axiosClient.post('/hieuxes/get');
+      setDataHieuXe(data.object.listHieuXe);
+      setIsLoading(false);
+    }catch(e){
+      setIsLoading(false);
+    }
+    
+  }
+
+  const getListPTNInDB= async () =>{
+    try{
+      setIsLoading(true);
+      let data = await axiosClient.get("phieutiepnhan/getListCarInToday");
+      console.log(data);
+      data= data.map((item,index)=>{
+        return { 
+          ...item,
+          key:index,
+          index:index
+        }
+      })
+      setDataSource(data);
+      setIsLoading(false);
+    }catch(e){
+      setIsLoading(false);
+      console.log('đã có lỗi xảy ra')
+    }
+  }
 
 
   const layout = {
@@ -114,38 +111,37 @@ const CarReception = () => {
     {
       title: '#',
       dataIndex: 'number',
-      key: 'number',
+      key: 'index',
     },
     {
       title: 'Biển Số',
-      dataIndex: 'plate',
-      key: 'plate',
+      dataIndex: 'bienSo',
+      key: 'bienSo',
     },
     {
       title: 'Hiệu Xe',
-      dataIndex: 'carName',
-      key: 'carName',
+      dataIndex: 'hieuXe',
+      key: 'hieuXe',
     },
     {
       title: 'Chủ Xe',
-      dataIndex: 'name',
+      dataIndex: 'tenKhachHang',
       key: 'name',
     },
     {
       title: 'Phone',
-      dataIndex: 'phone',
+      dataIndex: 'soDT',
       key: 'phone',
     },
     {
       title: 'Action',
       dataIndex: 'action',
-      render: (v, index) => (
+      render: (v, item) => (
         <>
-          <Button className="btn" icon={<EditOutlined />} />
           <Popconfirm
             placement="top"
             title="Are you sure to delete this customer?"
-            onConfirm={() => handleDelete(index.number)}
+            onConfirm={() => handleDelete(item)}
             okText="Yes"
             cancelText="No"
           >
@@ -156,44 +152,40 @@ const CarReception = () => {
     },
   ];
 
-  const handleDelete = async (number) => {
-   
-    setDataSource(dataSource.filter((item) => item.number !== number));
-    message.info('Clicked on Yes.');
-
-    await axiosClient.post("/phieutiepnhan/xoaXeSua", dataSource[number-1]);
-
-    console.log(number);
-  
+  const handleDelete = async (PTN) => {
+    try{
+      setIsLoading(true);
+      await axiosClient.post("/phieutiepnhan/deletePTNByMaPTN", {maPTN:PTN._id});
+      await getListPTNInDB();
+      setIsLoading(false);
+    }catch(e){
+      console.log(e);
+      setIsLoading(false);
+    }
+    
 
   };
 
   const onFinishAddItem = async (values) => {
-
-    const newData = {
-      maHieuXe: values.carName,
-      bienSo: values.plate,
-      tenChuXe: values.name,
-      dienThoai: values.phone,
-      email: values.email,
-      diaChi: values.address,
-    };
-
-    await axiosClient.post('/phieutiepnhan/createOne', newData);
-    // CCap nhat lai index trong dataSourcce
-
-    for(var i in dataSource) {
-      dataSource[i].number+=1;
+    try{
+      setIsLoading(true);
+      const newData = {
+        maHieuXe: values.carName,
+        bienSo: values.plate,
+        tenChuXe: values.name,
+        dienThoai: values.phone,
+        email: values.email,
+        diaChi: values.address,
+      };
+  
+      await axiosClient.post('/phieutiepnhan/createOne', newData);
+      // CCap nhat lai index trong dataSourcce
+      await getListPTNInDB();
+      setIsLoading(false);
+    }catch(e){
+      setIsLoading(false);
     }
     
-    setDataSource( [{
-      plate: values.plate,
-      carName: values.carName,
-      name: values.name,
-      phone:  values.phone,
-      number: 1,
-      key: dataSource.length
-    } ,...dataSource]);
   };
 
   return (
@@ -233,7 +225,24 @@ const CarReception = () => {
               },
             ]}
           >
-            <Input />
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              filterSort={(optionA, optionB) =>
+                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+              }
+            >
+              {dataHieuXe.map((item, id) => {
+                return (
+                  <Option key={id} value={item.maHieuXe}>
+                    {item.tenHieuXe}
+                  </Option>
+                );
+              })}
+            </Select>
           </Form.Item>
           <Form.Item
             name="name"
@@ -279,17 +288,6 @@ const CarReception = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            name="date"
-            label="Ngày Tiếp Nhận"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <DatePicker style={{ width: '100%' }} />
-          </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
             <Button type="primary" htmlType="submit">
               Xác nhận
@@ -304,8 +302,8 @@ const CarReception = () => {
           className="result-table"
           columns={columns}
           dataSource={dataSource}
-          pagination={false}
         />
+        <LoadingScreenCustom isLoading ={isLoading} />
       </div>
     </StyledCarReception>
   );

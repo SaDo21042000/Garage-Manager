@@ -21,8 +21,9 @@ const { Content } = AntLayout;
 const { Title } = Typography;
 
 const StyledAccessaryList = styled(AntLayout)`
-  .site-layout-background {n
+  .site-layout-background {
     background: #fff;
+    position:relative;
   }
 
   .main-title {

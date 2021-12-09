@@ -327,7 +327,7 @@ const WageList = () => {
               <Table
                 columns={columns}
                 dataSource={dataListWage}
-                pagination={{ pageSize: 50 }}
+                pagination={true}
                 scroll={{ y: 240 }}
                 style={{ fontSize: 16 }}
               />

@@ -12,7 +12,7 @@ const { Title, Text } = Typography;
 
 
 const StyledImportAccessary = styled(AntLayout)`
-  .site-layout-background {n
+  .site-layout-background {
     background: #fff;
     position:relative;
   }

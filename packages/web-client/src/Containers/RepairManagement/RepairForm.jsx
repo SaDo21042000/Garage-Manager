@@ -11,6 +11,7 @@ import {
   Select,
   Table,
   Typography,
+  notification
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -145,7 +146,7 @@ const RepairForm = () => {
   const getInitData = async () => {
     try {
       setIsLoading(true);
-      let listBS = await axiosClient.get('/xes/');
+      let listBS = await axiosClient.get('/phieutiepnhan/getListXe');
       setDataBienSo(listBS);
 
       // Lat tat ca cac loai vat tu co trong database
@@ -165,7 +166,8 @@ const RepairForm = () => {
     console.log(ctsc);
     try {
       setIsLoading(true);
-      await axiosClient.post('/phieusuachua/xoaPSC', { _id: ctsc._id });
+      console.log('ctsc',ctsc);
+      await axiosClient.post('/phieusuachua/xoaCTSC', { _id: ctsc._id });
       await changeDataTable(initMaXe);
       setIsLoading(false);
     } catch (err) {
@@ -178,46 +180,51 @@ const RepairForm = () => {
     await changeDataTable(maXe);
   };
   const changeDataTable = async (maXe) => {
+    console.log(maXe);
     try {
       setIsLoading(true);
-      const lstPhieuTiepNhan = await axiosClient.get(`/phieutiepnhan/getPTNbyMaXe?maXe=${maXe}`);
-      //1 xe chỉ có 1 phieu tiep nhan
-      const phieuTiepNhan = lstPhieuTiepNhan[0];
-      const listPhieuSuaChua = await axiosClient.get(
-        `/phieusuachua/getPSCByMaPTN?maPTN=${phieuTiepNhan._id}`,
-      );
-      if (listPhieuSuaChua.length === 0) {
-        setIsExistPSC(false);
-        setDataSource([]);
-      } else {
-        let phieuSuaChua = listPhieuSuaChua[0];
-        let listPhieuCTSC = await axiosClient.get(
-          `/phieusuachua/getCTSCByMaPSC?maPSC=${phieuSuaChua._id}`,
-        );
-        listPhieuCTSC = await Promise.all(
-          listPhieuCTSC.map(async (item, index) => {
-            let vatTu = await axiosClient.get(`phieusuachua/getVatTu?maVatTu=${item.maVaTu}`);
-            let tienCong = await axiosClient.get(
-              `phieusuachua/getTienCong?maTienCong=${item.maTienCong}`,
-            );
-
-            return {
-              noiDung: item.noiDung,
-              maVaTu: vatTu.name,
-              price: vatTu.unitPrice,
-              wage: tienCong.name,
-              soLuong: item.soLuong,
-              thanhTien: item.thanhTien,
-              key: index + 1,
-            };
-          }),
-        );
-        setDataSource(listPhieuCTSC);
-        setIsExistPSC(true);
-        setMaPSC(phieuSuaChua._id);
+      let data = await axiosClient.get(`/phieusuachua/getListCTSCByMaXe?maXe=${maXe}`);
+      console.log('123',data);
+      if(data.status===0){
+        let maPSC = data.maPSC;
+        let listPhieuCTSC = data.listPhieuCTSC;
+        listPhieuCTSC = listPhieuCTSC.map((item, index)=>{
+        maPSC = item.maPSC;
+        return {
+          ...item,
+          key:index+1,
+          index:index+1
+        }
+      })
+      setDataSource(listPhieuCTSC);
+      setIsExistPSC(true);
+      console.log('ma',maPSC)
+      setMaPSC(maPSC);
+      
       }
-      setIsLoading(false);
+      //chwua lập phiếu tiếp nhận
+      if(data.status===1){
+        setDataSource([]);
+        setIsExistPSC(false);
+        notification.info({
+          message: data.message,
+      });
+        setMaPSC('');
+        setIsExistPSC(false);
+      }
+      //chwua lập phiếu sửa chữa
+      if(data.status===2){
+        setDataSource([]);
+          notification.info({
+            message: data.message,
+        });
+        setIsExistPSC(false);
+        setMaPSC('');
+      }
+    setIsLoading(false);  
     } catch (e) {
+      setDataSource([]);
+      setIsExistPSC(false);
       setIsLoading(false);
     }
   };
@@ -235,6 +242,7 @@ const RepairForm = () => {
     try {
       setIsLoading(true);
       let id = maPSC;
+      console.log('id', maPSC)
       if (!isExistPSC) {
         let params = {
           bienSo: values.bienSo,
@@ -438,7 +446,7 @@ const RepairForm = () => {
           className="result-table"
           columns={columns}
           dataSource={dataSource}
-          pagination={false}
+          pagination={{pageSize:5}}
         />
         <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">
           In phiếu sửa chữa
