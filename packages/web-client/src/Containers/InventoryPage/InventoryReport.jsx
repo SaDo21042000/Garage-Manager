@@ -106,7 +106,7 @@ const InventoryReport = () => {
         className="site-layout-background"
         style={{ padding: 24, minHeight: 360, position: 'relative' }}
       >
-        <Title className="main-title" level={2}>
+        <Title data-testid="header" className="main-title" level={2}>
           Báo cáo tồn
         </Title>
         <Form
@@ -133,7 +133,7 @@ const InventoryReport = () => {
               },
             ]}
           >
-            <InputNumber style={{ width: '100%' }} />
+            <InputNumber aria-label='month-input' style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
             label="Năm"
@@ -149,7 +149,7 @@ const InventoryReport = () => {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button aria-label='btn' type="primary" htmlType="submit">
               Xem báo cáo
             </Button>
           </Form.Item>

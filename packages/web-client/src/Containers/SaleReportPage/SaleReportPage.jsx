@@ -196,7 +196,7 @@ const SaleReportPage = () => {
       </Breadcrumb>
 
       <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-        <Title className="main-title" level={2}>
+        <Title data-testid="header" className="main-title" level={2}>
           Báo cáo doanh thu tháng
         </Title>
 
@@ -226,7 +226,7 @@ const SaleReportPage = () => {
               },
             ]}
           >
-            <InputNumber style={{ width: '100%' }} />
+            <InputNumber aria-label='month-input' style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item
@@ -244,7 +244,7 @@ const SaleReportPage = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button data-testid="btn" type="primary" htmlType="submit">
               Xem báo cáo doanh thu
             </Button>
           </Form.Item>
@@ -261,6 +261,7 @@ const SaleReportPage = () => {
             pagination={false}
           />
           <Button
+          data-testid="btnBC"
             className="button-finish"
             icon={<DownloadOutlined />}
             type="primary"

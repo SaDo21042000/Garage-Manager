@@ -210,7 +210,7 @@ const CarReception = () => {
         <Breadcrumb.Item>Tiếp nhận xe sửa</Breadcrumb.Item>
       </Breadcrumb>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-        <Title className="main-title" level={2}>
+        <Title data-testid="header" className="main-title" level={2}>
           Form tiếp nhận xe sửa
         </Title>
 
@@ -229,7 +229,7 @@ const CarReception = () => {
               },
             ]}
           >
-            <Input />
+            <Input aria-label='plate-input'/>
           </Form.Item>
           <Form.Item
             name="carName"
@@ -290,7 +290,7 @@ const CarReception = () => {
               },
             ]}
           >
-            <Input />
+            <Input aria-label='email-input'/>
           </Form.Item>
           <Form.Item
             name="address"

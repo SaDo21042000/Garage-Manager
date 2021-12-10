@@ -167,7 +167,7 @@ const CarList = () => {
         <Breadcrumb.Item>Danh sách Xe</Breadcrumb.Item>
       </Breadcrumb>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
-        <Title className="main-title" level={2}>
+        <Title data-testid="header" className="main-title" level={2}>
           Danh sách xe
         </Title>
         <Form
@@ -183,6 +183,7 @@ const CarList = () => {
         >
           <Form.Item label="Biển Số" name="plate" style={{ width: '300px' }}>
             <Search
+              aria-label='plate-input'
               placeholder="input search text"
               enterButton="Search"
               onSearch={onFinish}

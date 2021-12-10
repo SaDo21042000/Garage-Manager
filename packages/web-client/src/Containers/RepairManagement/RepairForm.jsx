@@ -272,7 +272,7 @@ const RepairForm = () => {
       </Breadcrumb>
 
       <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
-        <Title className="main-title" level={2}>
+        <Title data-testid="header" className="main-title" level={2}>
           Lập phiếu sửa chữa
         </Title>
 
@@ -363,7 +363,7 @@ const RepairForm = () => {
               },
             ]}
           >
-            <InputNumber style={{ width: '100%' }} />
+            <InputNumber data-testid="amount-input" style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
             label="Tên tiền công"
@@ -394,7 +394,7 @@ const RepairForm = () => {
             </Select>
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-            <Button type="primary" htmlType="submit">
+            <Button aria-label='btn' type="primary" htmlType="submit">
               Thêm
             </Button>
           </Form.Item>
