@@ -15,9 +15,9 @@ exports.create = async (formInput) => {
     return Promise.reject({ message: 'Xe not found' });
   }
 
-  if (formInput.soTienThu > xe.tienNo) {
-    return Promise.reject({ message: 'Too much money' });
-  }
+  // if (formInput.soTienThu > xe.tienNo) {
+  //   return Promise.reject({ message: 'Too much money' });
+  // }
 
   let newPTT = await new PhieuThuTien({
     ...formInput,

@@ -10,7 +10,8 @@ import {
   Button,
   Table,
   Popconfirm,
-  Select
+  Select,
+  notification
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import {LoadingScreenCustom } from './../../Components'
@@ -79,7 +80,9 @@ const CarReception = () => {
       setIsLoading(false);
     }catch(e){
       setIsLoading(false);
-      console.log('đã có lỗi xảy ra')
+      notification.error({
+        message: "Đã có lỗi xảy ra khi lấy thông tin phiếu tiếp nhận hôm nay",
+      })
     }
   }
 
@@ -155,13 +158,17 @@ const CarReception = () => {
     try{
       setIsLoading(true);
       await axiosClient.post("/phieutiepnhan/deletePTNByMaPTN", {maPTN:PTN._id});
+      notification.success({
+        message: "Xóa phiếu tiếp nhận thành công",
+      })
       await getListPTNInDB();
       setIsLoading(false);
     }catch(e){
+      notification.error({
+        message: "Đã có lỗi xảy ra vui lòng thử lại",
+      })
       setIsLoading(false);
     }
-    
-
   };
 
   const onFinishAddItem = async (values) => {
@@ -176,7 +183,17 @@ const CarReception = () => {
         diaChi: values.address,
       };
   
-      await axiosClient.post('/phieutiepnhan/createOne', newData);
+      let data = await axiosClient.post('/phieutiepnhan/createOne', newData);
+      if(data.status===1){
+        notification.info({
+          message: data.message,
+        })
+      } 
+      if(data.status===0){
+        notification.success({
+          message: data.message,
+        })
+      }   
       // CCap nhat lai index trong dataSourcce
       await getListPTNInDB();
       setIsLoading(false);

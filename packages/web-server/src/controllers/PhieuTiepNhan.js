@@ -1,4 +1,4 @@
-const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua } = require('../models');
+const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua, HieuXe } = require('../models');
 const { Xe } = require('../models');
 const { KhachHang } = require('../models');
 const { generateID } = require('../helpers/generateID');
@@ -134,16 +134,21 @@ const getCarByPlate = async (req, res) => {
       lstXe = lstXe.filter(item=>item.bienSo.toLowerCase().indexOf(bienSo.toLowerCase())!==-1)
     }
     let lstKhachHang = await KhachHang.find();
+    let listHieuXe = await HieuXe.find();
     list=lstKhachHang.map(item=>{
       let xe= lstXe.find(data=>data.maKhachHang == item._id.toString());
       if(xe){
+        let hieuXe = listHieuXe.find(data=>xe.maHieuXe==data.maHieuXe)
+        if(hieuXe){
           return {
-          _id:xe._id.toString(),
-          bienSo:xe.bienSo,
-          hieuXe:xe.maHieuXe,
-          tenKhachHang:item.tenKhachHang,
-          soDT:item.soDT,
-          tienNo:xe.tienNo
+            _id:xe._id.toString(),
+            bienSo:xe.bienSo,
+            hieuXe:hieuXe.tenHieuXe,
+            tenKhachHang:item.tenKhachHang,
+            soDT:item.soDT,
+            tienNo:xe.tienNo
+          }
+          
         }
       }
     })

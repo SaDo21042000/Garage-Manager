@@ -14,7 +14,7 @@ const StyledFooter = styled.div`
 const Footer = () => {
   return (
     <StyledFooter>
-      <MainFooter className="main-footer">Ant Design ©2018 Created by Ant UED</MainFooter>
+      <MainFooter className="main-footer">Garage UIT Group</MainFooter>
     </StyledFooter>
   );
 };

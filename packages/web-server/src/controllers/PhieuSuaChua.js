@@ -124,6 +124,13 @@ const xoaCTSC = async (req, res) => {
   const idCTSC =  req.body._id;
 
   try {
+    console.log(idCTSC)
+    let ctsc = await ChiTietSuaChua.findOne({_id:idCTSC })
+    console.log('ctsc',ctsc)
+    let phieuSuaChua = await PhieuSuaChua.findOne({_id:ctsc.maPSC});
+    console.log('psc',phieuSuaChua)
+    let total = phieuSuaChua.tongTienSC - ctsc.thanhTien;
+    await PhieuSuaChua.updateOne({_id:ctsc.maPSC},{tongTienSC:total});
     await ChiTietSuaChua.deleteOne({ _id: idCTSC })
     res.status(201).json({
       statusCode: 201,

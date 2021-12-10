@@ -35,7 +35,7 @@ const Sidebar = () => {
         mode="inline"
       >
         <Menu.Item key="/" icon={<HomeOutlined />}>
-          <span>Home Page</span>
+          <span>Trang chủ</span>
           <Link to="/"></Link>
         </Menu.Item>
         <SubMenu key="car-management" icon={<FormOutlined />} title="Quản Lý Xe">
@@ -61,9 +61,9 @@ const Sidebar = () => {
           </Menu.Item>
         </SubMenu>
         <SubMenu key="repair" icon={<FormOutlined />} title="Phiếu Sửa Chữa">
-          <Menu.Item key="/repair-page">
+          {/* <Menu.Item key="/repair-page">
             <Link to="/repair-page">Quản Lý Phiếu Sửa Chữa</Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/repair-form">
             <Link to="/repair-form">Lập Phiếu Sửa Chữa</Link>
           </Menu.Item>
@@ -81,7 +81,7 @@ const Sidebar = () => {
             <Link to="/inventory-report-page">Báo cáo tồn</Link>
           </Menu.Item>
         </SubMenu>
-        <SubMenu key="admin" icon={<UserOutlined />} title="Quản lý user">
+        <SubMenu key="admin" icon={<UserOutlined />} title="Quản lý tài khoản">
           <Menu.Item key="/sign-up">
             <Link to="/sign-up">Đăng Ký thành viên</Link>
           </Menu.Item>

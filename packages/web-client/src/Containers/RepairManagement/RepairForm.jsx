@@ -253,6 +253,9 @@ const RepairForm = () => {
         MaPSC: id,
       };
       await axiosClient.post('/phieusuachua/create-CTSC', newData);
+      notification.success({
+        message:'Thêm chi tiết sản phẩm'
+      })
       let obj = dataBienSo.find((item) => item.bienSo === values.bienSo);
       await changeDataTable(obj._id);
       setIsLoading(false);

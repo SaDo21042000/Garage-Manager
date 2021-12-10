@@ -54,7 +54,10 @@ const Bill = () => {
     try {
       axios.post(`${process.env.REACT_APP_API_URL}/phieuthutiens`, dataPost);
       setIsLoading(false);
-      exportToCSV(['Phiếu thu tiền', dataPost], 'Phiếu thu tiền');
+     // exportToCSV([ dataPost], 'Phiếu thu tiền');
+      notification.success({
+        message:'Tạo phiếu thu tiền thành công'
+      })
       history.push('/car-list')
     } catch (error) {
       notification.error({
