@@ -163,10 +163,8 @@ const RepairForm = () => {
   };
 
   const handleDelete = async (ctsc) => {
-    console.log(ctsc);
     try {
       setIsLoading(true);
-      console.log('ctsc',ctsc);
       await axiosClient.post('/phieusuachua/xoaCTSC', { _id: ctsc._id });
       await changeDataTable(initMaXe);
       setIsLoading(false);
@@ -180,11 +178,9 @@ const RepairForm = () => {
     await changeDataTable(maXe);
   };
   const changeDataTable = async (maXe) => {
-    console.log(maXe);
     try {
       setIsLoading(true);
       let data = await axiosClient.get(`/phieusuachua/getListCTSCByMaXe?maXe=${maXe}`);
-      console.log('123',data);
       if(data.status===0){
         let maPSC = data.maPSC;
         let listPhieuCTSC = data.listPhieuCTSC;
@@ -198,7 +194,6 @@ const RepairForm = () => {
       })
       setDataSource(listPhieuCTSC);
       setIsExistPSC(true);
-      console.log('ma',maPSC)
       setMaPSC(maPSC);
       
       }
@@ -242,7 +237,6 @@ const RepairForm = () => {
     try {
       setIsLoading(true);
       let id = maPSC;
-      console.log('id', maPSC)
       if (!isExistPSC) {
         let params = {
           bienSo: values.bienSo,
@@ -264,7 +258,6 @@ const RepairForm = () => {
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
-      console.log(e);
     }
   };
 

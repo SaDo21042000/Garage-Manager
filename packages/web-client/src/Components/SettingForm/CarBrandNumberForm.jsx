@@ -87,7 +87,6 @@ const CarBrandNumberForm = (props) => {
   ];
 
   const handleDelete = (maHieuXe) => {
-    console.log(maHieuXe);
     const deleteCarBrand = async () => {
       try {
         setIsLoading(true);
@@ -110,7 +109,6 @@ const CarBrandNumberForm = (props) => {
 
   const handleAddSupplyType = (e) => {
     e.preventDefault();
-    console.log(e.target[0].value);
     const addCarBrand = async () => {
       try {
         setIsLoading(true);

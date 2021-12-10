@@ -42,7 +42,6 @@ const Bill = () => {
   const onFinish = (values) => {
     setIsLoading(true);
     const { plate, date, money, name, phone, email } = values;
-    console.log();
     const dataPost = {
       bienSo: plate,
       ngayTT: date.format(DATEFORMAT),
@@ -85,7 +84,7 @@ const Bill = () => {
     let money = 0;
 
     dataBienSo.forEach(item=>{
-      if(item.bienSo==value){
+      if(item.bienSo===value){
         money=item.tongTienSC;
       } 
     })

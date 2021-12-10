@@ -90,10 +90,8 @@ const Layout = ({ menuSelectedKey, children }) => {
       let isSettingPage = pathname === '/setting';
       if (isSettingPage || isSignUpPage) {
         let token = JSON.parse(localStorage.getItem('token'));
-        console.log(token);
         let isCheckRight = true;
         if (!token) {
-          console.log('có');
           isCheckRight = false;
         }
         if (user.quyenHan !== 1) {

@@ -109,7 +109,6 @@ const SupplyTypeForm = (props) => {
 
   const handleAddSupplyType = (e) => {
     e.preventDefault();
-    console.log(e.target[0].value);
     const addSupplyType = async () => {
       try {
         setIsLoading(true);

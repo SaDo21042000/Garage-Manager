@@ -19,6 +19,7 @@ import {LoadingScreenCustom } from './../../Components'
 
 const { Content } = AntLayout;
 const { Title } = Typography;
+const { Search } = Input;
 
 const StyledWageList = styled(AntLayout)`
   .site-layout-background {n
@@ -185,7 +186,7 @@ const WageList = () => {
 
   //Tìm kiếm vật tư
   const onFinishSearch = (values) => {
-    setInputSearch(values.nameWage);
+    setInputSearch(values);
   };
 
   //Xóa một vật tư
@@ -207,7 +208,6 @@ const WageList = () => {
 
   //Chỉnh sửa vật tư
   const onFinishEditWage = (wage) => {
-    console.log(wage);
     const dataEdit = {
       idWage: wage._id,
       nameWage: wage.name,
@@ -216,8 +216,6 @@ const WageList = () => {
     setDataEditWage(dataEdit);
     setCheckEdit(true);
     formWage.setFieldsValue(dataEdit);
-    console.log(formWage);
-    console.log(formWage.getFieldValue());
   };
 
   //Header table
@@ -314,12 +312,12 @@ const WageList = () => {
               form={formSearch}
             >
               <Form.Item label="Tên tiền công" name="nameWage">
-                <Input style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Tìm ngay
-                </Button>
+                <Search
+                  placeholder="input search text"
+                  enterButton="Search"
+                  onSearch={onFinishSearch}
+                  allowClear
+                />
               </Form.Item>
             </Form>
 

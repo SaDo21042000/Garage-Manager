@@ -19,6 +19,7 @@ import axiosClient from '../../Configs/Axios';
 import {LoadingScreenCustom } from './../../Components'
 const { Content } = AntLayout;
 const { Title } = Typography;
+const { Search } = Input;
 
 const StyledAccessaryList = styled(AntLayout)`
   .site-layout-background {
@@ -119,7 +120,6 @@ const AccessaryList = () => {
       setIsLoading(false);
     }
   };
-  console.log(dataListAccessary);
   useEffect(() => {
     getAPI();
   }, []);
@@ -189,7 +189,7 @@ const AccessaryList = () => {
 
   //Tìm kiếm vật tư
   const onFinishSearch = (values) => {
-    setInputSearch(values.nameAccessary);
+    setInputSearch(values);
   };
 
   //Xóa một vật tư
@@ -210,7 +210,6 @@ const AccessaryList = () => {
 
   //Chỉnh sửa vật tư
   const onFinishEditAccessary = (accessary) => {
-    console.log(accessary);
     const dataEdit = {
       typeAccessory: accessary.typeAccessory,
       idAccessary: accessary._id,
@@ -361,12 +360,12 @@ const AccessaryList = () => {
               form={formSearch}
             >
               <Form.Item label="Tên phụ tùng" name="nameAccessary">
-                <Input style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Tìm ngay
-                </Button>
+                <Search
+                  placeholder="input search text"
+                  enterButton="Search"
+                  onSearch={onFinishSearch}
+                  allowClear
+                />
               </Form.Item>
             </Form>
 

@@ -12,7 +12,7 @@ import {
   Popconfirm,
   Select
 } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import {LoadingScreenCustom } from './../../Components'
 import axiosClient from '../../Configs/Axios'
 
@@ -68,7 +68,6 @@ const CarReception = () => {
     try{
       setIsLoading(true);
       let data = await axiosClient.get("phieutiepnhan/getListCarInToday");
-      console.log(data);
       data= data.map((item,index)=>{
         return { 
           ...item,
@@ -159,7 +158,6 @@ const CarReception = () => {
       await getListPTNInDB();
       setIsLoading(false);
     }catch(e){
-      console.log(e);
       setIsLoading(false);
     }
     

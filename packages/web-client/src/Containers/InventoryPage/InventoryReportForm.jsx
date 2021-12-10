@@ -181,7 +181,6 @@ const InventoryReportForm = () => {
   );
 
   const handleDelete = (index) => {
-    console.log(index);
     setDataSource(dataSource.filter((item) => item.index !== index));
     message.info('Xóa thành công');
   };

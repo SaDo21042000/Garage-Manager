@@ -140,7 +140,6 @@ const SaleReportForm = () => {
   ];
 
   const handleDelete = (carNumber) => {
-    console.log(carNumber);
     setDataSource(dataSource.filter((item) => item.carNumber !== carNumber));
     message.info('Clicked on Yes.');
   };

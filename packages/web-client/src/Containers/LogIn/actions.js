@@ -35,7 +35,6 @@ export const onGetUserRequest=(user)=>{
 }
 
 export const onRegisterRequest=async (user)=>{
-    console.log(user);
     return new Promise( async(resolve, reject) => {
         try{
             const data= await axios.post("taikhoans/register",user);
@@ -48,7 +47,6 @@ export const onRegisterRequest=async (user)=>{
 }
 
 export const onValidateAccountRequest=async (userName)=>{
-    console.log(userName);
     return new Promise( async(resolve, reject) => {
         try{
             const data= await axios.post("taikhoans/validate-user",{userName:userName});

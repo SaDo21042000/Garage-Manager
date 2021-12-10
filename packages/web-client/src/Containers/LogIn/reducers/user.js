@@ -10,7 +10,6 @@ const initialState={
 const userReducer=(state=initialState,action)=>{
     switch(action.type){
         case types.GET_USER:
-            console.log('action',action.user)
             const user={
                 tenTaiKhoan:action.user.tenTaiKhoan,
                 email:action.user.email,

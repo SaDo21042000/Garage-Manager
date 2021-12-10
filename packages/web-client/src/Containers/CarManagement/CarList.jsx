@@ -17,6 +17,7 @@ import axiosClient from '../../Configs/Axios';
 import { LoadingScreenCustom } from './../../Components';
 
 const { Title } = Typography;
+const { Search } = Input;
 
 const StyledHomePage = styled(AntLayout)`
   .site-layout-background {n
@@ -132,7 +133,6 @@ const CarList = () => {
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
-      console.log(e);
       notification.error({
         message: 'Lỗi lấy danh sách xe. Vui lòng thử lại',
       });
@@ -140,8 +140,7 @@ const CarList = () => {
   };
 
   const onFinish = async (values) => {
-    let { plate } = values;
-    await getDataListCar(plate);
+    await getDataListCar(values);
   };
 
   const handleDelete = async (item) => {
@@ -183,13 +182,12 @@ const CarList = () => {
           onFinish={onFinish}
         >
           <Form.Item label="Biển Số" name="plate" style={{ width: '300px' }}>
-            <Input />
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Tìm kiếm
-            </Button>
+            <Search
+              placeholder="input search text"
+              enterButton="Search"
+              onSearch={onFinish}
+              allowClear
+            />
           </Form.Item>
         </Form>
         <Table columns={columns} dataSource={dataDisplay} />
