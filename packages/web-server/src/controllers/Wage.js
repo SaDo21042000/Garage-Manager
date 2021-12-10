@@ -24,7 +24,6 @@ const searchName = async (req, res) => {
 
 const create = async (req, res) => {
     let input = req.body;
-    console.log(input)
     if (input.remaining) {
         delete input['remaining'];
     }

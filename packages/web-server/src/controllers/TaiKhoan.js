@@ -54,7 +54,6 @@ exports.register = async (req, res) => {
         transporter.sendMail(mailOptions);
         return res.status(200).json(successResponse("Đăng kí tài khoản thành công. Vui lòng truy cập email để kích hoạt tài khoản"));
     }catch(e){
-        console.log(e);
         return res.status(500).json(errorResponse("Đã có lỗi xảy ra vui lòng thử lại"))
     }
     
@@ -87,10 +86,8 @@ exports.update = async (req, res) => {
 exports.forgetPassword = async (req, res) => {
     try{
         const email = req.body.email;
-        console.log(email);
         const user = await TaiKhoanService.findOne({ email: email});
         const newPw = generatePassword();
-        console.log(newPw);
         const password = await bcrypt.hash(newPw, saltRounds);
         await TaiKhoanService.update({email:email},{matKhau:password});
         const transporter = nodemailer.createTransport({

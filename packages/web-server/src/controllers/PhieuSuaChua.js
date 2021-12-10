@@ -24,7 +24,6 @@ const createOne = async (req, res) => {
     let phieuSuaChua = await newPSC.save();
     return res.status(200).json(phieuSuaChua);
   }catch(e){
-    console.log(e);
     return res.status(500).json({
       statusCode: 500,
       message: 'Create failed'
@@ -33,7 +32,6 @@ const createOne = async (req, res) => {
 }
 
 const createCTSC = async (req, res) => {
-  console.log("BODY: ", req.body);
   const { bienSo, noiDung, maVatTu, maTienCong, soLuong, MaPSC } = req.body;
   let maVT, maTC, maXe, maPTN, maPSC;
   var today = new Date();
@@ -41,18 +39,18 @@ const createCTSC = async (req, res) => {
   //  Truy xuat vao bang loai vat tu va tien cong de lat maVT va maTC
   await Accessory.findOne({ _id: maVatTu }).then(res => {
     maVT = res;
-  }).catch(err => {console.log()});
+  }).catch(err => {console.log(err)});
   await Wage.findOne({ _id: maTienCong }).then(res => {
     maTC = res;
-  }).catch(err => {console.log()});
+  }).catch(err => {console.log(err)});
 
   // Truy xuat vao bang Xe de tim phieu tiep nhan:
   await Xe.findOne({ bienSo }).then(res => {
     maXe = res;
-  }).catch(err => {console.log()});
+  }).catch(err => {console.log(err)});
   await PhieuTiepNhan.findOne({ maXe: maXe._id }).then(res => {
     maPTN = res;
-  }).catch(err => {console.log()});
+  }).catch(err => {console.log(err)});
   let newCTSC = new ChiTietSuaChua({
     noiDung,
     maVaTu: maVatTu,

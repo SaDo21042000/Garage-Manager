@@ -23,7 +23,6 @@ const create = async (req, res) => {
         if(data){
             var listHieuXe=await HieuXeService.findAll();
             let flag=0;
-            //console.log(listHieuXe)
             listHieuXe.forEach((item)=>{
                 let index=item.tenHieuXe.toLowerCase().indexOf(data.tenHieuXe.toLowerCase());
                 if(index>-1){

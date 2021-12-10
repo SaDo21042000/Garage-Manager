@@ -3,7 +3,6 @@ const pttService = require('../services/PhieuThuTien');
 /* ````````````Declare your custom controller here `````````````````````*/
 const create = async (req, res) => {
   let formInput = req.body;
-  console.log(formInput);
 
   // If input is null, return 400 Error
   if (!formInput.bienSo) {

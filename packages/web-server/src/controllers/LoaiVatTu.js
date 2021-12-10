@@ -23,7 +23,6 @@ const create = async (req, res) => {
         if(data){
             var listLoaiVatTu=await LoaiVatTuService.findAll();
             let flag=0;
-            //console.log(listLoaiVatTu)
             listLoaiVatTu.forEach((item)=>{
                 let index=item.tenLoaiVatTu.toLowerCase().indexOf(data.tenLoaiVatTu.toLowerCase());
                 if(index>-1){

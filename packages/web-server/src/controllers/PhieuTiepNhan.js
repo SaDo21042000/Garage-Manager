@@ -5,18 +5,14 @@ const { generateID } = require('../helpers/generateID');
 
 const createOne = async (req, res) => {
   try{
-    console.log("BODY: ", req.body);
     const { tenChuXe, diaChi, email, dienThoai } = req.body;
     const { bienSo, maHieuXe } = req.body;
     var today = new Date();
     var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
     let xe = await Xe .findOne({bienSo:bienSo});
-    console.log('xe',xe);
     if(xe){
       let phieuTiepNhan = await PhieuTiepNhan.findOne({maXe:xe._id.toString(),isDeleted:0})
-      console.log('phieu',phieuTiepNhan);
       if(!phieuTiepNhan){
-        console.log('có')
         let newPhieuTiepNhan = new PhieuTiepNhan({
           maXe: xe._id.toString(),
           ngayTN: date,
@@ -75,7 +71,6 @@ const createOne = async (req, res) => {
 }
 
 const xoaXeSua = async (req, res) => {
-  console.log("req.body", req.body.plate);
   try {
     await Xe.deleteMany({ bienSo: req.body.plate })
     res.status(201).json({
@@ -101,11 +96,7 @@ const getPhieuTiepNhan = async (req, res) => {
       let PTNToday = await PhieuTiepNhan.find({ ngayTN: date });
       for(var i of PTNToday) {
         let xe = await Xe.find({ _id: i.maXe });
-        console.log("xE: ", xe);
         let khachhang = await KhachHang.find({ _id: xe[0].maKhachHang });
-        console.log("KHACH-Hang: ", khachhang);
-
-
         data.xe.push(xe[0]);
         data.khachang.push(khachhang);
       }
@@ -146,7 +137,6 @@ const getCarByPlate = async (req, res) => {
     list=lstKhachHang.map(item=>{
       let xe= lstXe.find(data=>data.maKhachHang == item._id.toString());
       if(xe){
-        console.log(xe);
           return {
           _id:xe._id.toString(),
           bienSo:xe.bienSo,
@@ -207,8 +197,6 @@ const getListXe = async (req, res) => {
   try{
     let xe = await Xe.find();
     let phieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0});
-    console.log('xe',xe)
-    console.log('phieuTiepNhan',phieuTiepNhan)
     let list = phieuTiepNhan.map(item=>{
       let objXe = xe.find(data=>data._id.toString()==item.maXe);
       if(objXe){
@@ -222,7 +210,6 @@ const getListXe = async (req, res) => {
     list = list.filter(item => item)
     return res.status(200).json(list);
   }catch(e){
-    console.log(e)
     return res.status(500).json({
       message:'Đã có lỗi xảy ra vui lòng thử lại',
       error:e
@@ -249,8 +236,6 @@ const deleteXe = async (req, res) => {
 const deletePTNbyPTN = async (req, res) => {
   try{
     const maPTN = req.body.maPTN;
-    console.log('body', req.body)
-    console.log('maPTN', maPTN);
     await PhieuTiepNhan.update({ _id: maPTN }, {isDeleted:1})
     return res.status(200).json({});
   }catch(e){

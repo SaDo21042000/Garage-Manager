@@ -17,7 +17,6 @@ let isAdminAuth = async (req, res, next) => {
       const decoded = await jwtHelper.verifyToken(token, accessTokenSecret);
       // Nếu token hợp lệ, lưu thông tin giải mã được vào đối tượng req, dùng cho các xử lý ở phía sau.
       req.jwtDecoded = decoded;
-      console.log(decoded);
       // Cho phép req đi tiếp sang controller.
       if (decoded.data.quyenHan === 1) {
         next();
@@ -44,10 +43,8 @@ let isAdminAuth = async (req, res, next) => {
 };
 
 let checkToken = async (req, res, next) => {
-  console.log('token',accessTokenSecret)
   const authorizationHeader = req.headers['authorization'];
   let token = '';
-  console.log('có');
   if (authorizationHeader) token = authorizationHeader.split(' ')[1];
   if (token) {
     // Nếu tồn tại token

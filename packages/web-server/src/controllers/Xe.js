@@ -22,7 +22,6 @@ const getCarByPlate = async (req, res) => {
 }
  
 const getListCTSCByMaXe = async (req,res) =>{
-    console.log('có');
     try{
         const maXe =req.query.maXe;
         //1 xe chỉ có 1 phieu tiep nhan
