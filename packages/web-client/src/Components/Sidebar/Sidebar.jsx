@@ -26,7 +26,9 @@ const Sidebar = () => {
   return (
     <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}>
       <div className="logo-car mb-3">
-        <img src={logo} alt="LOGO" width="100px" />
+        <Link to ='/'>
+          <img src={logo} alt="LOGO" width="100px" />
+        </Link>  
       </div>
       <Menu
         className="mt-3"
@@ -43,7 +45,7 @@ const Sidebar = () => {
           <Menu.Item key="/car-reception">
             <Link to="/car-reception">Tiếp Nhận Xe Sửa</Link>
           </Menu.Item>
-          <Menu.Item key="/cart-list">
+          <Menu.Item key="/car-list">
             <Link to="/car-list">Danh sách xe</Link>
           </Menu.Item>
         </SubMenu>

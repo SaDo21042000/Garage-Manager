@@ -21,7 +21,6 @@ exports.findOne = async (query) =>{
     try{
         let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
         {$match: { month: parseInt(query.month), year: parseInt(query.year)}}]);
-        console.log(ds);
         return ds;
     }catch(e){
         console.log(e);

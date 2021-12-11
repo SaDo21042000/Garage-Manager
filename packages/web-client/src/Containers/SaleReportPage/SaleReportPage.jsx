@@ -15,7 +15,7 @@ import {
 import axios from '../../Configs/Axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { LoadingScreenCustom } from '../../Components';
+import { LoadingScreenCustom, Helper } from '../../Components';
 
 const { Title, Text } = Typography;
 
@@ -75,6 +75,7 @@ const SaleReportPage = () => {
   const [dateData, setDateData] = useState({ month: MONTH, year: YEAR });
   const [dataSource, setDataSource] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [total, setTotal] = useState(0);
 
   const columns = [
     {
@@ -133,10 +134,10 @@ const SaleReportPage = () => {
         `http://localhost:5000/api/doanhsos?month=${month}&year=${year}`,
       );
 
-      if (dataId.data.length === 0) {
+      if (dataId.length === 0) {
         setIsLoading(false);
         setShowReportResult(false);
-
+        
         notification.warning({
           message: 'Thông tin nhập không hợp lệ. Không có báo cáo trong thời gian trên',
         });
@@ -145,17 +146,20 @@ const SaleReportPage = () => {
           message: 'Lấy danh sách báo cáo thành công',
         });
 
+        let id = dataId[0]._id;
         const dataRaw = await axios.get(
-          `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${dataId.data[0]._id}`,
+          `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${id}`,
         );
-        const { data } = dataRaw;
-        const total = data.reduce((a, b) => a + b.tongTien, 0);
-        const finalData = data.map((i) => ({
+        const totalAmount =dataRaw.reduce((a, b) => a + b.tongTien, 0);
+        const finalData = dataRaw.map((i,index) => ({
           ...i,
-          tiLe: `${Number(i.tongTien / total).toFixed(2) * 100}%`,
+          tiLe: `${Number(i.tongTien /  totalAmount).toFixed(2) * 100}%`,
+          tongTien: Helper.convertNumberToMoney(i.tongTien),
+          key:index
         }));
         setDataSource(finalData);
         setShowReportResult(true);
+        setTotal(totalAmount);
         setIsLoading(false);
       }
     } catch (error) {
@@ -186,9 +190,8 @@ const SaleReportPage = () => {
     </Title>
   );
 
-  const TotalValues = () => {
-    const total = dataSource.reduce((a, b) => a + b.tongTien, 0);
-    return <Text className="result-total">Tổng doanh thu tháng: {total} đồng</Text>;
+  const TotalValues = ({total}) => {
+    return <Text className="result-total">Tổng doanh thu tháng: {Helper.convertNumberToMoney(total)}</Text>;
   };
 
   return (
@@ -256,12 +259,12 @@ const SaleReportPage = () => {
         <div className={showReportResult ? 'show' : 'hide'}>
           <Divider plain>Kết quả</Divider>
           <ResultTitle />
-          <TotalValues />
+          <TotalValues total ={total}/>
           <Table
             className="result-table"
             columns={columns}
             dataSource={dataSource}
-            pagination={false}
+            pagination={{pageSize:10}}
           />
           <Button
           data-testid="btnBC"
