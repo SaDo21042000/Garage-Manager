@@ -14,7 +14,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import { LoadingScreenCustom } from './../../Components';
+import { LoadingScreenCustom, Helper} from './../../Components';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -127,6 +127,7 @@ const CarList = () => {
         return {
           ...item,
           key: index + 1,
+          tienNo:Helper.convertNumberToMoney(item.tienNo)
         };
       });
       setDataDisplay(listCar);

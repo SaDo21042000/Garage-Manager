@@ -23,6 +23,7 @@ const Bill = () => {
     try{
       setIsLoading(true);
       let data= await axios.get('/phieusuachua/getBienSo');
+      console.log('data',data)
       if(data.status){
         setDataBienSo(data.list);
       }else{
@@ -41,10 +42,11 @@ const Bill = () => {
 
   const onFinish = (values) => {
     setIsLoading(true);
-    const { plate, date, money, name, phone, email } = values;
+    const { plate,  money, name, phone, email } = values;
+    let date =new Date();
     const dataPost = {
       bienSo: plate,
-      ngayTT: date.format(DATEFORMAT),
+      ngayTT: date,
       soTienThu: money,
       hoTen: name,
       dienThoai: phone,
@@ -85,14 +87,24 @@ const Bill = () => {
   const onChangeBienSo=(value)=>{
     setIsLoading(true);
     let money = 0;
+    let tenKhachHang='';
+    let soDT= '';
+    let email='';
 
     dataBienSo.forEach(item=>{
       if(item.bienSo===value){
         money=item.tongTienSC;
+        tenKhachHang=item.tenKhachHang;
+        soDT=item.soDT;
+        email=item.email;
       } 
     })
     form.setFieldsValue({
       soTienSC: money,
+      name:tenKhachHang,
+      phone:soDT,
+      email:email
+
     });
     setIsLoading(false);
   }
@@ -146,15 +158,37 @@ const Bill = () => {
             </Select>
           </Form.Item>
           <Form.Item
-            name="date"
-            label="Ngày Thanh Toán"
+            name="name"
+            label="Họ Tên"
             rules={[
               {
                 required: true,
               },
             ]}
           >
-            <DatePicker style={{ width: '100%' }} />
+            <Input disabled={true} className="text-dark"/>
+          </Form.Item>
+          <Form.Item
+            name="phone"
+            label="Phone"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input disabled={true} className="text-dark"/>
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input disabled={true} className="text-dark"/>
           </Form.Item>
           <Form.Item
             name="soTienSC"
@@ -183,39 +217,7 @@ const Bill = () => {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
 
-          <Form.Item
-            name="name"
-            label="Họ Tên"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="phone"
-            label="Phone"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
             <Button
               type="success"
@@ -223,7 +225,7 @@ const Bill = () => {
               htmlType="submit"
               style={{ backgroundColor: '#237804', color: '#fff' }}
             >
-              In báo cáo và lưu
+              Lưu phiếu thu tiền
             </Button>
           </Form.Item>
         </Form>

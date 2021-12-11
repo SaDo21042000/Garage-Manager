@@ -18,9 +18,15 @@ const { DoanhSo } = require('../models');
 // }
 
 exports.findOne = async (query) =>{
-    let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
-    {$match: { month: parseInt(query.month), year: parseInt(query.year)}}]);
-    return ds;
+    try{
+        let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
+        {$match: { month: parseInt(query.month), year: parseInt(query.year)}}]);
+        console.log(ds);
+        return ds;
+    }catch(e){
+        console.log(e);
+        throw e;
+    }
 }
 
 /* `````````````````````````````````` */

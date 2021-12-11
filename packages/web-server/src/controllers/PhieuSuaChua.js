@@ -1,4 +1,4 @@
-const { PhieuSuaChua, Wage, Accessory, ChiTietSuaChua, Xe, PhieuTiepNhan, DoanhSo, ChiTietDoanhSo, } = require('../models');
+const { PhieuSuaChua, Wage, Accessory, ChiTietSuaChua, Xe, PhieuTiepNhan, DoanhSo, ChiTietDoanhSo, KhachHang } = require('../models');
 const { generateID } = require('../helpers/generateID');
 const { json } = require('express');
 
@@ -206,6 +206,7 @@ const getBienSo = async (req, res) => {
     let lstXe = await Xe.find();
     let lstPhieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0});
     let lstPhieuSuaChua = await PhieuSuaChua.find({isDeleted:0});
+    let lstKhachHang = await KhachHang.find();
     if(lstPhieuSuaChua.length===0){
       return res.status(200).json({
         status:false,
@@ -217,9 +218,13 @@ const getBienSo = async (req, res) => {
       let objPhieuTiepNhan = lstPhieuTiepNhan.find(data=>data._id.toString()==item.maPTN);
       if( objPhieuTiepNhan) {
         let objXe =lstXe.find((data)=>data._id.toString() == objPhieuTiepNhan.maXe);
+        let objKhachHang = lstKhachHang.find((data)=>data._id.toString() == objXe.maKhachHang);
         return { 
           bienSo:objXe.bienSo,
-          tongTienSC: item.tongTienSC
+          tongTienSC: item.tongTienSC,
+          tenKhachHang:objKhachHang.tenKhachHang,
+          soDT:objKhachHang.soDT,
+          email:objKhachHang.email
         }
       }
     })

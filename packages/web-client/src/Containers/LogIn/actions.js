@@ -25,7 +25,7 @@ export const onGetUserRequest=(user)=>{
                 resolve(data);
                 dispatch(onGetUser(data.object));
             }catch(e){
-                reject(e?.response?.data);
+                reject(e.response.data);
             }
         })
         
@@ -40,7 +40,7 @@ export const onRegisterRequest=async (user)=>{
             const data= await axios.post("taikhoans/register",user);
             resolve(data)
         }catch(e){
-            reject(e?.response?.data);
+            reject(e.response.data);
         }
     })
     
@@ -52,7 +52,7 @@ export const onValidateAccountRequest=async (userName)=>{
             const data= await axios.post("taikhoans/validate-user",{userName:userName});
             resolve(data)
         }catch(e){
-            reject(e?.response?.data);
+            reject(e.response.data);
         }
     })
     
@@ -64,7 +64,7 @@ export const onForgotPasswordRequest=async (data)=>{
             const res= await axios.post("taikhoans/forgot-password",data);
             resolve(res)
         }catch(e){
-            reject(e?.response?.data);
+            reject(e.response.data);
         }
     })
     
@@ -76,7 +76,7 @@ export const onChangePasswordRequest=async (data)=>{
             const res= await axios.post("taikhoans/change-password",data);
             resolve(res)
         }catch(e){
-            reject(e?.response?.data);
+            reject(e.response.data);
         }
     })
     
@@ -85,10 +85,10 @@ export const onChangePasswordRequest=async (data)=>{
 export const onCheckTokenRequest=async ()=>{
     return new Promise( async(resolve, reject) => {
         try{
-            const res= await axios.post("check-token");
+            const res= await axios.post("/taikhoans/check-token");
             resolve(res)
         }catch(e){
-            reject(e?.response?.data);
+            reject(e.response.data);
         }
     })
     

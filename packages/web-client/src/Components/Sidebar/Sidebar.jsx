@@ -9,7 +9,7 @@ import logo from '../../assets/logocar.png';
 const { Sider } = Layout;
 const StyledSider = styled(Sider)`
   .logo-car {
-    height: 32px;
+    height: 60px;
     margin: 20px;
   }
 `;
@@ -25,10 +25,11 @@ const Sidebar = () => {
 
   return (
     <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-      <div className="logo-car">
+      <div className="logo-car mb-3">
         <img src={logo} alt="LOGO" width="100px" />
       </div>
       <Menu
+        className="mt-3"
         theme="dark"
         defaultSelectedKeys={[location.pathname]}
         selectedKeys={[location.pathname]}

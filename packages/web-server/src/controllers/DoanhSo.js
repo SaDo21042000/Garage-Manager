@@ -3,8 +3,10 @@ const dsService = require('../services/DoanhSo');
 /* ````````````Declare your custom controller here `````````````````````*/
 
 const findOne = async (req, res) => {
+    console.log('có');
     try {
         let query = req.query;
+        console.log('query', req.query);
         let objList = await dsService.findOne(query);
         return res.status(200).json(objList);
     } catch (err) {

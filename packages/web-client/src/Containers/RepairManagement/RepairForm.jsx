@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import { LoadingScreenCustom } from './../../Components';
+import { LoadingScreenCustom, Helper } from './../../Components';
 
 const { Title } = Typography;
 
@@ -184,12 +184,16 @@ const RepairForm = () => {
       if(data.status===0){
         let maPSC = data.maPSC;
         let listPhieuCTSC = data.listPhieuCTSC;
+        console.log('data',listPhieuCTSC)
         listPhieuCTSC = listPhieuCTSC.map((item, index)=>{
         maPSC = item.maPSC;
         return {
           ...item,
           key:index+1,
-          index:index+1
+          index:index+1,
+          price:Helper.convertNumberToMoney(item.price),
+          thanhTien:Helper.convertNumberToMoney(item.thanhTien),
+
         }
       })
       setDataSource(listPhieuCTSC);

@@ -5,7 +5,7 @@ import { ImportAccessary, WageList, AccessaryList } from './Containers/Accessary
 import { LogIn, SignUp, ForgotPassword, ChangePassword } from './Containers/LogIn';
 import { CarList, CarReception} from './Containers/CarManagement';
 import { RepairForm, RepairPage, Bill  } from './Containers/RepairManagement';
-import { SaleReportPage, SaleReportForm } from './Containers/SaleReportPage';
+import { SaleReportPage} from './Containers/SaleReportPage';
 import { InventoryReport } from './Containers/InventoryPage';
 import SettingPage from './Containers/SettingPage';
 
@@ -16,7 +16,6 @@ function Routes() {
         <Switch>
           <Route path="/" exact component={HomePage} />
           <Route path="/sales-report-page" component={SaleReportPage} />
-          <Route path="/sales-report-form" component={SaleReportForm} />
           <Route path="/car-list" component={CarList} />
           <Route path="/car-reception" component={CarReception} />
           <Route path="/repair-form" component={RepairForm} />

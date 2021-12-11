@@ -12,7 +12,7 @@ import {
   Table,
   Typography,
 } from 'antd';
-import axios from 'axios';
+import axios from '../../Configs/Axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { LoadingScreenCustom } from '../../Components';
@@ -161,6 +161,9 @@ const SaleReportPage = () => {
     } catch (error) {
       setIsLoading(false);
       console.error('Error: ', error.message);
+      notification.error({
+        message: 'Đã có lỗi xảy ra vui lòng thử lại',
+      });
     }
   }
 

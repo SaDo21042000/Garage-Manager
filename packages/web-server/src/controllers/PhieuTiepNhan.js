@@ -1,4 +1,4 @@
-const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua, HieuXe } = require('../models');
+const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua, HieuXe, QuyDinh } = require('../models');
 const { Xe } = require('../models');
 const { KhachHang } = require('../models');
 const { generateID } = require('../helpers/generateID');
@@ -7,8 +7,20 @@ const createOne = async (req, res) => {
   try{
     const { tenChuXe, diaChi, email, dienThoai } = req.body;
     const { bienSo, maHieuXe } = req.body;
+    
     var today = new Date();
     var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+    let lstPhieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0,ngayTN:date});
+    let objQuyDinh = await QuyDinh.findOne();
+    console.log('obj',objQuyDinh);
+    if(objQuyDinh){
+      if(lstPhieuTiepNhan.length>=objQuyDinh.soXeMax){
+          return res.status(200).json({
+            status:1,
+            message:'Đã tiếp nhận đủ số xe cần sửa trong ngày theo quy dịnh. Vui lòng quay lại vào ngày mai'
+          })
+      }
+    }
     let xe = await Xe .findOne({bienSo:bienSo});
     if(xe){
       let phieuTiepNhan = await PhieuTiepNhan.findOne({maXe:xe._id.toString(),isDeleted:0})

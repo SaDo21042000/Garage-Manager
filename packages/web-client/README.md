@@ -37,18 +37,5 @@ npm install
 
 ### Note:
 
-1. Thư mục Containers chứa những trang lớn, nên viết các reducer và các actions trong 1 thư mục page để dể quản lý
-
-2. Thư mục Components trong containers chứa từng component con của 1 page. Nên gộp những component liên quan với nhau vào 1 thư mục chung nằm trong thư mục Components
-
-3. Thư mục Reducers để chứa các reducer của redux
-
-4. Thư mục store để chứa store của redux
-
-5. Thư mục actions để chứa các action của redux, nên tạo các function gọi api ở đây
-
-6. Thư mục Constants để chứa các hằng số
-
-7. Thư mục helper để chứa các hàm helper viết thêm.
-
-8. Axios đã được cấu hình trong file Config/Axios
+Login is required to access website resources. Website access account:	Username: quocTD
+	Paasword: 12345678
