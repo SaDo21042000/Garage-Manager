@@ -27,13 +27,14 @@ const Sidebar = () => {
   };
 
   return (
-    <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+    <StyledSider collapsible collapsed={collapsed} onCollapse={onCollapse}  width={250} >
       <div className="logo-car mb-3">
         <Link to ='/'>
           <img src={logo} alt="LOGO" width="100px" />
         </Link>  
       </div>
       <Menu
+       
         className="mt-3 menu-sidebar"
         theme="dark"
         defaultSelectedKeys={[location.pathname]}
@@ -58,7 +59,7 @@ const Sidebar = () => {
             <Link to="/list-accessary"></Link>
           </Menu.Item>
           <Menu.Item key="/import-accessary">
-            <span>Nhập vật tư phụ tùng</span>
+            <span>Nhập số lượng phụ tùng</span>
             <Link to="/import-accessary"></Link>
           </Menu.Item>
           <Menu.Item key="/wage-list">
