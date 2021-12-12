@@ -105,7 +105,7 @@ const getPhieuTiepNhan = async (req, res) => {
   var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
 
   try {
-      let PTNToday = await PhieuTiepNhan.find({ ngayTN: date });
+      let PTNToday = await PhieuTiepNhan.find({ ngayTN: date, isDeleted:0 });
       for(var i of PTNToday) {
         let xe = await Xe.find({ _id: i.maXe });
         let khachhang = await KhachHang.find({ _id: xe[0].maKhachHang });
@@ -128,7 +128,7 @@ const getPTNbyMaXe = async (req, res) => {
   let maXe = req.query.maXe;
   
   // Lay ma PhieuTiepNhan tu maXe ma nguoi dung nhap len
-  await PhieuTiepNhan.find({ maXe }).then( async res1 => {
+  await PhieuTiepNhan.find({ maXe, isDeleted:0 }).then( async res1 => {
     let data = res1;
     return res.status(200).json(data);
     

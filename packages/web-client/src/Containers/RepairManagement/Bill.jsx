@@ -33,7 +33,6 @@ const Bill = () => {
     try {
       setIsLoading(true);
       let data = await axios.get('/phieusuachua/getBienSo');
-      console.log('data', data);
       if (data.status) {
         setDataBienSo(data.list);
       } else {

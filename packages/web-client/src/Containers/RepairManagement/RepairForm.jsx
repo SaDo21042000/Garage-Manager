@@ -19,6 +19,7 @@ import axiosClient from '../../Configs/Axios';
 import { LoadingScreenCustom, Helper } from './../../Components';
 
 const { Title } = Typography;
+const { TextArea } = Input;
 
 const StyledRepairForm = styled(AntLayout)`
   .site-layout-background {
@@ -341,7 +342,7 @@ const RepairForm = () => {
               },
             ]}
           >
-            <Input />
+            <TextArea />
           </Form.Item>
 
           <Form.Item

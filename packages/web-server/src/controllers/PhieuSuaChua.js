@@ -15,8 +15,9 @@ const createOne = async (req, res) => {
       });
     }
 
-    let phieuTiepNhan = await PhieuTiepNhan.findOne({ maXe: xe._id.toString() });
+    let phieuTiepNhan = await PhieuTiepNhan.findOne({ maXe: xe._id.toString(),isDeleted:0 });
     if (!phieuTiepNhan){
+      console.log(123);
       return res.status(200).json({
         status:false,
         message: `Xe chưa lập phiếu tiếp nhận`,
@@ -42,6 +43,7 @@ const createOne = async (req, res) => {
 }
 
 const createCTSC = async (req, res) => {
+  console.log('có 123')
   const { bienSo, noiDung, maVatTu, maTienCong, soLuong, MaPSC } = req.body;
   let maVT, maTC, maXe, maPTN, maPSC;
   var today = new Date();
@@ -70,6 +72,7 @@ const createCTSC = async (req, res) => {
     maPSC: MaPSC
   })
   let ctsc = await newCTSC.save();
+  
   let phieuSuaChua = await PhieuSuaChua.findOne({_id:MaPSC});
   let total = phieuSuaChua.tongTienSC + ctsc.thanhTien;
   await PhieuSuaChua.updateOne({_id:MaPSC},{tongTienSC:total});
@@ -79,7 +82,7 @@ const createCTSC = async (req, res) => {
   let { maHieuXe } = await Xe.findOne({ bienSo }, { maHieuXe: 1 });
   let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
     {$match: { month: today.getMonth() + 1, year: today.getFullYear()}}]);
-
+    console.log('ds', ds)
     if(!ds[0]){
         let newDS = await new DoanhSo({ThoiDiemDS: date, tongDS: 0});
         await newDS.save();
@@ -91,9 +94,10 @@ const createCTSC = async (req, res) => {
             tongTien: 0,
             maDoanhSo: _id
         });
-        //await newCtds.save();
+        await newCtds.save();
     } else {
         let ctds = await ChiTietDoanhSo.findOne({ maDoanhSo: ds[0]._id, maHieuXe: maHieuXe });
+        console.log('ctds',ctds);
         if(!ctds) {
             let newCtds = await new ChiTietDoanhSo({
                 maHieuXe: maHieuXe,
@@ -110,7 +114,7 @@ const createCTSC = async (req, res) => {
 
   // cập nhật tiền nợ trong xe
   await Xe.updateOne({ bienSo: bienSo }, { tienNo: maXe.tienNo + soLuong*maVT.unitPrice })
-
+  console.log('có');
   return res.status(201).json({
     statusCode: 201,
     message: 'Receiving your form succesfully'
@@ -135,7 +139,7 @@ const xoaCTSC = async (req, res) => {
 
   try {
     let ctsc = await ChiTietSuaChua.findOne({_id:idCTSC })
-    let phieuSuaChua = await PhieuSuaChua.findOne({_id:ctsc.maPSC});
+    let phieuSuaChua = await PhieuSuaChua.findOne({_id:ctsc.maPSC, isDeleted:0});
     let total = phieuSuaChua.tongTienSC - ctsc.thanhTien;
     await PhieuSuaChua.updateOne({_id:ctsc.maPSC},{tongTienSC:total});
     await ChiTietSuaChua.deleteOne({ _id: idCTSC })
@@ -316,7 +320,7 @@ const getListCTSCByMaXe = async (req,res) =>{
   try{
       const maXe =req.query.maXe;
       //1 xe chỉ có 1 phieu tiep nhan
-      const objPhieuTiepNhan = await PhieuTiepNhan.findOne({maXe:maXe});
+      const objPhieuTiepNhan = await PhieuTiepNhan.findOne({maXe:maXe, isDeleted:0});
       if(!objPhieuTiepNhan ) return res.status(200).json({
           status:1,
           message:  `Xe này chưa lập phiếu tiếp nhận`,
