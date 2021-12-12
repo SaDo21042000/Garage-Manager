@@ -11,7 +11,7 @@ import {
   Select,
   Table,
   Typography,
-  notification
+  notification,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -65,7 +65,7 @@ const RepairForm = () => {
 
   const columns = [
     {
-      title: '#',
+      title: 'STT',
       dataIndex: 'key',
       key: 'number',
     },
@@ -181,46 +181,44 @@ const RepairForm = () => {
     try {
       setIsLoading(true);
       let data = await axiosClient.get(`/phieusuachua/getListCTSCByMaXe?maXe=${maXe}`);
-      if(data.status===0){
+      if (data.status === 0) {
         let maPSC = data.maPSC;
         let listPhieuCTSC = data.listPhieuCTSC;
-        console.log('data',listPhieuCTSC)
-        listPhieuCTSC = listPhieuCTSC.map((item, index)=>{
-        maPSC = item.maPSC;
-        return {
-          ...item,
-          key:index+1,
-          index:index+1,
-          price:Helper.convertNumberToMoney(item.price),
-          thanhTien:Helper.convertNumberToMoney(item.thanhTien),
-
-        }
-      })
-      setDataSource(listPhieuCTSC);
-      setIsExistPSC(true);
-      setMaPSC(maPSC);
-      
+        console.log('data', listPhieuCTSC);
+        listPhieuCTSC = listPhieuCTSC.map((item, index) => {
+          maPSC = item.maPSC;
+          return {
+            ...item,
+            key: index + 1,
+            index: index + 1,
+            price: Helper.convertNumberToMoney(item.price),
+            thanhTien: Helper.convertNumberToMoney(item.thanhTien),
+          };
+        });
+        setDataSource(listPhieuCTSC);
+        setIsExistPSC(true);
+        setMaPSC(maPSC);
       }
       //chwua lập phiếu tiếp nhận
-      if(data.status===1){
+      if (data.status === 1) {
         setDataSource([]);
         setIsExistPSC(false);
         notification.info({
           message: data.message,
-      });
+        });
         setMaPSC('');
         setIsExistPSC(false);
       }
       //chwua lập phiếu sửa chữa
-      if(data.status===2){
+      if (data.status === 2) {
         setDataSource([]);
-          notification.info({
-            message: data.message,
+        notification.info({
+          message: data.message,
         });
         setIsExistPSC(false);
         setMaPSC('');
       }
-    setIsLoading(false);  
+      setIsLoading(false);
     } catch (e) {
       setDataSource([]);
       setIsExistPSC(false);
@@ -258,8 +256,8 @@ const RepairForm = () => {
       };
       await axiosClient.post('/phieusuachua/create-CTSC', newData);
       notification.success({
-        message:'Thêm chi tiết sản phẩm'
-      })
+        message: 'Thêm chi tiết sản phẩm',
+      });
       let obj = dataBienSo.find((item) => item.bienSo === values.bienSo);
       await changeDataTable(obj._id);
       setIsLoading(false);
@@ -398,7 +396,7 @@ const RepairForm = () => {
             </Select>
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-            <Button aria-label='btn' type="primary" htmlType="submit">
+            <Button aria-label="btn" type="primary" htmlType="submit">
               Thêm
             </Button>
           </Form.Item>
@@ -446,7 +444,7 @@ const RepairForm = () => {
           className="result-table"
           columns={columns}
           dataSource={dataSource}
-          pagination={{pageSize:5}}
+          pagination={{ pageSize: 5 }}
         />
         {/* <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">
           In phiếu sửa chữa

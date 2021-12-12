@@ -1,49 +1,59 @@
 /* eslint-disable no-template-curly-in-string */
-import React, {useState, useEffect} from 'react';
-import { Breadcrumb, Typography, Form, Input, Button, InputNumber, DatePicker, Select, notification} from 'antd';
+import React, { useState, useEffect } from 'react';
+import {
+  Breadcrumb,
+  Typography,
+  Form,
+  Input,
+  Button,
+  InputNumber,
+  DatePicker,
+  Select,
+  notification,
+} from 'antd';
 import { PrinterFilled } from '@ant-design/icons';
 import { DATEFORMAT, layout, StyledBill, validateMessages } from './Bill.constants';
 import { useHistory } from 'react-router-dom';
 import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-import axios from './../../Configs/Axios'
-import {LoadingScreenCustom } from './../../Components'
+import axios from './../../Configs/Axios';
+import { LoadingScreenCustom } from './../../Components';
 
 const { Title } = Typography;
-const {Option} = Select;
+const { Option } = Select;
 const Bill = () => {
   const [dataBienSo, setDataBienSo] = useState([]);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
-  useEffect(()=>{
-    getBienSo()
-  },[])
-  const getBienSo= async ()=>{
-    try{
+  useEffect(() => {
+    getBienSo();
+  }, []);
+  const getBienSo = async () => {
+    try {
       setIsLoading(true);
-      let data= await axios.get('/phieusuachua/getBienSo');
-      console.log('data',data)
-      if(data.status){
+      let data = await axios.get('/phieusuachua/getBienSo');
+      console.log('data', data);
+      if (data.status) {
         setDataBienSo(data.list);
-      }else{
+      } else {
         notification.warning({
-          message:data.message
-        })
+          message: data.message,
+        });
       }
       setIsLoading(false);
-    }catch(e){
+    } catch (e) {
       setIsLoading(false);
       notification.error({
-        message:'Có lỗi lấy danh sách xe. Vui lòng kiểm tra lại'
-      })
+        message: 'Có lỗi lấy danh sách xe. Vui lòng kiểm tra lại',
+      });
     }
-  }
+  };
 
   const onFinish = (values) => {
     setIsLoading(true);
-    const { plate,  money, name, phone, email } = values;
-    let date =new Date();
+    const { plate, money, name, phone, email } = values;
+    let date = new Date();
     const dataPost = {
       bienSo: plate,
       ngayTT: date,
@@ -56,15 +66,15 @@ const Bill = () => {
     try {
       axios.post(`${process.env.REACT_APP_API_URL}/phieuthutiens`, dataPost);
       setIsLoading(false);
-     // exportToCSV([ dataPost], 'Phiếu thu tiền');
+      // exportToCSV([ dataPost], 'Phiếu thu tiền');
       notification.success({
-        message:'Tạo phiếu thu tiền thành công'
-      })
-      history.push('/car-list')
+        message: 'Tạo phiếu thu tiền thành công',
+      });
+      history.push('/car-list');
     } catch (error) {
       notification.error({
-        message:'Đã có lỗi xảy ra khi thu tiền. Vui lòng kiểm tra lại'
-      })
+        message: 'Đã có lỗi xảy ra khi thu tiền. Vui lòng kiểm tra lại',
+      });
       setIsLoading(false);
       console.log('Error:', error.message);
     }
@@ -84,30 +94,29 @@ const Bill = () => {
   //   const data = new Blob([excelBuffer], { type: fileType });
   //   FileSaver.saveAs(data, fileName + fileExtension);
   // };
-  const onChangeBienSo=(value)=>{
+  const onChangeBienSo = (value) => {
     setIsLoading(true);
     let money = 0;
-    let tenKhachHang='';
-    let soDT= '';
-    let email='';
+    let tenKhachHang = '';
+    let soDT = '';
+    let email = '';
 
-    dataBienSo.forEach(item=>{
-      if(item.bienSo===value){
-        money=item.tongTienSC;
-        tenKhachHang=item.tenKhachHang;
-        soDT=item.soDT;
-        email=item.email;
-      } 
-    })
+    dataBienSo.forEach((item) => {
+      if (item.bienSo === value) {
+        money = item.tongTienSC;
+        tenKhachHang = item.tenKhachHang;
+        soDT = item.soDT;
+        email = item.email;
+      }
+    });
     form.setFieldsValue({
       soTienSC: money,
-      name:tenKhachHang,
-      phone:soDT,
-      email:email
-
+      name: tenKhachHang,
+      phone: soDT,
+      email: email,
     });
     setIsLoading(false);
-  }
+  };
   return (
     <StyledBill>
       <Breadcrumb style={{ margin: '16px 0' }}>
@@ -115,7 +124,10 @@ const Bill = () => {
         <Breadcrumb.Item>Lập phiếu thu tiền</Breadcrumb.Item>
       </Breadcrumb>
 
-      <div className="site-layout-background" style={{ padding: 24, minHeight: 30, position:'relative' }}>
+      <div
+        className="site-layout-background"
+        style={{ padding: 24, minHeight: 30, position: 'relative' }}
+      >
         <Title className="main-title" level={2}>
           Lập phiếu thu tiền
         </Title>
@@ -166,7 +178,7 @@ const Bill = () => {
               },
             ]}
           >
-            <Input disabled={true} className="text-dark"/>
+            <Input disabled={true} className="text-dark" />
           </Form.Item>
           <Form.Item
             name="phone"
@@ -177,7 +189,7 @@ const Bill = () => {
               },
             ]}
           >
-            <Input disabled={true} className="text-dark"/>
+            <Input disabled={true} className="text-dark" />
           </Form.Item>
           <Form.Item
             name="email"
@@ -188,7 +200,7 @@ const Bill = () => {
               },
             ]}
           >
-            <Input disabled={true} className="text-dark"/>
+            <Input disabled={true} className="text-dark" />
           </Form.Item>
           <Form.Item
             name="soTienSC"
@@ -201,7 +213,7 @@ const Bill = () => {
               },
             ]}
           >
-            <InputNumber style={{ width: '100%' }} disabled={true} className="text-dark"/>
+            <InputNumber style={{ width: '100%' }} disabled={true} className="text-dark" />
           </Form.Item>
           <Form.Item
             name="money"
@@ -217,7 +229,6 @@ const Bill = () => {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
 
-          
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
             <Button
               type="success"
@@ -229,7 +240,7 @@ const Bill = () => {
             </Button>
           </Form.Item>
         </Form>
-        <LoadingScreenCustom isLoading ={isLoading} />
+        <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledBill>
   );

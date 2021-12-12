@@ -133,7 +133,7 @@ const InventoryReport = () => {
               },
             ]}
           >
-            <InputNumber aria-label='month-input' style={{ width: '100%' }} />
+            <InputNumber aria-label="month-input" style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item
             label="Năm"
@@ -149,7 +149,7 @@ const InventoryReport = () => {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
           <Form.Item>
-            <Button aria-label='btn' type="primary" htmlType="submit">
+            <Button aria-label="btn" type="primary" htmlType="submit">
               Xem báo cáo
             </Button>
           </Form.Item>

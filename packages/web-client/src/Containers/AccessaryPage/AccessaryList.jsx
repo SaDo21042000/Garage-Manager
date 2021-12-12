@@ -16,7 +16,7 @@ import {
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import {LoadingScreenCustom, Helper } from './../../Components'
+import { LoadingScreenCustom, Helper } from './../../Components';
 const { Content } = AntLayout;
 const { Title } = Typography;
 const { Search } = Input;
@@ -24,7 +24,7 @@ const { Search } = Input;
 const StyledAccessaryList = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
-    position:relative;
+    position: relative;
   }
 
   .main-title {
@@ -44,11 +44,11 @@ const StyledAccessaryList = styled(AntLayout)`
   .search-input {
     max-width: 200px;
   }
-  
+
   .label-search {
     margin-right: 16px;
   }
-  
+
   .input-search {
     margin-right: 28px;
   }
@@ -110,25 +110,25 @@ const AccessaryList = () => {
       const typeAccessary = await axiosClient.get('/loaivattus/get');
       let listAccessay = await axiosClient.get('/accessories');
       let listType = typeAccessary.object.listLoaiVatTu;
-      listType = listType.map((item,index)=>{
+      listType = listType.map((item, index) => {
         return {
           ...item,
-          key:index+1
-        }
-      })
-      listAccessay = listAccessay.map((item,index)=>{
+          key: index + 1,
+        };
+      });
+      listAccessay = listAccessay.map((item, index) => {
         return {
           ...item,
-          key:index+1
-        }
-      })
+          key: index + 1,
+        };
+      });
       setDataTypeAccessay(listType);
       setDataListAccessary(listAccessay);
       setIsLoading(false);
     } catch (error) {
       notification.error({
         message: 'Đã có khi lấy dữ liệu danh sách loại vật tư. Vui lòng thử lại',
-      })
+      });
       setIsLoading(false);
     }
   };
@@ -146,7 +146,7 @@ const AccessaryList = () => {
       } catch (error) {
         notification.error({
           message: 'Đã có khi lấy dữ liệu danh sách phụ tùng. Vui lòng thử lại',
-        })
+        });
         setIsLoading(false);
       }
     };
@@ -168,7 +168,7 @@ const AccessaryList = () => {
         } catch (error) {
           notification.error({
             message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
-          })
+          });
           setIsLoading(false);
         }
       };
@@ -187,7 +187,7 @@ const AccessaryList = () => {
         } catch (error) {
           notification.error({
             message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
-          })
+          });
           setIsLoading(false);
         }
       };
@@ -291,14 +291,17 @@ const AccessaryList = () => {
             onFinish={onFinishAccessary}
             form={formAcccessary}
           >
-            <Form.Item label="Loại phụ tùng" name="typeAccessory" 
-            rules={[
-                    {
-                        required: true,
-                    },
-                    ]}>
+            <Form.Item
+              label="Loại phụ tùng"
+              name="typeAccessory"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
               <Select
-                placeholder="Select a option"
+                placeholder="Chọn loại phụ tùng"
                 showSearch="true"
                 showArrow
                 allowClear
@@ -317,20 +320,26 @@ const AccessaryList = () => {
                 })}
               </Select>
             </Form.Item>
-            <Form.Item label="Tên phụ tùng" name="name"
+            <Form.Item
+              label="Tên phụ tùng"
+              name="name"
               rules={[
                 {
-                    required: true,
+                  required: true,
                 },
-                ]}>
+              ]}
+            >
               <Input style={{ width: '100%' }} defaultValue={dataEditAccessary.nameAccessary} />
             </Form.Item>
-            <Form.Item label="Đơn giá" name="unitPrice"
+            <Form.Item
+              label="Đơn giá"
+              name="unitPrice"
               rules={[
-              {
+                {
                   required: true,
-              },
-              ]}>
+                },
+              ]}
+            >
               <Input
                 type="number"
                 style={{ width: '100%' }}
@@ -373,7 +382,7 @@ const AccessaryList = () => {
             >
               <Form.Item label="Tên phụ tùng" name="nameAccessary">
                 <Search
-                  placeholder="input search text"
+                  placeholder="Nhập tên phụ tùng"
                   enterButton="Search"
                   onSearch={onFinishSearch}
                   allowClear
@@ -405,7 +414,7 @@ const AccessaryList = () => {
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <AccessaryListView />
-          <LoadingScreenCustom isLoading ={isLoading} />
+          <LoadingScreenCustom isLoading={isLoading} />
         </div>
       </Content>
     </StyledAccessaryList>

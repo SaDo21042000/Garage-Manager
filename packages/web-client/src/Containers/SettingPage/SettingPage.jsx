@@ -1,16 +1,11 @@
 /* eslint-disable no-template-curly-in-string */
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import {
-  Layout as AntLayout,
-  Breadcrumb,
-  Typography,
-  Divider,
-} from 'antd';
+import { Layout as AntLayout, Breadcrumb, Typography, Divider } from 'antd';
 
 import { MaxCarForm, CarBrandNumberForm, SupplyTypeForm } from '../../Components/SettingForm';
-import {LoadingScreenCustom } from './../../Components'
+import { LoadingScreenCustom } from './../../Components';
 
 const { Title } = Typography;
 
@@ -27,7 +22,7 @@ const StyledSaleReportPage = styled(AntLayout)`
       text-align: center;
     }
   }
-  
+
   .max-car-number {
     justify-content: center;
     margin-bottom: 25px;
@@ -35,11 +30,10 @@ const StyledSaleReportPage = styled(AntLayout)`
 `;
 
 const SettingPage = () => {
-
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <StyledSaleReportPage >
+    <StyledSaleReportPage>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Cài đặt và thay đổi quy định</Breadcrumb.Item>
       </Breadcrumb>
@@ -51,15 +45,15 @@ const SettingPage = () => {
 
         <Divider />
 
-        <MaxCarForm  setIsLoading={setIsLoading}/>
+        <MaxCarForm setIsLoading={setIsLoading} />
 
         <Divider />
 
-        <CarBrandNumberForm  setIsLoading={setIsLoading}/>
+        <CarBrandNumberForm setIsLoading={setIsLoading} />
 
         <Divider />
 
-        <SupplyTypeForm  setIsLoading={setIsLoading}/>
+        <SupplyTypeForm setIsLoading={setIsLoading} />
         <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledSaleReportPage>

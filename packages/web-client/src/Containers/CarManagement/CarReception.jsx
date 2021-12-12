@@ -11,19 +11,19 @@ import {
   Table,
   Popconfirm,
   Select,
-  notification
+  notification,
 } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import {LoadingScreenCustom } from './../../Components'
-import axiosClient from '../../Configs/Axios'
+import { LoadingScreenCustom } from './../../Components';
+import axiosClient from '../../Configs/Axios';
 
 const { Title } = Typography;
-const { Option} = Select;
+const { Option } = Select;
 
 const StyledCarReception = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
-    position:relative
+    position: relative;
   }
 
   .main-title {
@@ -41,51 +41,46 @@ const StyledCarReception = styled(AntLayout)`
 `;
 
 const CarReception = () => {
-
   const [dataSource, setDataSource] = useState([]);
-  const [isLoading, setIsLoading] =useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [dataHieuXe, setDataHieuXe] = useState([]);
 
   useEffect(() => {
-    
     getListPTNInDB();
     getHieuXe();
-
   }, []);
 
-  const getHieuXe = async ()=>{
-    try{
+  const getHieuXe = async () => {
+    try {
       setIsLoading(true);
       let data = await axiosClient.post('/hieuxes/get');
       setDataHieuXe(data.object.listHieuXe);
       setIsLoading(false);
-    }catch(e){
+    } catch (e) {
       setIsLoading(false);
     }
-    
-  }
+  };
 
-  const getListPTNInDB= async () =>{
-    try{
+  const getListPTNInDB = async () => {
+    try {
       setIsLoading(true);
-      let data = await axiosClient.get("phieutiepnhan/getListCarInToday");
-      data= data.map((item,index)=>{
-        return { 
+      let data = await axiosClient.get('phieutiepnhan/getListCarInToday');
+      data = data.map((item, index) => {
+        return {
           ...item,
-          key:index+1,
-          index:index+1
-        }
-      })
+          key: index + 1,
+          index: index + 1,
+        };
+      });
       setDataSource(data);
       setIsLoading(false);
-    }catch(e){
+    } catch (e) {
       setIsLoading(false);
       notification.error({
-        message: "Đã có lỗi xảy ra khi lấy thông tin phiếu tiếp nhận hôm nay",
-      })
+        message: 'Đã có lỗi xảy ra khi lấy thông tin phiếu tiếp nhận hôm nay',
+      });
     }
-  }
-
+  };
 
   const layout = {
     labelCol: {
@@ -111,7 +106,7 @@ const CarReception = () => {
 
   const columns = [
     {
-      title: '#',
+      title: 'STT',
       dataIndex: 'key',
       key: 'index',
     },
@@ -131,12 +126,12 @@ const CarReception = () => {
       key: 'name',
     },
     {
-      title: 'Phone',
+      title: 'Số điện thoại',
       dataIndex: 'soDT',
       key: 'phone',
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       dataIndex: 'action',
       render: (v, item) => (
         <>
@@ -155,24 +150,24 @@ const CarReception = () => {
   ];
 
   const handleDelete = async (PTN) => {
-    try{
+    try {
       setIsLoading(true);
-      await axiosClient.post("/phieutiepnhan/deletePTNByMaPTN", {maPTN:PTN._id});
+      await axiosClient.post('/phieutiepnhan/deletePTNByMaPTN', { maPTN: PTN._id });
       notification.success({
-        message: "Xóa phiếu tiếp nhận thành công",
-      })
+        message: 'Xóa phiếu tiếp nhận thành công',
+      });
       await getListPTNInDB();
       setIsLoading(false);
-    }catch(e){
+    } catch (e) {
       notification.error({
-        message: "Đã có lỗi xảy ra vui lòng thử lại",
-      })
+        message: 'Đã có lỗi xảy ra vui lòng thử lại',
+      });
       setIsLoading(false);
     }
   };
 
   const onFinishAddItem = async (values) => {
-    try{
+    try {
       setIsLoading(true);
       const newData = {
         maHieuXe: values.carName,
@@ -182,36 +177,35 @@ const CarReception = () => {
         email: values.email,
         diaChi: values.address,
       };
-  
+
       let data = await axiosClient.post('/phieutiepnhan/createOne', newData);
-      if(data.status===1){
+      if (data.status === 1) {
         notification.info({
           message: data.message,
-        })
-      } 
-      if(data.status===0){
+        });
+      }
+      if (data.status === 0) {
         notification.success({
           message: data.message,
-        })
-      }   
+        });
+      }
       // CCap nhat lai index trong dataSourcce
       await getListPTNInDB();
       setIsLoading(false);
-    }catch(e){
+    } catch (e) {
       setIsLoading(false);
     }
-    
   };
 
   return (
-    <StyledCarReception >
+    <StyledCarReception>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Quản lý xe</Breadcrumb.Item>
         <Breadcrumb.Item>Tiếp nhận xe sửa</Breadcrumb.Item>
       </Breadcrumb>
       <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
         <Title data-testid="header" className="main-title" level={2}>
-          Form tiếp nhận xe sửa
+          Lập phiếu tiếp nhận xe sửa
         </Title>
 
         <Form
@@ -229,7 +223,7 @@ const CarReception = () => {
               },
             ]}
           >
-            <Input aria-label='plate-input'/>
+            <Input aria-label="plate-input" />
           </Form.Item>
           <Form.Item
             name="carName"
@@ -272,7 +266,7 @@ const CarReception = () => {
           </Form.Item>
           <Form.Item
             name="phone"
-            label="Phone"
+            label="Số điện thoại"
             rules={[
               {
                 required: true,
@@ -290,7 +284,7 @@ const CarReception = () => {
               },
             ]}
           >
-            <Input aria-label='email-input'/>
+            <Input aria-label="email-input" />
           </Form.Item>
           <Form.Item
             name="address"
@@ -313,12 +307,8 @@ const CarReception = () => {
         <Title className="main-title" level={2}>
           Danh sách xe tiếp nhận trong ngày
         </Title>
-        <Table
-          className="result-table"
-          columns={columns}
-          dataSource={dataSource}
-        />
-        <LoadingScreenCustom isLoading ={isLoading} />
+        <Table className="result-table" columns={columns} dataSource={dataSource} />
+        <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledCarReception>
   );

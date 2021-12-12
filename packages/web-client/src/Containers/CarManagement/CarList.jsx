@@ -14,7 +14,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import { LoadingScreenCustom, Helper} from './../../Components';
+import { LoadingScreenCustom, Helper } from './../../Components';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -59,7 +59,7 @@ const CarList = () => {
 
   const columns = [
     {
-      title: '#',
+      title: 'STT',
       dataIndex: 'number',
       key: 'number',
       width: 60,
@@ -83,7 +83,7 @@ const CarList = () => {
       key: 'tenKhachHang',
     },
     {
-      title: 'Phone',
+      title: 'Số điện thoại',
       dataIndex: 'soDT',
       key: 'soDT',
     },
@@ -93,7 +93,7 @@ const CarList = () => {
       key: 'tienNo',
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       dataIndex: 'action',
       render: (v, index) => (
         <>
@@ -127,7 +127,7 @@ const CarList = () => {
         return {
           ...item,
           key: index + 1,
-          tienNo:Helper.convertNumberToMoney(item.tienNo)
+          tienNo: Helper.convertNumberToMoney(item.tienNo),
         };
       });
       setDataDisplay(listCar);
@@ -184,8 +184,8 @@ const CarList = () => {
         >
           <Form.Item label="Biển Số" name="plate" style={{ width: '300px' }}>
             <Search
-              aria-label='plate-input'
-              placeholder="input search text"
+              aria-label="plate-input"
+              placeholder="Nhập biển số xe"
               enterButton="Search"
               onSearch={onFinish}
               allowClear

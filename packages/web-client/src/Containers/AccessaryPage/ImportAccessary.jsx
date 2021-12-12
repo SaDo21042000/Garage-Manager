@@ -1,20 +1,28 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Layout as AntLayout, Breadcrumb, Button, Form, InputNumber, Typography, Select, notification } from 'antd';
+import {
+  Layout as AntLayout,
+  Breadcrumb,
+  Button,
+  Form,
+  InputNumber,
+  Typography,
+  Select,
+  notification,
+} from 'antd';
 import styled from 'styled-components';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 import axiosClient from '../../Configs/Axios';
-import {LoadingScreenCustom } from './../../Components'
+import { LoadingScreenCustom } from './../../Components';
 const { Content } = AntLayout;
 const { Title, Text } = Typography;
-
 
 const StyledImportAccessary = styled(AntLayout)`
   .site-layout-background {
     background: #fff;
-    position:relative;
+    position: relative;
   }
 
   .main-title {
@@ -51,42 +59,42 @@ const ImportAccessary = () => {
     },
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const getAPI = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosClient.get('/accessories')
-        setData(response)
+        const response = await axiosClient.get('/accessories');
+        setData(response);
         setIsLoading(false);
       } catch (error) {
         notification.error({
           message: 'Đã có lỗi lấy danh sách tên loại phụ tùng. Vui lòng thử lại',
-        })
+        });
         setIsLoading(false);
       }
-    }
+    };
     getAPI();
-  },[])
+  }, []);
 
   const onFinish = (values) => {
     const postData = async () => {
       try {
         setIsLoading(true);
-        await axiosClient.post('/accessory-import-forms',values)
+        await axiosClient.post('/accessory-import-forms', values);
         notification.success({
           message: 'Thêm vật tư phụ tùng thành công',
-        })
+        });
         history.push('/list-accessary');
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
         notification.error({
           message: 'Đã có lỗi xảy ra vui lòng thử lại',
-        })
+        });
       }
-    }
+    };
     postData();
-    form.resetFields()
+    form.resetFields();
   };
 
   const ImportAccessaryView = () => {
@@ -115,7 +123,7 @@ const ImportAccessary = () => {
         >
           <Form.Item label="Tên phụ tùng" name="accessoryId">
             <Select
-              placeholder="Select a option"
+              placeholder="Chọn một phụ tùng"
               showSearch="true"
               showArrow
               allowClear
@@ -174,7 +182,7 @@ const ImportAccessary = () => {
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <ImportAccessaryView />
-          <LoadingScreenCustom isLoading ={isLoading} />
+          <LoadingScreenCustom isLoading={isLoading} />
         </div>
       </Content>
     </StyledImportAccessary>

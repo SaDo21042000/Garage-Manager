@@ -1,6 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
 
-import { DownloadOutlined } from '@ant-design/icons';
 import {
   Breadcrumb,
   Button,
@@ -12,10 +11,10 @@ import {
   Table,
   Typography,
 } from 'antd';
-import axios from '../../Configs/Axios';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { LoadingScreenCustom, Helper } from '../../Components';
+import { Helper, LoadingScreenCustom } from '../../Components';
+import axios from '../../Configs/Axios';
 
 const { Title, Text } = Typography;
 
@@ -79,7 +78,7 @@ const SaleReportPage = () => {
 
   const columns = [
     {
-      title: '#',
+      title: 'STT',
       dataIndex: 'carNumber',
       key: 'carNumber',
     },
@@ -120,14 +119,14 @@ const SaleReportPage = () => {
     },
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const DATE = new Date();
     const MONTH = DATE.getMonth() + 1;
     const YEAR = DATE.getFullYear();
-    onGetDataFromDB(MONTH,YEAR );
-  },[])
+    onGetDataFromDB(MONTH, YEAR);
+  }, []);
 
-  const onGetDataFromDB = async (month,year) =>{
+  const onGetDataFromDB = async (month, year) => {
     try {
       setIsLoading(true);
       const dataId = await axios.get(
@@ -137,7 +136,7 @@ const SaleReportPage = () => {
       if (dataId.length === 0) {
         setIsLoading(false);
         setShowReportResult(false);
-        
+
         notification.warning({
           message: 'Thông tin nhập không hợp lệ. Không có báo cáo trong thời gian trên',
         });
@@ -150,12 +149,12 @@ const SaleReportPage = () => {
         const dataRaw = await axios.get(
           `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${id}`,
         );
-        const totalAmount =dataRaw.reduce((a, b) => a + b.tongTien, 0);
-        const finalData = dataRaw.map((i,index) => ({
+        const totalAmount = dataRaw.reduce((a, b) => a + b.tongTien, 0);
+        const finalData = dataRaw.map((i, index) => ({
           ...i,
-          tiLe: `${Number(i.tongTien /  totalAmount).toFixed(2) * 100}%`,
+          tiLe: `${Number(i.tongTien / totalAmount).toFixed(2) * 100}%`,
           tongTien: Helper.convertNumberToMoney(i.tongTien),
-          key:index
+          key: index,
         }));
         setDataSource(finalData);
         setShowReportResult(true);
@@ -169,14 +168,12 @@ const SaleReportPage = () => {
         message: 'Đã có lỗi xảy ra vui lòng thử lại',
       });
     }
-  }
+  };
 
   const onFinishCreateTable = async (values) => {
     const { month, year } = values;
     setDateData({ ...dateData, month: month, year: year });
-    onGetDataFromDB(month,year);
-
-    
+    onGetDataFromDB(month, year);
   };
 
   const onFinishFailedCreateTable = (errorInfo) => {
@@ -190,8 +187,12 @@ const SaleReportPage = () => {
     </Title>
   );
 
-  const TotalValues = ({total}) => {
-    return <Text className="result-total">Tổng doanh thu tháng: {Helper.convertNumberToMoney(total)}</Text>;
+  const TotalValues = ({ total }) => {
+    return (
+      <Text className="result-total">
+        Tổng doanh thu tháng: {Helper.convertNumberToMoney(total)}
+      </Text>
+    );
   };
 
   return (
@@ -232,7 +233,7 @@ const SaleReportPage = () => {
               },
             ]}
           >
-            <InputNumber aria-label='month-input' style={{ width: '100%' }} />
+            <InputNumber aria-label="month-input" style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item
@@ -259,12 +260,12 @@ const SaleReportPage = () => {
         <div className={showReportResult ? 'show' : 'hide'}>
           <Divider plain>Kết quả</Divider>
           <ResultTitle />
-          <TotalValues total ={total}/>
+          <TotalValues total={total} />
           <Table
             className="result-table"
             columns={columns}
             dataSource={dataSource}
-            pagination={{pageSize:10}}
+            pagination={{ pageSize: 10 }}
           />
           {/* <Button
           data-testid="btnBC"

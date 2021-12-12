@@ -15,7 +15,7 @@ import {
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import {LoadingScreenCustom } from './../../Components'
+import { LoadingScreenCustom } from './../../Components';
 
 const { Content } = AntLayout;
 const { Title } = Typography;
@@ -128,7 +128,7 @@ const WageList = () => {
       } catch (error) {
         setIsLoading(false);
         notification.error({
-          message: "Lỗi lấy danh sách tiền công. Vui lòng thử lại",
+          message: 'Lỗi lấy danh sách tiền công. Vui lòng thử lại',
         });
       }
     };
@@ -313,7 +313,7 @@ const WageList = () => {
             >
               <Form.Item label="Tên tiền công" name="nameWage">
                 <Search
-                  placeholder="input search text"
+                  placeholder="Tìm kiếm tiền công"
                   enterButton="Search"
                   onSearch={onFinishSearch}
                   allowClear
@@ -345,7 +345,7 @@ const WageList = () => {
         </Breadcrumb>
         <div className="site-layout-background" style={{ padding: 24, minHeight: 30 }}>
           <WageListView />
-          <LoadingScreenCustom isLoading ={isLoading} />
+          <LoadingScreenCustom isLoading={isLoading} />
         </div>
       </Content>
     </StyledWageList>
