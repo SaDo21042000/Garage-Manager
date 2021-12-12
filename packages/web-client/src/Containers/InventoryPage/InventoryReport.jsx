@@ -81,7 +81,9 @@ const InventoryReport = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log(error);
+      notification.error({
+        message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+      });
     }
   };
 

@@ -70,13 +70,13 @@ const Bill = () => {
       notification.success({
         message: 'Tạo phiếu thu tiền thành công',
       });
+      form.resetFields();
       history.push('/car-list');
     } catch (error) {
       notification.error({
         message: 'Đã có lỗi xảy ra khi thu tiền. Vui lòng kiểm tra lại',
       });
       setIsLoading(false);
-      console.log('Error:', error.message);
     }
   };
   const onFinishFailed = (errorInfo) => {

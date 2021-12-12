@@ -60,7 +60,7 @@ export const TableActions = ({ onDelete, onEdit }) => {
       <Button icon={<EditOutlined />} onClick={onEdit}></Button>
       <Popconfirm
         placement="topRight"
-        title={'Are you sure to delete?'}
+        title={'Bạn có chắc chắn muốn xóa không ?'}
         onConfirm={onDelete}
         okText={'Yes'}
         cancelText={'No'}
@@ -214,6 +214,9 @@ const AccessaryList = () => {
         });
       } catch (error) {
         console.log(error);
+        notification.error({
+          message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+        });
       }
     };
     postData();

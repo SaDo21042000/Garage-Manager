@@ -44,6 +44,7 @@ const CarReception = () => {
   const [dataSource, setDataSource] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataHieuXe, setDataHieuXe] = useState([]);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     getListPTNInDB();
@@ -137,7 +138,7 @@ const CarReception = () => {
         <>
           <Popconfirm
             placement="top"
-            title="Are you sure to delete this customer?"
+            title="Bạn có chắc chắn muốn xóa phiếu tiếp nhận này không?"
             onConfirm={() => handleDelete(item)}
             okText="Yes"
             cancelText="No"
@@ -189,10 +190,14 @@ const CarReception = () => {
           message: data.message,
         });
       }
+      form.resetFields();
       // CCap nhat lai index trong dataSourcce
       await getListPTNInDB();
       setIsLoading(false);
     } catch (e) {
+      notification.error({
+        message: 'Đã có lỗi xảy ra . Vui lòng kiểm tra lại',
+      });
       setIsLoading(false);
     }
   };
@@ -213,6 +218,7 @@ const CarReception = () => {
           name="nest-messages"
           onFinish={onFinishAddItem}
           validateMessages={validateMessages}
+          form={form}
         >
           <Form.Item
             name="plate"

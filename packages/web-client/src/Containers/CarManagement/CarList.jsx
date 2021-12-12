@@ -99,7 +99,7 @@ const CarList = () => {
         <>
           <Popconfirm
             placement="top"
-            title="Are you sure to delete this customer?"
+            title="Bạn có muốn xóa thông tin xe này không?"
             onConfirm={() => handleDelete(index)}
             okText="Yes"
             cancelText="No"

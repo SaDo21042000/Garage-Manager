@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
+import { DeleteOutlined  } from '@ant-design/icons';
 import {
   Breadcrumb,
   Button,
@@ -158,6 +158,9 @@ const RepairForm = () => {
       setDataTenTienCong(lstLoaiTC);
       setIsLoading(false);
     } catch (e) {
+      notification.error({
+        message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+      });
       setIsLoading(false);
     }
   };
@@ -170,6 +173,9 @@ const RepairForm = () => {
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
+      notification.error({
+        message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+      });
     }
   };
 
@@ -184,7 +190,6 @@ const RepairForm = () => {
       if (data.status === 0) {
         let maPSC = data.maPSC;
         let listPhieuCTSC = data.listPhieuCTSC;
-        console.log('data', listPhieuCTSC);
         listPhieuCTSC = listPhieuCTSC.map((item, index) => {
           maPSC = item.maPSC;
           return {
@@ -222,6 +227,9 @@ const RepairForm = () => {
     } catch (e) {
       setDataSource([]);
       setIsExistPSC(false);
+      notification.error({
+        message: 'Đã có lỗi xảy ra . Vui lòng kiểm tra lại',
+      });
       setIsLoading(false);
     }
   };
@@ -256,12 +264,16 @@ const RepairForm = () => {
       };
       await axiosClient.post('/phieusuachua/create-CTSC', newData);
       notification.success({
-        message: 'Thêm chi tiết sản phẩm',
+        message: 'Thêm chi tiết phiếu sửa chữa thành công',
       });
       let obj = dataBienSo.find((item) => item.bienSo === values.bienSo);
       await changeDataTable(obj._id);
+      form.resetFields();
       setIsLoading(false);
     } catch (e) {
+      notification.error({
+        message: 'Đã có lỗi xảy ra . Vui lòng kiểm tra lại',
+      });
       setIsLoading(false);
     }
   };
@@ -410,7 +422,7 @@ const RepairForm = () => {
           name="nest1-messages"
         >
           <Form.Item
-            label="Tìm phiếu sữa chữa theo biển số"
+            label="Tìm phiếu sửa chữa theo biển số"
             name="plateFilter"
             rules={[
               {

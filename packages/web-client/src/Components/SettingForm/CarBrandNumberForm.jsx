@@ -35,7 +35,9 @@ const CarBrandNumberForm = (props) => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
+        notification.error({
+          message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+        });
       }
     };
     getAPI();
@@ -134,7 +136,9 @@ const CarBrandNumberForm = (props) => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
+        notification.error({
+          message: 'Đã có lỗi xảy ra. Vui lòng thử lại',
+        });
       }
     };
     addCarBrand();

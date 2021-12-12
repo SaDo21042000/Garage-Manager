@@ -59,12 +59,10 @@ const Homepage = () => {
       notification.error({
         message: "Đã có lỗi xảy ra .Vui lòng thử lại.",
       });
-
-    }
-   
+      setIsLoading(false);
+    } 
   }
   
-
     return (
 
       <StyledHomePage >
