@@ -112,7 +112,14 @@ const CarBrandNumberForm = (props) => {
     const addCarBrand = async () => {
       try {
         setIsLoading(true);
-        await axiosClient.post('/hieuxes/create', { tenHieuXe: e.target[0].value });
+        let data = await axiosClient.post('/hieuxes/create', { tenHieuXe: e.target[0].value });
+        if(!data.status){
+          notification.info({
+            message: data.message,
+          });
+          setIsLoading(false);
+          return ;
+        }
         const response = await axiosClient.post('/hieuxes/get');
         const newCarBrand = response.object.listHieuXe.filter(
           (item) => item.tenHieuXe === e.target[0].value,

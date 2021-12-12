@@ -8,7 +8,7 @@ const deleteOne = async (req, res) => {
         let maHieuXe=req.body.maHieuXe;
         let hieuxe=await HieuXeService.findOne({maHieuXe:maHieuXe});
         if(hieuxe===null){
-            return res.status(404).json(errorResponse("Không tìm thấy hiệu xe"));
+            return res.status(200).json(errorResponse("Không tìm thấy hiệu xe"));
         }
         await HieuXeService.deleteOne({maHieuXe:maHieuXe});
         return res.status(200).json(successResponse("Xóa hiệu xe thành công"));
@@ -30,7 +30,7 @@ const create = async (req, res) => {
                 }
             })
             if(flag===1){
-                return res.status(403).json(errorResponse("Tên hiệu xe đã tồn tại"));
+                return res.status(200).json(errorResponse("Tên hiệu xe đã tồn tại"));
             }
             maHieuXe=generateID("HX");
             let newHieuXe={
@@ -42,7 +42,7 @@ const create = async (req, res) => {
             return res.status(200).json(successResponse("Tạo thành công"));
         }
         else{
-            return res.status(403).json(
+            return res.status(200).json(
                 errorResponse("Dữ liệu không hợp lệ")
             );
         }

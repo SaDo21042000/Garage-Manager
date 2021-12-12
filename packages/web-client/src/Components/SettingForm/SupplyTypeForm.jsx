@@ -35,7 +35,6 @@ const SupplyTypeForm = (props) => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
       }
     };
     getAPI();
@@ -46,12 +45,10 @@ const SupplyTypeForm = (props) => {
       try {
         setIsLoading(true);
         const response = await axiosClient.get('/loaivattus/get');
-        console.log('response', response);
         setDataSourceSupply(response.object.listLoaiVatTu);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
       }
     };
     getAPI();
@@ -102,7 +99,6 @@ const SupplyTypeForm = (props) => {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
       }
     };
     deleteSupplyType();
@@ -113,7 +109,14 @@ const SupplyTypeForm = (props) => {
     const addSupplyType = async () => {
       try {
         setIsLoading(true);
-        await axiosClient.post('/loaivattus/create', { tenLoaiVatTu: e.target[0].value });
+        let data = await axiosClient.post('/loaivattus/create', { tenLoaiVatTu: e.target[0].value });
+        if(!data.status){
+          notification.info({
+            message: data.message,
+          });
+          setIsLoading(false);
+          return ;
+        }
         const response = await axiosClient.get('/loaivattus/get');
         const newSupplyType = response.object.listLoaiVatTu.filter(
           (item) => item.tenLoaiVatTu === e.target[0].value,

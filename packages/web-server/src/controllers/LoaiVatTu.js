@@ -8,7 +8,7 @@ const deleteOne = async (req, res) => {
         let maLoaiVatTu=req.body.maLoaiVatTu;
         let LoaiVatTu=await LoaiVatTuService.findOne({maLoaiVatTu:maLoaiVatTu});
         if(LoaiVatTu===null){
-            return res.status(404).json(errorResponse("Không tìm thấy loại vật tư"));
+            return res.status(200).json(errorResponse("Không tìm thấy loại vật tư"));
         }
         await LoaiVatTuService.deleteOne({maLoaiVatTu:maLoaiVatTu});
         return res.status(200).json(successResponse("Xóa loại vật tư thành công"));
@@ -30,7 +30,7 @@ const create = async (req, res) => {
                 }
             })
             if(flag===1){
-                return res.status(403).json(errorResponse("Tên loại vật tư đã tồn tại"));
+                return res.status(200).json(errorResponse("Tên loại vật tư đã tồn tại"));
             }
             maLoaiVatTu=generateID("LVT");
             let newLoaiVatTu={
@@ -43,7 +43,7 @@ const create = async (req, res) => {
             return res.status(200).json(successResponse("Tạo thành công"));
         }
         else{
-            return res.status(403).json(
+            return res.status(200).json(
                 errorResponse("Dữ liệu không hợp lệ")
             );
         }
@@ -53,7 +53,6 @@ const create = async (req, res) => {
 }
 
 const getAll = async (req, res) => {
-    console.log('có');
     try { 
         var listLoaiVatTu=await LoaiVatTuService.findAll();
         listLoaiVatTu=listLoaiVatTu.map((item)=>{
