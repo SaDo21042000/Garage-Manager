@@ -17,7 +17,6 @@ const createOne = async (req, res) => {
 
     let phieuTiepNhan = await PhieuTiepNhan.findOne({ maXe: xe._id.toString(),isDeleted:0 });
     if (!phieuTiepNhan){
-      console.log(123);
       return res.status(200).json({
         status:false,
         message: `Xe chưa lập phiếu tiếp nhận`,
@@ -43,7 +42,6 @@ const createOne = async (req, res) => {
 }
 
 const createCTSC = async (req, res) => {
-  console.log('có 123')
   const { bienSo, noiDung, maVatTu, maTienCong, soLuong, MaPSC } = req.body;
   let maVT, maTC, maXe, maPTN, maPSC;
   var today = new Date();
@@ -68,7 +66,7 @@ const createCTSC = async (req, res) => {
     maVaTu: maVatTu,
     soLuong,
     maTienCong: maTienCong,
-    thanhTien: soLuong*maVT.unitPrice,
+    thanhTien: soLuong*maVT.unitPrice + maTC.price,
     maPSC: MaPSC
   })
   let ctsc = await newCTSC.save();
@@ -82,7 +80,7 @@ const createCTSC = async (req, res) => {
   let { maHieuXe } = await Xe.findOne({ bienSo }, { maHieuXe: 1 });
   let ds = await DoanhSo.aggregate([{$project: { month: {$month: '$ThoiDiemDS'}, year: { $year: '$ThoiDiemDS'}, tongDS: 1}}, 
     {$match: { month: today.getMonth() + 1, year: today.getFullYear()}}]);
-    console.log('ds', ds)
+    
     if(!ds[0]){
         let newDS = await new DoanhSo({ThoiDiemDS: date, tongDS: 0});
         await newDS.save();
@@ -97,7 +95,6 @@ const createCTSC = async (req, res) => {
         await newCtds.save();
     } else {
         let ctds = await ChiTietDoanhSo.findOne({ maDoanhSo: ds[0]._id, maHieuXe: maHieuXe });
-        console.log('ctds',ctds);
         if(!ctds) {
             let newCtds = await new ChiTietDoanhSo({
                 maHieuXe: maHieuXe,
@@ -114,7 +111,6 @@ const createCTSC = async (req, res) => {
 
   // cập nhật tiền nợ trong xe
   await Xe.updateOne({ bienSo: bienSo }, { tienNo: maXe.tienNo + soLuong*maVT.unitPrice })
-  console.log('có');
   return res.status(201).json({
     statusCode: 201,
     message: 'Receiving your form succesfully'
@@ -214,12 +210,12 @@ const getPlate = async (req, res) => {
 
 const getBienSo = async (req, res) => {
   try {
-    let lstXe = await Xe.find();
-    let lstPhieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0});
-    let lstPhieuSuaChua = await PhieuSuaChua.find({isDeleted:0});
-    console.log(lstPhieuSuaChua);
-    console.log(lstPhieuTiepNhan);
-    let lstKhachHang = await KhachHang.find();
+    let lstPhieuSuaChua = await PhieuSuaChua.find({isDeleted:0})
+    .populate({
+      path: 'maPTN',
+      populate: { path: 'maXe',
+                populate: 'maKhachHang',
+     }});
     if(lstPhieuSuaChua.length===0){
       return res.status(200).json({
         status:false,
@@ -228,21 +224,14 @@ const getBienSo = async (req, res) => {
       })
     }
     let list = lstPhieuSuaChua.map((item)=>{
-      let objPhieuTiepNhan = lstPhieuTiepNhan.find(data=>data._id.toString()==item.maPTN);
-      if( objPhieuTiepNhan) {
-        let objXe =lstXe.find((data)=>data._id.toString() == objPhieuTiepNhan.maXe);
-        let objKhachHang = lstKhachHang.find((data)=>data._id.toString() == objXe.maKhachHang);
         return { 
-          bienSo:objXe.bienSo,
+          bienSo:item.maPTN.maXe.bienSo,
           tongTienSC: item.tongTienSC,
-          tenKhachHang:objKhachHang.tenKhachHang,
-          soDT:objKhachHang.soDT,
-          email:objKhachHang.email
+          tenKhachHang:item.maPTN.maXe.maKhachHang.tenKhachHang,
+          soDT:item.maPTN.maXe.maKhachHang.soDT,
+          email:item.maPTN.maXe.maKhachHang.email
         }
-      }
     })
-
-    list =list.filter(item=>item);
 
     return res.status(200).json({
       status:true,

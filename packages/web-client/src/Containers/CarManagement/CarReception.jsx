@@ -186,11 +186,12 @@ const CarReception = () => {
         });
       }
       if (data.status === 0) {
+        form.resetFields();
         notification.success({
           message: data.message,
         });
       }
-      form.resetFields();
+      
       // CCap nhat lai index trong dataSourcce
       await getListPTNInDB();
       setIsLoading(false);

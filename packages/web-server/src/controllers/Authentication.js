@@ -7,7 +7,7 @@ const {successResponse,errorResponse}= require('../utils/objResponse');
 // Thời gian sống của token
 const accessTokenLife = process.env.ACCESS_TOKEN_LIFE? process.env.ACCESS_TOKEN_LIFE : "10d";
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET? process.env.ACCESS_TOKEN_SECRET: 'QuocDepTrai';
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET? process.env.ACCESS_TOKEN_SECRET: 'UITGARAGE';
 
 let login = async (req, res) => {
   try {

@@ -136,6 +136,7 @@ const RepairForm = () => {
   const [isExistPSC, setIsExistPSC] = useState(true);
   const [maPSC, setMaPSC] = useState('');
   const [form] = Form.useForm();
+  const [formAdd] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [initMaXe, setMaXe] = useState('');
 
@@ -148,6 +149,12 @@ const RepairForm = () => {
     try {
       setIsLoading(true);
       let listBS = await axiosClient.get('/phieutiepnhan/getListXe');
+      if(listBS.length===0){
+        notification.info({
+          message: "Không tồn tại danh sách xe đã lập phiếu tiếp nhận trong hệ thống",
+        });
+      }
+      
       setDataBienSo(listBS);
 
       // Lat tat ca cac loai vat tu co trong database
@@ -276,7 +283,7 @@ const RepairForm = () => {
       });
       let obj = dataBienSo.find((item) => item.bienSo === values.bienSo);
       await changeDataTable(obj._id);
-      form.resetFields();
+      formAdd.resetFields();
       setIsLoading(false);
     } catch (e) {
       notification.error({
@@ -303,6 +310,7 @@ const RepairForm = () => {
           name="nest-messages"
           onFinish={onFinishAddItem}
           validateMessages={validateMessages}
+          form={formAdd}
         >
           <Form.Item
             label="Biển Số"
@@ -342,7 +350,7 @@ const RepairForm = () => {
               },
             ]}
           >
-            <TextArea />
+            <TextArea rows={5}/>
           </Form.Item>
 
           <Form.Item

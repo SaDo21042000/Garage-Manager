@@ -181,7 +181,7 @@ const Bill = () => {
           </Form.Item>
           <Form.Item
             name="phone"
-            label="Phone"
+            label="Số điện thoại"
             rules={[
               {
                 required: true,

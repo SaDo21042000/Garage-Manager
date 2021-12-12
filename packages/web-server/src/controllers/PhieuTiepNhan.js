@@ -21,7 +21,6 @@ const createOne = async (req, res) => {
       }
     }
     let xe = await Xe .findOne({bienSo:bienSo});
-    console.log('xe', xe);
     if(xe){
       let phieuTiepNhan = await PhieuTiepNhan.findOne({maXe:xe._id.toString(),isDeleted:0})
       if(!phieuTiepNhan){

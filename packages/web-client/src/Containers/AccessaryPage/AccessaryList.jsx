@@ -120,6 +120,7 @@ const AccessaryList = () => {
         return {
           ...item,
           key: index + 1,
+          
         };
       });
       setDataTypeAccessay(listType);
@@ -140,7 +141,13 @@ const AccessaryList = () => {
     const getApiSearch = async () => {
       try {
         setIsLoading(true);
-        const dataResultSearch = await axiosClient.get(`/accessories/search?name=${inputSearch}`);
+        let dataResultSearch = await axiosClient.get(`/accessories/search?name=${inputSearch}`);
+        dataResultSearch = dataResultSearch.map((item, index) => {
+          return {
+            ...item,
+            key: index + 1,
+          };
+        });
         setDataListAccessary(dataResultSearch);
         setIsLoading(false);
       } catch (error) {

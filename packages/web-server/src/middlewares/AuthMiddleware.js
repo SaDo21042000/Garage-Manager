@@ -2,7 +2,7 @@ const jwtHelper = require('../helpers/jwt.helper');
 const { successResponse, errorResponse } = require('../utils/objResponse');
 
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET? process.env.ACCESS_TOKEN_SECRET: 'QuocDepTrai';
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET? process.env.ACCESS_TOKEN_SECRET: 'UITGARAGE';
 
 
 //login để truy cập các tài nguyên yêu cầu quyền cao nhất

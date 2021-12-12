@@ -45,7 +45,13 @@ const SupplyTypeForm = (props) => {
       try {
         setIsLoading(true);
         const response = await axiosClient.get('/loaivattus/get');
-        setDataSourceSupply(response.object.listLoaiVatTu);
+        let data = (response.object.listLoaiVatTu).map((item,index)=>{
+          return {
+            ...item,
+            key:index +1
+          }
+        })
+        setDataSourceSupply(data);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -171,7 +177,7 @@ const SupplyTypeForm = (props) => {
         footer={null}
       >
         <form style={{ marginBottom: '10px' }} onSubmit={handleAddSupplyType}>
-          <label for="fname" style={{ marginRight: '5px' }}>
+          <label style={{ marginRight: '5px' }}>
             Tên loại vật tư:
           </label>
           <input

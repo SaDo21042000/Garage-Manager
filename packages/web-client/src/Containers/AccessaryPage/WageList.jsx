@@ -15,7 +15,7 @@ import {
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import { LoadingScreenCustom } from './../../Components';
+import { LoadingScreenCustom, Helper} from './../../Components';
 
 const { Content } = AntLayout;
 const { Title } = Typography;
@@ -105,8 +105,14 @@ const WageList = () => {
   const getAPI = async () => {
     try {
       setIsLoading(true);
-      const listWage = await axiosClient.get('/wages');
-
+      let listWage = await axiosClient.get('/wages');
+      listWage = listWage.map((item,index)=>{
+        return {
+          ...item,
+          key:index+1,
+          priceVND:Helper.convertNumberToMoney(item.price),
+        }
+      })
       setDataListWage(listWage);
       setIsLoading(false);
     } catch (error) {
@@ -122,7 +128,14 @@ const WageList = () => {
     const getApiSearch = async () => {
       try {
         setIsLoading(true);
-        const dataResultSearch = await axiosClient.get(`/wages/search?name=${inputSearch}`);
+        let  dataResultSearch = await axiosClient.get(`/wages/search?name=${inputSearch}`);
+        dataResultSearch = dataResultSearch.map((item,index)=>{
+          return {
+            ...item,
+            key:index+1,
+            priceVND:Helper.convertNumberToMoney(item.price),
+          }
+        })
         setDataListWage(dataResultSearch);
         setIsLoading(false);
       } catch (error) {
@@ -215,7 +228,10 @@ const WageList = () => {
     };
     setDataEditWage(dataEdit);
     setCheckEdit(true);
-    formWage.setFieldsValue(dataEdit);
+    formWage.setFieldsValue({
+      name:dataEdit.nameWage,
+      price:dataEdit.price
+    });
   };
 
   //Header table
@@ -236,7 +252,7 @@ const WageList = () => {
     },
     {
       title: 'Đơn giá',
-      dataIndex: 'price',
+      dataIndex: 'priceVND',
       key: 'price',
       width: 150,
     },
@@ -274,10 +290,10 @@ const WageList = () => {
             form={formWage}
           >
             <Form.Item label="Tên tiền công" name="name">
-              <Input style={{ width: '100%' }} defaultValue={dataEdit.nameWage} />
+              <Input style={{ width: '100%' }}  />
             </Form.Item>
             <Form.Item label="Đơn giá" name="price">
-              <Input type="number" style={{ width: '100%' }} defaultValue={dataEdit.price} />
+              <Input type="number" style={{ width: '100%' }}  />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
