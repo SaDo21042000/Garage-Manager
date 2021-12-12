@@ -4,9 +4,7 @@ const Schema = mongoose.Schema;
 
     // Create Bill Schema
     const XeSchema = new Schema({
-        maKhachHang: {
-            type:String,
-        },
+        maKhachHang: { type: Schema.Types.ObjectId, ref: 'khachhangs' },
         bienSo:{
             type:String
         },
@@ -20,7 +18,8 @@ const Schema = mongoose.Schema;
             type:Number
         },
         maHieuXe:{
-            type:String
+            type:String,
+            
         },
     })
 

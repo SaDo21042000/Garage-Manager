@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOne, getAllCTSC, getVatTu, getTienCong, getBienSo,xoaCTSC, xoaPSC, getPlate, getPSCByMaPTN, getCTSCByMaPSC, createCTSC, getListCTSCByMaXe } = require('../controllers/PhieuSuaChua');
+const { createOne, getAllCTSC, getVatTu, getAllPSC, getTienCong, getBienSo,xoaCTSC, xoaPSC, getPlate, getPSCByMaPTN, getCTSCByMaPSC, createCTSC, getListCTSCByMaXe } = require('../controllers/PhieuSuaChua');
 const { post } = require('./Bill');
 
 router.post('/createOne', createOne);
@@ -15,5 +15,6 @@ router.get('/getCTSCByMaPSC', getCTSCByMaPSC);
 router.get('/getListCTSCByMaXe', getListCTSCByMaXe);
 router.get('/getBienSo', getBienSo);
 router.post('/xoaCTSC', xoaCTSC);
+router.get('/getAllPSC', getAllPSC);
 
 module.exports = router;

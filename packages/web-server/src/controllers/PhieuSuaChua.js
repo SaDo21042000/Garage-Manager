@@ -14,7 +14,9 @@ const createOne = async (req, res) => {
         message: `Xe chưa lập phiếu tiếp nhận`,
       });
     }
-    let phieuTiepNhan = await PhieuTiepNhan.findOne({ maXe: xe._id });
+
+    let phieuTiepNhan = await PhieuTiepNhan.findOne({ maXe: xe._id.toString() });
+    console.log(phieuTiepNhan);
     let newPSC = new PhieuSuaChua({
       maPTN: phieuTiepNhan._id,
       ngaySC: date,
@@ -24,6 +26,7 @@ const createOne = async (req, res) => {
     let phieuSuaChua = await newPSC.save();
     return res.status(200).json(phieuSuaChua);
   }catch(e){
+    console.log(e);
     return res.status(500).json({
       statusCode: 500,
       message: 'Create failed'
@@ -108,15 +111,15 @@ const createCTSC = async (req, res) => {
 }
 
 const xoaPSC = async (req, res) => {
-  const idCTSC =  req.body._id;
+  const idPSC =  req.body._id;
 
   try {
-    await ChiTietSuaChua.deleteOne({ _id: idCTSC })
+    await PhieuSuaChua.deleteOne({ _id: idPSC })
     res.status(201).json({
       statusCode: 201,
       message: 'Xoa thanh cong' })  
   } catch (err){
-    console.log("Error xoa xe: ", err);
+    console.log("Error: ", err);
   }
 }
 
@@ -124,11 +127,8 @@ const xoaCTSC = async (req, res) => {
   const idCTSC =  req.body._id;
 
   try {
-    console.log(idCTSC)
     let ctsc = await ChiTietSuaChua.findOne({_id:idCTSC })
-    console.log('ctsc',ctsc)
     let phieuSuaChua = await PhieuSuaChua.findOne({_id:ctsc.maPSC});
-    console.log('psc',phieuSuaChua)
     let total = phieuSuaChua.tongTienSC - ctsc.thanhTien;
     await PhieuSuaChua.updateOne({_id:ctsc.maPSC},{tongTienSC:total});
     await ChiTietSuaChua.deleteOne({ _id: idCTSC })
@@ -252,6 +252,49 @@ const getPSCByMaPTN = async (req, res) => {
   })
 }
 
+const getAllPSC = async (req, res) => {
+  try{
+    var today = new Date(req.query.keyword);
+    var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+    let lstPhieuSuaChua =[];
+    if(req.query.keyword){
+      lstPhieuSuaChua = await PhieuSuaChua.find({ isDeleted:0, ngaySC:date }).populate({
+        path: 'maPTN',
+        populate: { path: 'maXe',
+                  populate: 'maKhachHang',
+       }})
+    }else{
+      lstPhieuSuaChua = await PhieuSuaChua.find({ isDeleted:0 }).populate({
+        path: 'maPTN',
+        populate: { path: 'maXe',
+                  populate: 'maKhachHang',
+       }})
+    }
+    
+
+    let list = lstPhieuSuaChua.map(item=>{
+      return {
+        _id:item._id,
+        bienSo:item.maPTN.maXe.bienSo,
+        tongTienSC:item.tongTienSC,
+        tenKhachHang:item.maPTN.maXe.maKhachHang.tenKhachHang,
+        status:'Đang sửa chữa',
+        ngaySC: item.ngaySC
+      }
+    })
+
+    return res.status(200).json(list )
+  }catch(e){
+    console.log(e);
+    return res.status(500).json({
+      statusCode: 500,
+      message: e.message || `Some errors happened when finding accessory`
+  });
+
+  }
+ 
+}
+
 const getCTSCByMaPSC = async (req, res) => {
 
   const maPSC = req.query.maPSC;
@@ -278,23 +321,25 @@ const getListCTSCByMaXe = async (req,res) =>{
           message: `Xe này chưa lập phiếu sửa chữa`,
           listPhieuCTSC:[],
       })
-      const listPhieuCTSC = await ChiTietSuaChua.find({maPSC:objPhieuSuaChua._id.toString()});
-      let lstVatTu = await Accessory.find();
-      let lstTienCong = await Wage.find();
-      let list = listPhieuCTSC.map(item=>{
-          let vatTu = lstVatTu.find(data=>data._id.toString()==item.maVaTu);
-          let tienCong =lstTienCong.find(data=>data._id.toString()==item.maTienCong);
-          return {
-              maPSC: item.maPSC,
-              noiDung: item.noiDung,
-              maVaTu: vatTu.name,
-              price: vatTu.unitPrice,
-              wage: tienCong.name,
-              soLuong: item.soLuong,
-              thanhTien: item.thanhTien,
-              _id:item._id.toString(),
-          }
-      })
+      const listPhieuCTSC = await ChiTietSuaChua.find({maPSC:objPhieuSuaChua._id.toString()})
+      .populate({
+        path: 'maVaTu'}
+        )
+      .populate({
+        path: 'maTienCong'}
+        )
+        let list = listPhieuCTSC.map(item=>{
+            return {
+                maPSC: item.maPSC,
+                noiDung: item.noiDung,
+                maVaTu: item.maVaTu.name,
+                price: item.maVaTu.unitPrice,
+                wage: item.maTienCong.name,
+                soLuong: item.soLuong,
+                thanhTien: item.thanhTien,
+                _id:item._id.toString(),
+            }
+          })
       return res.status(200).json({
         listPhieuCTSC:list,
         status:0,
@@ -322,4 +367,5 @@ module.exports = {
   getListCTSCByMaXe ,
   getBienSo,
   xoaCTSC,
+  getAllPSC,
 }

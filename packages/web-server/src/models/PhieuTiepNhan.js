@@ -4,10 +4,7 @@ exports.initPhieuTiepNhan = function(mongoose) {
     
         // Create Bill Schema
         const PhieuTiepNhanSchema = new Schema({
-            maXe: {
-                type:String,
-                require: true
-            },
+            maXe: { type: Schema.Types.ObjectId, ref: 'Xes' },
             ngayTN:{
                 type:String,
                 require: true

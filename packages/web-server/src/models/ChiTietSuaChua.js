@@ -6,18 +6,12 @@ exports.initChiTietSuaChua = function(mongoose) {
        type: String,
        require: true
      },
-     maVaTu: {
-       type:String,
-       require: true
-     },
+     maVaTu: { type: Schema.Types.ObjectId, ref: 'Accessory' },
      soLuong: {
        type:Number,
        require: true
      },
-     maTienCong: {
-       type:String,
-       require: true
-     },
+     maTienCong: { type: Schema.Types.ObjectId, ref: 'Wage' },
      thanhTien: {
        type:Number,
        require: true

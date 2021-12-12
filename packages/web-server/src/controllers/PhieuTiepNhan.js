@@ -1,4 +1,4 @@
-const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua, HieuXe, QuyDinh } = require('../models');
+const { PhieuTiepNhan, HieuXe, QuyDinh } = require('../models');
 const { Xe } = require('../models');
 const { KhachHang } = require('../models');
 const { generateID } = require('../helpers/generateID');
@@ -12,7 +12,6 @@ const createOne = async (req, res) => {
     var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
     let lstPhieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0,ngayTN:date});
     let objQuyDinh = await QuyDinh.findOne();
-    console.log('obj',objQuyDinh);
     if(objQuyDinh){
       if(lstPhieuTiepNhan.length>=objQuyDinh.soXeMax){
           return res.status(200).json({
@@ -181,23 +180,26 @@ const getCarToday = async (req, res) => {
     let month = today.getMonth()+1;
     let year = today.getFullYear();
     let stringDate =date+'-'+month+'-'+year;
-    let listPTN = await PhieuTiepNhan.find({ngayTN:stringDate, isDeleted:0});
-    let lstXe = await Xe.find();
-    let lstKhachHang = await KhachHang.find();
+    let listPTN = await PhieuTiepNhan.find({ngayTN:stringDate, isDeleted:0})
+    .populate({
+      path: 'maXe',
+      populate: 'maKhachHang',
+     })
+    let listHieuXe = await HieuXe.find();
     let list=listPTN.map(item=>{
-      let xe= lstXe.find(data=>data._id.toString() == item.maXe);
-      if(xe){
-        let khachHang = lstKhachHang.find(data=>data._id.toString() == xe.maKhachHang);
-          return {
+      let objHieuXe = listHieuXe.find(data=>data.maHieuXe == item.maXe.maHieuXe);
+      if(objHieuXe){
+        return {
           _id:item._id.toString(),
-          bienSo:xe.bienSo,
-          hieuXe:xe.maHieuXe,
-          tenKhachHang:khachHang.tenKhachHang,
-          soDT:khachHang.soDT,
+          bienSo:item.maXe.bienSo,
+          hieuXe: objHieuXe.tenHieuXe,
+          tenKhachHang:item.maXe.maKhachHang.tenKhachHang,
+          soDT:item.maXe.maKhachHang.soDT,
         }
       }
+          
     })
-    list = list.filter(item => item)
+    list = list.filter(item=>item);
     return res.status(200).json(list);
   }catch(e){
     return res.status(500).json({

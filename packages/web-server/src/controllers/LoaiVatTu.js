@@ -53,6 +53,7 @@ const create = async (req, res) => {
 }
 
 const getAll = async (req, res) => {
+    console.log('có');
     try { 
         var listLoaiVatTu=await LoaiVatTuService.findAll();
         listLoaiVatTu=listLoaiVatTu.map((item)=>{

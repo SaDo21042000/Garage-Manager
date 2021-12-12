@@ -12,6 +12,9 @@ const StyledSider = styled(Sider)`
     height: 60px;
     margin: 20px;
   }
+  // menu-sidebar:{
+  //   min-width:300px;
+  // }
 `;
 const { SubMenu } = Menu;
 
@@ -31,7 +34,7 @@ const Sidebar = () => {
         </Link>  
       </div>
       <Menu
-        className="mt-3"
+        className="mt-3 menu-sidebar"
         theme="dark"
         defaultSelectedKeys={[location.pathname]}
         selectedKeys={[location.pathname]}
@@ -64,11 +67,11 @@ const Sidebar = () => {
           </Menu.Item>
         </SubMenu>
         <SubMenu key="repair" icon={<FormOutlined />} title="Phiếu Sửa Chữa">
-          {/* <Menu.Item key="/repair-page">
-            <Link to="/repair-page">Quản Lý Phiếu Sửa Chữa</Link>
-          </Menu.Item> */}
           <Menu.Item key="/repair-form">
             <Link to="/repair-form">Lập Phiếu Sửa Chữa</Link>
+          </Menu.Item>
+          <Menu.Item key="/repair-page">
+            <Link to="/repair-page">Quản Lý Phiếu Sửa Chữa</Link>
           </Menu.Item>
           <Menu.Item key="/bill">
             <Link to="/bill">Lập Phiếu Thu Tiền</Link>

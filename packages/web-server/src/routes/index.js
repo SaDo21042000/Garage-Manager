@@ -34,7 +34,7 @@ const route = (app) => {
   app.use('/api/inventory-reports',isAuth, InventoryReportRouter);
   app.use('/api/phieuthutiens',isAuth, PhieuThuTien);
   app.use('/api/doanhsos',isAuth, DoanhSo);
-  app.use('/api/phieusuachua',isAuth, PhieuSuaChua);
+  app.use('/api/phieusuachua', PhieuSuaChua);
   app.use('/api/phieutiepnhan',isAuth, PhieuTiepNhan);
   app.use('/api/home',isAuth, Home);
 };

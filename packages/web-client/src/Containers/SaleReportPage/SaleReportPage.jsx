@@ -266,7 +266,7 @@ const SaleReportPage = () => {
             dataSource={dataSource}
             pagination={{pageSize:10}}
           />
-          <Button
+          {/* <Button
           data-testid="btnBC"
             className="button-finish"
             icon={<DownloadOutlined />}
@@ -274,7 +274,7 @@ const SaleReportPage = () => {
             size="middle"
           >
             In báo cáo doanh thu
-          </Button>
+          </Button> */}
         </div>
         <LoadingScreenCustom isLoading={isLoading} />
       </div>

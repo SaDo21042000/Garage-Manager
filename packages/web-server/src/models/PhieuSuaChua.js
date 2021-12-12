@@ -4,10 +4,7 @@ exports.initPhieuSuaChua = function(mongoose) {
     
         // Create Bill Schema
         const PhieuSuaChuaSchema = new Schema({
-            maPTN: {
-                type:String,
-                require: true
-            },
+            maPTN: { type: Schema.Types.ObjectId, ref: 'phieutiepnhans' },
             ngaySC:{
                 type:String,
                 require: true
@@ -21,7 +18,8 @@ exports.initPhieuSuaChua = function(mongoose) {
             },
             maPhieuThuTien:{
                 type:String
-            }
+            },
+            
         })
     
         const PhieuSuaChua = mongoose.model('phieusuachuas', PhieuSuaChuaSchema);

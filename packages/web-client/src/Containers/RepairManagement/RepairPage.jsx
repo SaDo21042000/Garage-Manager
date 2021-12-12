@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import React from 'react';
+import React, {useEffect, useState}from 'react';
 import {
   Layout as AntLayout,
   Breadcrumb,
@@ -10,16 +10,20 @@ import {
   message,
   Form,
   DatePicker,
+  notification
 } from 'antd';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import axiosClient from '../../Configs/Axios';
+import { LoadingScreenCustom, Helper } from './../../Components';
 
 const { Title } = Typography;
-
+const DATEFORMAT = 'MM-DD-YYYY';
 const StyledHomePage = styled(AntLayout)`
-  .site-layout-background {n
+  .site-layout-background {
     background: #fff;
+    position:relative;
   }
 
   .main-title {
@@ -37,45 +41,55 @@ const StyledHomePage = styled(AntLayout)`
   }
 `;
 
-const RepairPage = () => {
+const validateMessages = {
+  required: 'Nhập ${label}!',
+  types: {
+    email: '${label} không phải là email hợp lệ!',
+    number: '${label} không phải là số hợp lệ!',
+  },
+  number: {
+    min: "'${label}' không thể nhỏ hơn ${min}",
+    max: "'${label}' không thể lớn hơn ${max}",
+    range: '${label} phải ở giữa ${min} và ${max}',
+  },
+};
 
-  const validateMessages = {
-    required: 'Nhập ${label}!',
-    types: {
-      email: '${label} không phải là email hợp lệ!',
-      number: '${label} không phải là số hợp lệ!',
-    },
-    number: {
-      min: "'${label}' không thể nhỏ hơn ${min}",
-      max: "'${label}' không thể lớn hơn ${max}",
-      range: '${label} phải ở giữa ${min} và ${max}',
-    },
-  };
+const RepairPage = () => {
+  const [dataSource,setDataSource] = useState([]);
+  const [isSearch, setIsSearch] = useState([false]);
+  const [dataSearch, setDataSearch] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
 
   const columns = [
     {
       title: '#',
-      dataIndex: 'number',
+      dataIndex: 'key',
       key: 'number',
     },
     {
       title: 'Biển Số',
-      dataIndex: 'plate',
+      dataIndex: 'bienSo',
       key: 'plate',
     },
     {
       title: 'Chủ Xe',
-      dataIndex: 'name',
+      dataIndex: 'tenKhachHang',
       key: 'name',
     },
     {
+      title: 'Ngày SC',
+      dataIndex: 'ngaySC',
+      key: 'ngaySC',
+    },
+    {
       title: 'Tổng Tiền Sửa Chữa',
-      dataIndex: 'money',
+      dataIndex: 'tongTienSC',
       key: 'money',
     },
     {
       title: 'Tình trạng sửa',
-      dataIndex: 'done',
+      dataIndex: 'status',
       key: 'done',
     },
     {
@@ -83,11 +97,10 @@ const RepairPage = () => {
       dataIndex: 'action',
       render: (v, i) => (
         <>
-          <Button className="btn" icon={<EditOutlined />} />
           <Popconfirm
             placement="top"
-            title="Are you sure to delete this customer?"
-            onConfirm={confirm}
+            title="Bạn có muốn xóa phiếu sửa chữa này?"
+            onConfirm={() => handleDelete(i)}
             okText="Yes"
             cancelText="No"
           >
@@ -98,35 +111,67 @@ const RepairPage = () => {
     },
   ];
 
-  const data = [
-    {
-      key: '1',
-      number: '1',
-      plate: '81A-12345',
-      name: 'Nguyen Van A',
-      money: '500000',
-      done: 'Đã sửa chữa',
-    },
-    {
-      key: '2',
-      number: '2',
-      plate: '81A-12345',
-      name: 'Nguyen Van B',
-      money: '1500000',
-      done: 'Chưa sửa chữa',
-    },
-    {
-      key: '3',
-      number: '3',
-      plate: '81A-12345',
-      name: 'Nguyen Van C',
-      money: '5000000',
-      done: 'Chưa sửa chữa',
-    },
-  ];
+  useEffect(()=>{
+    getAllPSC(dataSearch);
+  },[isSearch])
 
-  function confirm() {
-    message.info('Clicked on Yes.');
+  const getAllPSC = async (date = null )=>{
+    try{
+      setIsLoading(true);
+      let url = '/phieusuachua/getAllPSC'
+      if(date){
+        url +='?keyword='+date;
+      }
+      let data = await axiosClient.get(url);
+      data = data.map((item,index)=>{
+        return {
+          ...item,
+          key:index+1,
+          tongTienSC:Helper.convertNumberToMoney(item.tongTienSC)
+        }
+      })
+      setDataSource(data);
+      setIsLoading(false);
+    }catch(e){
+      setIsLoading(false);
+      notification.error({
+        message: "Đã có lỗi lấy danh sách phiếu sửa chữa",
+    });
+    }
+    
+  }
+
+  const onFinishAddItem = (values)=>{
+    if(!values.date) {
+      setDataSearch(null);
+    }else{
+      let date = values.date.format(DATEFORMAT);
+      setDataSearch(date);
+    }
+    setIsSearch(!isSearch);
+  }
+
+  
+
+  async function handleDelete(value) {
+    try{  
+      setIsLoading(true);
+      let body ={
+        _id:value._id
+      }
+      await axiosClient.post('/phieusuachua/xoaPSC',body);
+        notification.success({
+        message: "Xóa chi tiết sản phẩm thành công",
+      });
+      setIsLoading(false);
+    }catch(e){
+      notification.error({
+        message: "Đã có lỗi vui lòng kiểm tra lại.",
+      });
+      setIsLoading(false);
+    }
+    setIsSearch(!isSearch);
+    
   }
 
   return (
@@ -145,6 +190,7 @@ const RepairPage = () => {
             initialValues={{
               remember: true,
             }}
+            onFinish={onFinishAddItem}
             autoComplete="off"
             layout="inline"
             validateMessages={validateMessages}
@@ -158,7 +204,8 @@ const RepairPage = () => {
               </Button>
             </Form.Item>
           </Form>
-          <Table columns={columns} dataSource={data} />
+          <Table columns={columns} dataSource={dataSource} />
+          <LoadingScreenCustom isLoading={isLoading} />
         </div>
     </StyledHomePage>
   );

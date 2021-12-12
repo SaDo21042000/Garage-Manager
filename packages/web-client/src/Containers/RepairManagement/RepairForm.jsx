@@ -448,9 +448,9 @@ const RepairForm = () => {
           dataSource={dataSource}
           pagination={{pageSize:5}}
         />
-        <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">
+        {/* <Button className="button-finish" icon={<DownloadOutlined />} type="primary" size="middle">
           In phiếu sửa chữa
-        </Button>
+        </Button> */}
         <LoadingScreenCustom isLoading={isLoading} />
       </div>
     </StyledRepairForm>

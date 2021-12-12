@@ -72,8 +72,8 @@ const CarReception = () => {
       data= data.map((item,index)=>{
         return { 
           ...item,
-          key:index,
-          index:index
+          key:index+1,
+          index:index+1
         }
       })
       setDataSource(data);
@@ -112,7 +112,7 @@ const CarReception = () => {
   const columns = [
     {
       title: '#',
-      dataIndex: 'number',
+      dataIndex: 'key',
       key: 'index',
     },
     {

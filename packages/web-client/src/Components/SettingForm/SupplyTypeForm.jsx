@@ -45,7 +45,8 @@ const SupplyTypeForm = (props) => {
     const getAPI = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosClient.post('/loaivattus/get');
+        const response = await axiosClient.get('/loaivattus/get');
+        console.log('response', response);
         setDataSourceSupply(response.object.listLoaiVatTu);
         setIsLoading(false);
       } catch (error) {
@@ -113,7 +114,7 @@ const SupplyTypeForm = (props) => {
       try {
         setIsLoading(true);
         await axiosClient.post('/loaivattus/create', { tenLoaiVatTu: e.target[0].value });
-        const response = await axiosClient.post('/loaivattus/get');
+        const response = await axiosClient.get('/loaivattus/get');
         const newSupplyType = response.object.listLoaiVatTu.filter(
           (item) => item.tenLoaiVatTu === e.target[0].value,
         )[0];

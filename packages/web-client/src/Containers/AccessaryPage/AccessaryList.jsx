@@ -108,9 +108,21 @@ const AccessaryList = () => {
     try {
       setIsLoading(true);
       const typeAccessary = await axiosClient.get('/loaivattus/get');
-      const listAccessay = await axiosClient.get('/accessories');
-
-      setDataTypeAccessay(typeAccessary.object.listLoaiVatTu);
+      let listAccessay = await axiosClient.get('/accessories');
+      let listType = typeAccessary.object.listLoaiVatTu;
+      listType = listType.map((item,index)=>{
+        return {
+          ...item,
+          key:index+1
+        }
+      })
+      listAccessay = listAccessay.map((item,index)=>{
+        return {
+          ...item,
+          key:index+1
+        }
+      })
+      setDataTypeAccessay(listType);
       setDataListAccessary(listAccessay);
       setIsLoading(false);
     } catch (error) {

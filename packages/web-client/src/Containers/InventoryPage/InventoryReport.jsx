@@ -165,16 +165,16 @@ const InventoryReport = () => {
               pagination={{ defaultPageSize: 5 }}
             />
           )}
-          {dataTable.length !== 0 && (
-            <Button
-              className="button-finish"
-              icon={<DownloadOutlined />}
-              type="primary"
-              size="middle"
-            >
-              In báo cáo
-            </Button>
-          )}
+          {/* {dataTable.length !== 0 && (
+            // <Button
+            //   className="button-finish"
+            //   icon={<DownloadOutlined />}
+            //   type="primary"
+            //   size="middle"
+            // >
+            //   In báo cáo
+            // </Button>
+          )} */}
         </div>
         <LoadingScreenCustom isLoading={isLoading} />
       </div>
