@@ -16,7 +16,12 @@ const createOne = async (req, res) => {
     }
 
     let phieuTiepNhan = await PhieuTiepNhan.findOne({ maXe: xe._id.toString() });
-    console.log(phieuTiepNhan);
+    if (!phieuTiepNhan){
+      return res.status(200).json({
+        status:false,
+        message: `Xe chưa lập phiếu tiếp nhận`,
+      });
+    }
     let newPSC = new PhieuSuaChua({
       maPTN: phieuTiepNhan._id,
       ngaySC: date,
@@ -24,7 +29,9 @@ const createOne = async (req, res) => {
       isDeleted: 0
     })
     let phieuSuaChua = await newPSC.save();
-    return res.status(200).json(phieuSuaChua);
+    return res.status(200).json({
+      status:true,
+      obj:phieuSuaChua});
   }catch(e){
     console.log(e);
     return res.status(500).json({
@@ -206,11 +213,13 @@ const getBienSo = async (req, res) => {
     let lstXe = await Xe.find();
     let lstPhieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0});
     let lstPhieuSuaChua = await PhieuSuaChua.find({isDeleted:0});
+    console.log(lstPhieuSuaChua);
+    console.log(lstPhieuTiepNhan);
     let lstKhachHang = await KhachHang.find();
     if(lstPhieuSuaChua.length===0){
       return res.status(200).json({
         status:false,
-        message:'Không tồn tại danh sách xe đã lâp phiếu sửa chữa trong hệ thống',
+        message:'Không tồn tại danh sách xe đã lập phiếu sửa chữa trong hệ thống',
         list:[]
       })
     }

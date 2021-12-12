@@ -252,7 +252,14 @@ const RepairForm = () => {
           bienSo: values.bienSo,
         };
         let PSC = await axiosClient.post('/phieusuachua/createOne', params);
-        id = PSC._id;
+        if(!PSC.status){
+          notification.info({
+            message: PSC.message,
+          });
+          setIsLoading(false);
+          return ;
+        }
+        id = PSC.obj._id;
       }
       const newData = {
         bienSo: values.bienSo,
