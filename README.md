@@ -1,0 +1,1 @@
+move into 2 directories web-client and web-server and follow the instructions 2 readme files to install and launch the application

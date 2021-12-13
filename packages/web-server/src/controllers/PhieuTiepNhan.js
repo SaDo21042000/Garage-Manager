@@ -1,4 +1,4 @@
-const { PhieuTiepNhan, HieuXe, QuyDinh } = require('../models');
+const { PhieuTiepNhan, HieuXe, QuyDinh, PhieuSuaChua } = require('../models');
 const { Xe } = require('../models');
 const { KhachHang } = require('../models');
 const { generateID } = require('../helpers/generateID');
@@ -83,7 +83,16 @@ const createOne = async (req, res) => {
 
 const xoaXeSua = async (req, res) => {
   try {
-    await Xe.deleteMany({ bienSo: req.body.plate })
+    let phieuTiepNhan = await PhieuTiepNhan.findOne({maXe:req.body.plate, isDeleted:0});
+    if(phieuTiepNhan){
+      let phieuSuaChua  = await PhieuSuaChua.findOne({maPTN:phieuTiepNhan._id, isDeleted:0});
+        await  PhieuTiepNhan.deleteOne({ _id: phieuTiepNhan._id });
+      if(phieuSuaChua){
+        await  PhieuSuaChua.deleteOne({ _id: phieuSuaChua._id });
+      }
+    }
+    await Xe.deleteOne({ bienSo: req.body.plate });
+
     res.status(201).json({
       statusCode: 201,
       message: 'Xoa thanh cong' })  
@@ -134,45 +143,6 @@ const getPTNbyMaXe = async (req, res) => {
   })
 }
 
-
-const getCarByPlate = async (req, res) => {
-  try{
-    const bienSo = req.query.bienSo;
-    let list = [];
-    let lstXe = await Xe.find();
-
-    if(bienSo){
-      lstXe = lstXe.filter(item=>item.bienSo.toLowerCase().indexOf(bienSo.toLowerCase())!==-1)
-    }
-    let lstKhachHang = await KhachHang.find();
-    let listHieuXe = await HieuXe.find();
-    list=lstKhachHang.map(item=>{
-      let xe= lstXe.find(data=>data.maKhachHang == item._id.toString());
-      if(xe){
-        let hieuXe = listHieuXe.find(data=>xe.maHieuXe==data.maHieuXe)
-        if(hieuXe){
-          return {
-            _id:xe._id.toString(),
-            bienSo:xe.bienSo,
-            hieuXe:hieuXe.tenHieuXe,
-            tenKhachHang:item.tenKhachHang,
-            soDT:item.soDT,
-            tienNo:xe.tienNo
-          }
-          
-        }
-      }
-    })
-    list = list.filter(item => item)
-    return res.status(200).json(list);
-  }catch(e){
-    return res.status(500).json({
-      message:'Đã có lỗi xảy ra vui lòng thử lại',
-      error:e
-    });
-  }
-}
-
 const getCarToday = async (req, res) => {
   try{
     var today = new Date();
@@ -187,21 +157,28 @@ const getCarToday = async (req, res) => {
      })
     let listHieuXe = await HieuXe.find();
     let list=listPTN.map(item=>{
-      let objHieuXe = listHieuXe.find(data=>data.maHieuXe == item.maXe.maHieuXe);
-      if(objHieuXe){
-        return {
-          _id:item._id.toString(),
-          bienSo:item.maXe.bienSo,
-          hieuXe: objHieuXe.tenHieuXe,
-          tenKhachHang:item.maXe.maKhachHang.tenKhachHang,
-          soDT:item.maXe.maKhachHang.soDT,
+      if(item.maXe){
+        let objHieuXe = listHieuXe.find(data=>data.maHieuXe == item.maXe.maHieuXe);
+        if(objHieuXe){
+          if(item.maXe.maKhachHang){
+            return {
+              _id:item._id.toString(),
+              bienSo:item.maXe.bienSo,
+              hieuXe: objHieuXe.tenHieuXe,
+              tenKhachHang:item.maXe.maKhachHang.tenKhachHang,
+              soDT:item.maXe.maKhachHang.soDT,
+            }
+          }
+          
         }
       }
+     
           
     })
     list = list.filter(item=>item);
     return res.status(200).json(list);
   }catch(e){
+    console.log(e);
     return res.status(500).json({
       message:'Đã có lỗi xảy ra vui lòng thử lại',
       error:e
@@ -242,6 +219,16 @@ const deleteXe = async (req, res) => {
   try{
     const maXe = req.body._id;
     await Xe.deleteOne({ _id: maXe })
+    let phieuTiepNhan = await PhieuTiepNhan.findOne({maXe:maXe, isDeleted:0});
+    console.log(phieuTiepNhan);
+    if(phieuTiepNhan){
+      let phieuSuaChua  = await PhieuSuaChua.findOne({maPTN:phieuTiepNhan._id, isDeleted:0});
+      console.log(phieuTiepNhan);
+        await  PhieuTiepNhan.deleteOne({ _id: phieuTiepNhan._id });
+      if(phieuSuaChua){
+        await  PhieuSuaChua.deleteOne({ _id: phieuSuaChua._id });
+      }
+    }
     return res.status(200).json({});
   }catch(e){
     return res.status(500).json({
@@ -255,7 +242,8 @@ const deleteXe = async (req, res) => {
 const deletePTNbyPTN = async (req, res) => {
   try{
     const maPTN = req.body.maPTN;
-    await PhieuTiepNhan.update({ _id: maPTN }, {isDeleted:1})
+    await PhieuTiepNhan.update({ _id: maPTN, isDeleted:0 }, {isDeleted:1})
+    await PhieuSuaChua.update({maPTN: maPTN,  isDeleted:0 }, {isDeleted:1})
     return res.status(200).json({});
   }catch(e){
     return res.status(500).json({
@@ -270,7 +258,7 @@ module.exports = {
   getPhieuTiepNhan,
   xoaXeSua,
   getPTNbyMaXe,
-  getCarByPlate,
+  // getCarByPlate,
   deleteXe,
   getCarToday,
   deletePTNbyPTN,

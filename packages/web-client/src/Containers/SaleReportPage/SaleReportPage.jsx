@@ -99,8 +99,8 @@ const SaleReportPage = () => {
     },
     {
       title: 'Tổng Tiền',
-      dataIndex: 'tongTien',
-      key: 'tongTien',
+      dataIndex: 'tongTienVND',
+      key: 'tongTienVND',
     },
   ];
 
@@ -153,7 +153,7 @@ const SaleReportPage = () => {
         const finalData = dataRaw.map((i, index) => ({
           ...i,
           tiLe: `${Number(i.tongTien / totalAmount).toFixed(2) * 100}%`,
-          tongTien: Helper.convertNumberToMoney(i.tongTien),
+          tongTienVND: Helper.convertNumberToMoney(i.tongTien),
           key: index,
         }));
         setDataSource(finalData);

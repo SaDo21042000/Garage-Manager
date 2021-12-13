@@ -22,10 +22,11 @@ exports.create = async (formInput) => {
   let newPTT = await new PhieuThuTien({
     ...formInput,
   });
-
+  let tienNo = (xe.tienNo - formInput.soTienThu)<0?0: (xe.tienNo - formInput.soTienThu);
+  console.log(tienNo);
   await Xe.updateOne(
     { bienSo: formInput.bienSo },
-    { tienNo: xe.tienNo - formInput.soTienThu }
+    { tienNo: tienNo }
   );
 
   let ptt = await newPTT.save();

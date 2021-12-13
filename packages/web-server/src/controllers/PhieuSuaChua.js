@@ -43,7 +43,7 @@ const createOne = async (req, res) => {
 
 const createCTSC = async (req, res) => {
   const { bienSo, noiDung, maVatTu, maTienCong, soLuong, MaPSC } = req.body;
-  let maVT, maTC, maXe, maPTN, maPSC;
+  let maVT, maTC, maXe;
   var today = new Date();
   var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
   //  Truy xuat vao bang loai vat tu va tien cong de lat maVT va maTC
@@ -110,7 +110,7 @@ const createCTSC = async (req, res) => {
     }
 
   // cập nhật tiền nợ trong xe
-  await Xe.updateOne({ bienSo: bienSo }, { tienNo: maXe.tienNo + soLuong*maVT.unitPrice })
+  await Xe.updateOne({ bienSo: bienSo }, { tienNo: maXe.tienNo + soLuong*maVT.unitPrice + maTC.price})
   return res.status(201).json({
     statusCode: 201,
     message: 'Receiving your form succesfully'
@@ -224,6 +224,7 @@ const getBienSo = async (req, res) => {
       })
     }
     let list = lstPhieuSuaChua.map((item)=>{
+      if(item.maPTN&&item.maPTN.maXe&&item.maPTN.maXe.maKhachHang){
         return { 
           bienSo:item.maPTN.maXe.bienSo,
           tongTienSC: item.tongTienSC,
@@ -231,8 +232,10 @@ const getBienSo = async (req, res) => {
           soDT:item.maPTN.maXe.maKhachHang.soDT,
           email:item.maPTN.maXe.maKhachHang.email
         }
+      }
+        
     })
-
+    list =  list.filter(data=>data);
     return res.status(200).json({
       status:true,
       message:'Lấy danh sách biển số đã sửa chữa thành công',
@@ -272,19 +275,20 @@ const getAllPSC = async (req, res) => {
                   populate: 'maKhachHang',
        }})
     }
-    
-
     let list = lstPhieuSuaChua.map(item=>{
-      return {
-        _id:item._id,
-        bienSo:item.maPTN.maXe.bienSo,
-        tongTienSC:item.tongTienSC,
-        tenKhachHang:item.maPTN.maXe.maKhachHang.tenKhachHang,
-        status:'Đang sửa chữa',
-        ngaySC: item.ngaySC
+      if(item.maPTN&&item.maPTN.maXe&&item.maPTN.maXe.maKhachHang){
+        return {
+          _id:item._id,
+          bienSo:item.maPTN.maXe.bienSo,
+          tongTienSC:item.tongTienSC,
+          tenKhachHang:item.maPTN.maXe.maKhachHang.tenKhachHang,
+          status:'Đang sửa chữa',
+          ngaySC: item.ngaySC
+        }
       }
+      
     })
-
+    list =  list.filter(data=>data);
     return res.status(200).json(list )
   }catch(e){
     console.log(e);
@@ -331,17 +335,21 @@ const getListCTSCByMaXe = async (req,res) =>{
         path: 'maTienCong'}
         )
         let list = listPhieuCTSC.map(item=>{
+          if(item.maVaTu&&item.maTienCong){
             return {
-                maPSC: item.maPSC,
-                noiDung: item.noiDung,
-                maVaTu: item.maVaTu.name,
-                price: item.maVaTu.unitPrice,
-                wage: item.maTienCong.name,
-                soLuong: item.soLuong,
-                thanhTien: item.thanhTien,
-                _id:item._id.toString(),
+              maPSC: item.maPSC,
+              noiDung: item.noiDung,
+              maVaTu: item.maVaTu.name,
+              price: item.maVaTu.unitPrice,
+              wage: item.maTienCong.name,
+              soLuong: item.soLuong,
+              thanhTien: item.thanhTien,
+              _id:item._id.toString(),
             }
+          }
+            
           })
+        list =  list.filter(data=>data);
       return res.status(200).json({
         listPhieuCTSC:list,
         status:0,

@@ -112,13 +112,14 @@ const CarList = () => {
   ];
 
   useEffect(() => {
+    console.log('có');
     getDataListCar();
   }, []);
 
   const getDataListCar = async (data = null) => {
     try {
       setIsLoading(true);
-      let url = '/phieutiepnhan/getCarByPlate';
+      let url = '/xes';
       if (data) {
         url += `?bienSo=${data}`;
       }

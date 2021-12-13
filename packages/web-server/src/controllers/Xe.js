@@ -1,20 +1,46 @@
 const { Xe, KhachHang } = require('../models');
-const { PhieuTiepNhan, PhieuThuTien, PhieuSuaChua, ChiTietSuaChua, Wage, Accessory } = require('../models');
+const {ChiTietSuaChua, Wage, Accessory, HieuXe } = require('../models');
 
 const XeService = require('../services/Xe');
 
 const { findOne, create, update, deleteOne } = require('../configs/controller.template.config')(Xe);
 
-const find = async (_, res) => {
-    try { 
-        let objList = await XeService.find();
-        return res.status(200).json(objList);
-    } catch(err) {
+const find = async (req, res) => {
+    try{
+        const bienSo = req.query.bienSo;
+        let list = [];
+        let lstXe = await Xe.find();
+        if(bienSo){
+          lstXe = lstXe.filter(item=>item.bienSo.toLowerCase().indexOf(bienSo.toLowerCase())!==-1)
+        }
+        let lstKhachHang = await KhachHang.find();
+        let listHieuXe = await HieuXe.find();
+        list=lstKhachHang.map(item=>{
+          let xe= lstXe.find(data=>data.maKhachHang == item._id.toString());
+          if(xe){
+            let hieuXe = listHieuXe.find(data=>xe.maHieuXe==data.maHieuXe)
+            if(hieuXe){
+              return {
+                _id:xe._id.toString(),
+                bienSo:xe.bienSo,
+                hieuXe:hieuXe.tenHieuXe,
+                tenKhachHang:item.tenKhachHang,
+                soDT:item.soDT,
+                tienNo:xe.tienNo
+              }
+              
+            }
+          }
+        })
+        list = list.filter(item => item)
+        return res.status(200).json(list);
+      }catch(e){
+          console.log(e);
         return res.status(500).json({
-            statusCode: 500,
-            message: err.message || `Some errors occur while finding repair votes list`
+          message:'Đã có lỗi xảy ra vui lòng thử lại',
+          error:e
         });
-    }
+      }
 }
 
 const getCarByPlate = async (req, res) => {
@@ -42,7 +68,8 @@ const getListCTSCByMaXe = async (req,res) =>{
         let list = listPhieuCTSC.map(item=>{
             let vatTu = lstVatTu.find(data=>data._id.toString()==item.maVaTu);
             let tienCong =lstTienCong.find(data=>data._id.toString()==item.maTienCong);
-            return {
+            if(vatTu&& tienCong){
+              return {
                 noiDung: item.noiDung,
                 maVaTu: vatTu.name,
                 price: vatTu.unitPrice,
@@ -50,7 +77,10 @@ const getListCTSCByMaXe = async (req,res) =>{
                 soLuong: item.soLuong,
                 thanhTien: item.thanhTien,
             }
+            }
+            
         })
+        list = list.map(item=>item);
         return res.status(200).json(list);
     }catch(e){
         return res.status(500).json({
