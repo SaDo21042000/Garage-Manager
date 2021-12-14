@@ -70,7 +70,7 @@ const Bill = () => {
         message: 'Tạo phiếu thu tiền thành công',
       });
       form.resetFields();
-      history.push('/');
+      // history.push('/');
     } catch (error) {
       notification.error({
         message: 'Đã có lỗi xảy ra khi thu tiền. Vui lòng kiểm tra lại',

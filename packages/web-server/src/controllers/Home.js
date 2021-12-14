@@ -7,7 +7,7 @@ const getInfoToday = async (req, res) => {
     var today = new Date();
     var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
     let lstPhieuSuaChua = await PhieuSuaChua.find({isDeleted:0});
-    let lstPhieuTiepNhan = await PhieuTiepNhan.find({isDeleted:0,ngayTN:date});
+    let lstPhieuTiepNhan = await PhieuTiepNhan.find({ngayTN:date});
     let lstPhieuThuTien = await PhieuThuTien.find();
     let count  = 0 ;
     let total = 0 ;
