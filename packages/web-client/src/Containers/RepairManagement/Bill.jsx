@@ -7,15 +7,11 @@ import {
   Input,
   Button,
   InputNumber,
-  DatePicker,
   Select,
   notification,
 } from 'antd';
 import { PrinterFilled } from '@ant-design/icons';
-import { DATEFORMAT, layout, StyledBill, validateMessages } from './Bill.constants';
-import { useHistory } from 'react-router-dom';
-import FileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
+import { layout, StyledBill, validateMessages } from './Bill.constants';
 import axios from './../../Configs/Axios';
 import { LoadingScreenCustom } from './../../Components';
 
@@ -25,7 +21,6 @@ const Bill = () => {
   const [dataBienSo, setDataBienSo] = useState([]);
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
   useEffect(() => {
     getBienSo();
   }, []);

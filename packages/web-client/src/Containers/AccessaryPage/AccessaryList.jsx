@@ -16,7 +16,7 @@ import {
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import axiosClient from '../../Configs/Axios';
-import { LoadingScreenCustom, Helper } from './../../Components';
+import { LoadingScreenCustom } from './../../Components';
 const { Content } = AntLayout;
 const { Title } = Typography;
 const { Search } = Input;

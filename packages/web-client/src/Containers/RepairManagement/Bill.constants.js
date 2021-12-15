@@ -39,15 +39,15 @@ const layout = {
 };
 
 const validateMessages = {
-  required: 'Nhập ${label}!',
+  required: 'Nhập !',
   types: {
-    number: ' ${label} không phải số hợp lệ!',
-    email: ' ${label} không phải là email hợp lệ!',
+    number: '  không phải số hợp lệ!',
+    email: '  không phải là email hợp lệ!',
   },
   number: {
-    min: ' ${label} không thể nhỏ hơn min',
-    max: ' ${label} không thể lớn hơn max',
-    range: ' ${label} phải ở giữa min và max',
+    min: '  không thể nhỏ hơn min',
+    max: '  không thể lớn hơn max',
+    range: '  phải ở giữa min và max',
   },
 };
 

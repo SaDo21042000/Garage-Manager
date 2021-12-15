@@ -110,7 +110,7 @@ const RepairPage = () => {
 
   useEffect(() => {
     getAllPSC(dataSearch);
-  }, [isSearch]);
+  }, [dataSearch, isSearch]);
 
   const getAllPSC = async (date = null) => {
     try {
