@@ -38,4 +38,4 @@ npm install
 ### Note:
 
 Login is required to access website resources. Website access account:	Username: quocTD
-	Paasword: 12345678
+	Password: 12345678
