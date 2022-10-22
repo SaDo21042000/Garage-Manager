@@ -258,7 +258,6 @@ module.exports = {
   getPhieuTiepNhan,
   xoaXeSua,
   getPTNbyMaXe,
-  // getCarByPlate,
   deleteXe,
   getCarToday,
   deletePTNbyPTN,

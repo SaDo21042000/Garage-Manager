@@ -5,7 +5,11 @@ const baseURL =
   process.env.NODE_ENV !== "production"
     ? "https://garage-manager-nodejs-reactjs.herokuapp.com/api"
     //? "http://localhost:5001/api"
-    : "https://shielded-hamlet-86304.herokuapp.com/api";
+    :  process.env.REACT_APP_API_URL;
+
+    const baseURLl =
+  process.env.NODE_ENV !== "production" ? process.env.REACT_APP_API_URL
+    : "https://garage-manager-nodejs-reactjs.herokuapp.com/api";
 
 var axiosClient = axios.create({
   //baseURL: process.env.REACT_APP_API_URL,

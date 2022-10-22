@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const connect = async () => {
   try {
     await mongoose.connect(
-      //`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.fxllx.mongodb.net/${process.env.DB_DATABASE_NAME}?retryWrites=true&w=majority`,
       `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@general.8kjnd81.mongodb.net/${process.env.DB_DATABASE_NAME}?retryWrites=true&w=majority`,
       {
         useNewUrlParser: true,

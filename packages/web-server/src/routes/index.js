@@ -15,7 +15,7 @@ const InventoryReportRouter = require('./InventoryReport');
 const PhieuThuTien = require('./PhieuThuTien');
 const DoanhSo = require('./DoanhSo');
 const PhieuSuaChua = require('./PhieuSuaChua');
-//const PhieuTiepNhan = require('./PhieuTiepNhan');
+const PhieuTiepNhan = require('./PhieuTiepNhan');
 const Home = require('./Home');
 
 const route = (app) => {
@@ -35,7 +35,7 @@ const route = (app) => {
   app.use('/api/phieuthutiens',isAuth, PhieuThuTien);
   app.use('/api/doanhsos',isAuth, DoanhSo);
   app.use('/api/phieusuachua',isAuth,PhieuSuaChua);
-  //app.use('/api/phieutiepnhan',isAuth, PhieuTiepNhan);
+  app.use('/api/phieutiepnhan',isAuth, PhieuTiepNhan);
   app.use('/api/home',isAuth, Home);
 };
 
