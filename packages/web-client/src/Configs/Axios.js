@@ -1,6 +1,15 @@
 import axios from 'axios';
+
+    //baseURL: '',
+const baseURL =
+  process.env.NODE_ENV !== "production"
+    ? "https://garage-manager-nodejs-reactjs.herokuapp.com/api"
+    //? "http://localhost:5001/api"
+    : "https://shielded-hamlet-86304.herokuapp.com/api";
+
 var axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  //baseURL: process.env.REACT_APP_API_URL,
+  baseURL: baseURL,
   // `withCredentials` chỉ định có thực hiện các request cross-site Access-Control sử dụng credential hay không
   withCredentials: false, // mặc định là false,
   headers: {
