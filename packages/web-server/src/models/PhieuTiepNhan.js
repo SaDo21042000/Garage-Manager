@@ -20,4 +20,6 @@ exports.initPhieuTiepNhan = function(mongoose) {
         const PhieuTiepNhan = mongoose.model('phieutiepnhans', PhieuTiepNhanSchema);
     
         return PhieuTiepNhan;
+
+        
     }
