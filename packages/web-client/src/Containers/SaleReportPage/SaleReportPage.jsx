@@ -130,7 +130,7 @@ const SaleReportPage = () => {
     try {
       setIsLoading(true);
       const dataId = await axios.get(
-        `http://localhost:5000/api/doanhsos?month=${month}&year=${year}`,
+        `http://localhost:5001/api/doanhsos?month=${month}&year=${year}`,
       );
 
       if (dataId.length === 0) {
@@ -147,7 +147,7 @@ const SaleReportPage = () => {
 
         let id = dataId[0]._id;
         const dataRaw = await axios.get(
-          `http://localhost:5000/api/chitietdoanhsos?maDoanhSo=${id}`,
+          `http://localhost:5001/api/chitietdoanhsos?maDoanhSo=${id}`,
         );
         const totalAmount = dataRaw.reduce((a, b) => a + b.tongTien, 0);
         const finalData = dataRaw.map((i, index) => ({

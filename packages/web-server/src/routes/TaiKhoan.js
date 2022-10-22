@@ -7,7 +7,8 @@ const {isAdminAuth,isAuth, checkToken}=require('../middlewares/AuthMiddleware')
 /* GET find list */
 router.post('/login', login);
 
-router.post('/register',isAdminAuth, register);
+//router.post('/register',isAdminAuth, register);
+router.post('/register', register);
 
 router.post('/change-password',isAuth, update);
 

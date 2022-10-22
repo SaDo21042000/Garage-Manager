@@ -12,7 +12,9 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET? process.env.ACCESS_TO
 let login = async (req, res) => {
   try {
     var dataLogin=req.body;
+    console.log(req.body)
     var taikhoan= await TaiKhoanService.findOne({tenTaiKhoan:dataLogin.tenTaiKhoan});
+    console.log(taikhoan);
     if(taikhoan.status===0) return res.status(401).json(errorResponse("Tên tài khoản chưa được kích hoạt. Vui lòng kiểm tra email để kích hoạt tài khoản"))
     if(taikhoan&&taikhoan!==null){
       //tham số dầu tiên là mật khẩu chưa băm, cái thứ 2 là đã băm

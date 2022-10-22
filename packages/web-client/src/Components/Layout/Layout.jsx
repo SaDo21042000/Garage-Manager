@@ -29,11 +29,14 @@ const Layout = ({ menuSelectedKey, children }) => {
   const { pathname } = useLocation();
   const user= useSelector(state=>state.user);
   const history=useHistory();
+  //const [isLoading, setIsLoading] =useState(false);
   const [isLoading, setIsLoading] =useState(false);
   const isPubicRoutes = pathname === '/log-in'|| pathname ==='/forgot-password' ? true : false;
+  //const isPubicRoutes = pathname === '/sign-up'|| pathname ==='/forgot-password' ? true : false;
 
   useEffect(()=>{ 
     let isLoginPage = pathname !== '/log-in';
+    //let isLoginPage = pathname !== 'sign-up';
     let isForGotPasswordPage = pathname !== '/forgot-password';
     if(isLoginPage&&isForGotPasswordPage){
       isCheckToken()
@@ -57,9 +60,11 @@ const Layout = ({ menuSelectedKey, children }) => {
   //Không cho nhân viên truy cập khi chưa đăng nhập
   useEffect(() => {
     setIsLoading(true);
-    let isLoginPage = pathname !== '/log-in';
+    //let isLoginPage = pathname !== '/log-in';
+    let isLoginPage = pathname !== '/sign-up';
     let isForGotPasswordPage = pathname !== '/forgot-password';
     let isSignUpPage = pathname !== '/sign-up';
+    //let isSignUpPage = pathname !== '/dangkygifdo';
     let isSettingPage=pathname!=='/setting';
     const isNumeric = /^\/validate-account\/*/;
     const isValidateAccountPage=!isNumeric.test(pathname)
@@ -78,6 +83,7 @@ const Layout = ({ menuSelectedKey, children }) => {
           message: "Bạn vui lòng đăng nhập để truy cập trang này. ",
         });
         history.push("/log-in");
+        //history.push("/sign-up");
       }
     }
     setIsLoading(false);
@@ -87,6 +93,7 @@ const Layout = ({ menuSelectedKey, children }) => {
     useEffect(() => {
       setIsLoading(true);
       let isSignUpPage = pathname === '/sign-up';
+      //let isSignUpPage = pathname === '/dangkygifdo';
       let isSettingPage = pathname === '/setting';
       if (isSettingPage || isSignUpPage) {
         let token = JSON.parse(localStorage.getItem('token'));
@@ -106,6 +113,7 @@ const Layout = ({ menuSelectedKey, children }) => {
             history.push('/');
           } else {
             history.push('/log-in');
+            //history.push('/sign-up');
           }
         }
         setIsLoading(false);
