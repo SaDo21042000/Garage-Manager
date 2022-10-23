@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Layout as AntLayout, Typography, Form, Input, Button, notification } from 'antd';
-import { Link } from 'react-router-dom';
+import { Layout as AntLayout, Form, Input, Button, notification } from 'antd';
+//import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as actions from './actions';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { LoadingScreen } from './../../Components';
 import background from './../../assets/background-login.jpg';
-const { Text } = Typography;
+//const { Text } = Typography;
 
 const StyledLogIn = styled(AntLayout)`
   .site-layout-background {
