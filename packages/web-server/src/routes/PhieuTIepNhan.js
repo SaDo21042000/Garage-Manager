@@ -1,5 +1,7 @@
-const express = require("express");
-const router = express.Router();
+var express = require('express');
+var router = express.Router();
+
+
 const { createOne, getPhieuTiepNhan, xoaXeSua,getPTNbyMaXe, deleteXe, getCarToday,getListXe,  deletePTNbyPTN } = require('../controllers/PhieuTiepNhan');
 
 router.post('/createOne', createOne);
