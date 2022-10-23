@@ -1,15 +1,14 @@
 import axios from 'axios';
 
 //baseURL: '',
-const baseURL =
-  process.env.NODE_ENV !== 'production'
-    ? process.env.REACT_APP_API_URL
-    :'https://garage-manager-nodejs-reactjs.herokuapp.com/api'
-
 const baseURLl =
   process.env.NODE_ENV !== 'production'
     ? process.env.REACT_APP_API_URL
-    : 'https://garage-manager-nodejs-reactjs.herokuapp.com/api';
+    :'https://garage-manager-nodejs-reactjs.herokuapp.com/api'
+const baseURL =
+  process.env.NODE_ENV !== 'production'
+  ?'https://garage-manager-nodejs-reactjs.herokuapp.com/api'
+    : process.env.REACT_APP_API_URL
 
 var axiosClient = axios.create({
   //baseURL: process.env.REACT_APP_API_URL,

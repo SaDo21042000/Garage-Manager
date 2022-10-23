@@ -19,9 +19,11 @@ let login = async (req, res) => {
     if(taikhoan&&taikhoan!==null){
       //tham số dầu tiên là mật khẩu chưa băm, cái thứ 2 là đã băm
       const checkPw = await bcrypt.compare(dataLogin.matKhau,taikhoan.matKhau);
-
+      console.log('password wrong')
         if(checkPw){
+          console.log('password true')
             const accessToken = await jwtHelper.generateToken(taikhoan, accessTokenSecret, accessTokenLife);
+            console.log(accessToken)
             return res.status(200).json(successResponse("Bạn đã đăng nhập thành công",{accessToken,
             tenTaiKhoan:taikhoan.tenTaiKhoan,
             email:taikhoan.email,

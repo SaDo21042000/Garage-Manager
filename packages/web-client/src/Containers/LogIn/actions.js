@@ -24,6 +24,7 @@ export const onGetUserRequest=(user)=>{
                 const data= await axios.post("taikhoans/login",user);
                 resolve(data);
                 dispatch(onGetUser(data.object));
+                console.log(data.object)
             }catch(e){
                 reject(e.response.data);
             }

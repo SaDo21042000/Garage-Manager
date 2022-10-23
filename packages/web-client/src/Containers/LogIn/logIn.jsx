@@ -1,32 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Layout as AntLayout, Typography, Form, Input, Button, notification} from 'antd';
+import { Layout as AntLayout, Typography, Form, Input, Button, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as actions from './actions';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import {LoadingScreen } from './../../Components'
-import background from './../../assets/background-login.jpg'; 
+import { LoadingScreen } from './../../Components';
+import background from './../../assets/background-login.jpg';
 const { Text } = Typography;
 
 const StyledLogIn = styled(AntLayout)`
   .site-layout-background {
     position: 'relative';
-    width:100%;
+    width: 100%;
     background-size: 100% 100%;
-    background-image: url(${background}); 
+    background-image: url(${background});
     background-repeat: no-repeat;
-    height:100vh;  
-    
+    height: 100vh;
   }
 
-  .form-login{
-    width:550px;
-    position:absolute;
-    height:320px;
-    top:calc(50% - 160px);
-    left:calc(50% - 275px);
-    background-color:rgba(0,0,0,0.6);
+  .form-login {
+    width: 550px;
+    position: absolute;
+    height: 320px;
+    top: calc(50% - 160px);
+    left: calc(50% - 275px);
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 7px;
   }
 
@@ -53,7 +52,7 @@ const LogIn = () => {
   const params = useParams();
   let history = useHistory();
   let location = useLocation();
-  const [isLoading, setIsLoading] =useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const isNumeric = /^\/validate-account\/*/;
@@ -101,7 +100,7 @@ const LogIn = () => {
       <div className="site-layout-background">
         <div className="form-login" style={{ padding: 15 }}>
           <div className="main-title">
-            <h3 style={{  marginBottom: '0px' ,color:'white'}}>Đăng nhập</h3>
+            <h3 style={{ marginBottom: '0px', color: 'white' }}>Đăng nhập</h3>
           </div>
           <Form
             {...layout}
@@ -111,7 +110,7 @@ const LogIn = () => {
           >
             <Form.Item
               name="tenTaiKhoan"
-              label={<label style={{ color: "white" }}>Tên tài khoản</label>}
+              label={<label style={{ color: 'white' }}>Tên tài khoản</label>}
               rules={[
                 {
                   required: true,
@@ -122,7 +121,7 @@ const LogIn = () => {
             </Form.Item>
             <Form.Item
               name="matKhau"
-              label={<label style={{ color: "white" }}>Mật khẩu</label>}
+              label={<label style={{ color: 'white' }}>Mật khẩu</label>}
               rules={[
                 {
                   required: true,
@@ -145,9 +144,12 @@ const LogIn = () => {
               </Button>
             </Form.Item>
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 7 }}>
-            <Text style={{color:'white'}}>
-              Bạn quên mật khẩu? <Link to={'forgot-password'} className="text-primary">Quên mật khẩu</Link>
-            </Text>
+              {/*<Text style={{ color: 'white' }}>
+                Bạn quên mật khẩu?{' '}
+                <Link to={'/'} className="text-primary">
+                  Quên mật khẩu
+                </Link>
+              </Text>*/}
             </Form.Item>
           </Form>
         </div>
