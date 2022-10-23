@@ -15,7 +15,7 @@ const InventoryReportRouter = require('./InventoryReport');
 const PhieuThuTien = require('./PhieuThuTien');
 const DoanhSo = require('./DoanhSo');
 const PhieuSuaChua = require('./PhieuSuaChua');
-const PhieuTiepNhan = require('./PhieuTiepNhanSai');
+const PhieuTiepNhan = require('./PhieuTiepNhan');
 const Home = require('./Home');
 
 const route = (app) => {
